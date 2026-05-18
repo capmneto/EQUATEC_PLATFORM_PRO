@@ -174,41 +174,6 @@ a {
   margin-top: 32px;
 }
 
-.hero-panel {
-  min-height: 420px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background:
-    linear-gradient(145deg, rgba(34, 211, 238, 0.18), rgba(15, 23, 42, 0.82)),
-    rgba(15, 23, 42, 0.72);
-}
-
-.hero-panel h2 {
-  font-size: 28px;
-  line-height: 1.15;
-}
-
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-top: 28px;
-}
-
-.kpi {
-  border: 1px solid rgba(103, 232, 249, 0.18);
-  border-radius: 18px;
-  padding: 16px;
-  background: rgba(2, 6, 23, 0.38);
-}
-
-.kpi strong {
-  display: block;
-  color: #67e8f9;
-  font-size: 24px;
-}
-
 .section-title {
   max-width: 860px;
   margin-bottom: 34px;
@@ -282,5 +247,210 @@ a {
 
   .footer-inner {
     flex-direction: column;
+  }
+}
+
+
+.grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.profile-hero {
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(34, 211, 238, 0.16), rgba(15, 23, 42, 0.88)),
+    rgba(15, 23, 42, 0.72);
+}
+
+.profile-photo {
+  width: 100%;
+  max-height: 330px;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 1px solid rgba(103, 232, 249, 0.18);
+}
+
+.profile-photo-large {
+  max-width: 340px;
+  margin: 0 auto 20px;
+}
+
+.profile-hero h2,
+.profile-card-center h2 {
+  margin-top: 16px;
+  font-size: 34px;
+  letter-spacing: -0.04em;
+}
+
+.profile-card-center {
+  text-align: center;
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.quick-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  padding: 10px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(15, 23, 42, 0.72);
+  color: #e2e8f0;
+  font-weight: 800;
+}
+
+.quick-link:hover,
+.contact-card:hover {
+  border-color: rgba(103, 232, 249, 0.55);
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.quick-icon,
+.contact-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(34, 211, 238, 0.14);
+  color: #67e8f9;
+  font-weight: 950;
+}
+
+.whatsapp .quick-icon {
+  color: #86efac;
+}
+
+.linkedin .quick-icon {
+  color: #93c5fd;
+}
+
+.email .quick-icon {
+  color: #fcd34d;
+}
+
+.mini-card {
+  min-height: 150px;
+}
+
+.module-card {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.module-card .btn {
+  margin-top: auto;
+}
+
+.highlight-section {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.12), rgba(34, 211, 238, 0.04));
+}
+
+.compact-grid {
+  gap: 14px;
+}
+
+.service-card {
+  min-height: 210px;
+}
+
+.card-title-large {
+  margin-top: 18px;
+  font-size: clamp(30px, 4vw, 44px);
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+
+.about-hero {
+  align-items: center;
+}
+
+.clean-list {
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.clean-list li {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(2, 6, 23, 0.34);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.pill {
+  border: 1px solid rgba(103, 232, 249, 0.22);
+  background: rgba(34, 211, 238, 0.08);
+  color: #cffafe;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 850;
+}
+
+.contact-card {
+  display: block;
+  min-height: 260px;
+  transition: 0.2s ease;
+}
+
+.contact-card strong {
+  display: block;
+  color: #67e8f9;
+  margin: 12px 0;
+  word-break: break-word;
+}
+
+.contact-icon {
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.cta-card {
+  padding: 42px;
+}
+
+.cta-card h2 {
+  margin-top: 18px;
+  font-size: clamp(32px, 5vw, 54px);
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+}
+
+@media (max-width: 1100px) {
+  .grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-hero {
+    min-height: auto;
+  }
+
+  .profile-photo {
+    max-height: 420px;
   }
 }
