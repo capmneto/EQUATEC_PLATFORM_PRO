@@ -250,7 +250,6 @@ a {
   }
 }
 
-
 .grid-4 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
@@ -452,5 +451,108 @@ a {
 
   .profile-photo {
     max-height: 420px;
+  }
+}
+
+/* =========================================================
+   AJUSTE FASE 1.4 — Hero institucional mais equilibrado
+   Objetivo: reduzir zoom visual, melhorar leitura acima da dobra
+   e preservar proporção da foto de Carlos Machado.
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .hero {
+    padding: 56px 0 58px;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) 430px;
+    gap: 52px;
+  }
+
+  .hero h1 {
+    font-size: clamp(44px, 4.8vw, 64px);
+    line-height: 1.02;
+    letter-spacing: -0.055em;
+    max-width: 780px;
+  }
+
+  .hero p {
+    font-size: 16.5px;
+    line-height: 1.62;
+    max-width: 720px;
+    margin-top: 20px;
+  }
+
+  .hero-actions {
+    margin-top: 24px;
+  }
+
+  .quick-links {
+    margin-top: 18px;
+  }
+
+  .profile-hero {
+    min-height: auto;
+    padding: 22px;
+    align-self: center;
+  }
+
+  .profile-photo {
+    height: 360px;
+    max-height: none;
+    object-fit: contain;
+    object-position: center;
+    background: rgba(255, 255, 255, 0.96);
+  }
+
+  .profile-hero h2 {
+    font-size: 28px;
+  }
+
+  .profile-hero p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container,
+  .header-inner,
+  .footer-inner {
+    width: min(1320px, calc(100% - 64px));
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) 470px;
+  }
+
+  .hero h1 {
+    font-size: clamp(48px, 4.4vw, 68px);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    padding: 56px 0 48px;
+  }
+
+  .hero h1 {
+    font-size: clamp(38px, 12vw, 54px);
+    line-height: 1.03;
+    letter-spacing: -0.055em;
+  }
+
+  .hero p {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .profile-photo {
+    width: 100%;
+    height: auto;
+    max-height: 460px;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.96);
   }
 }
