@@ -29,29 +29,41 @@ export function InternalShell({
       <section
         className="simple-page"
         style={{
-          paddingTop: 54,
-          paddingBottom: 54,
+          paddingTop: 34,
+          paddingBottom: 42,
         }}
       >
         <div className="container">
           <div
             className="card"
             style={{
-              padding: 28,
+              padding: 24,
               display: "grid",
-              gridTemplateColumns: "240px minmax(0, 1fr)",
-              gap: 28,
+              gridTemplateColumns: "220px minmax(0, 1fr)",
+              gap: 24,
               alignItems: "start",
+              overflow: "hidden",
             }}
           >
             <aside>
-              <span className="badge">EQUATEC Platform Pro</span>
+              <span
+                className="badge"
+                style={{
+                  fontSize: 10,
+                  padding: "7px 12px",
+                  maxWidth: "100%",
+                  whiteSpace: "normal",
+                  lineHeight: 1.2,
+                }}
+              >
+                EQUATEC Platform Pro
+              </span>
 
               <h2
                 style={{
-                  marginTop: 18,
+                  marginTop: 16,
                   marginBottom: 10,
-                  fontSize: "clamp(24px, 1.8vw, 32px)",
+                  fontSize: "clamp(22px, 1.45vw, 28px)",
                   lineHeight: 1.08,
                   letterSpacing: "-0.04em",
                 }}
@@ -62,24 +74,25 @@ export function InternalShell({
               <p
                 style={{
                   marginTop: 0,
-                  fontSize: 16,
-                  lineHeight: 1.55,
+                  fontSize: 14,
+                  lineHeight: 1.45,
                 }}
               >
-                Central de acesso aos módulos, recursos digitais, gestão,
-                automações, IA e ferramentas do ecossistema.
+                Central dos módulos, recursos digitais, automações, IA e ferramentas
+                do ecossistema.
               </p>
 
-              <nav style={{ display: "grid", gap: 10, marginTop: 22 }}>
+              <nav style={{ display: "grid", gap: 8, marginTop: 18 }}>
                 {internalLinks.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     className="btn btn-outline"
                     style={{
-                      minHeight: 48,
-                      padding: "12px 16px",
-                      fontSize: 16,
+                      minHeight: 42,
+                      padding: "10px 12px",
+                      fontSize: 14,
+                      borderRadius: 14,
                     }}
                   >
                     {item.label}
@@ -88,16 +101,26 @@ export function InternalShell({
               </nav>
             </aside>
 
-            <section>
-              <span className="badge">{eyebrow}</span>
+            <section style={{ minWidth: 0 }}>
+              <span
+                className="badge"
+                style={{
+                  fontSize: 10,
+                  padding: "7px 12px",
+                  maxWidth: "100%",
+                  whiteSpace: "normal",
+                }}
+              >
+                {eyebrow}
+              </span>
 
               <h1
                 style={{
                   marginTop: 12,
-                  marginBottom: 18,
-                  fontSize: "clamp(42px, 5vw, 78px)",
-                  lineHeight: 0.95,
-                  letterSpacing: "-0.07em",
+                  marginBottom: 14,
+                  fontSize: "clamp(38px, 4vw, 64px)",
+                  lineHeight: 0.98,
+                  letterSpacing: "-0.065em",
                 }}
               >
                 {title}
@@ -106,15 +129,15 @@ export function InternalShell({
               <p
                 style={{
                   maxWidth: 980,
-                  fontSize: "clamp(17px, 1.25vw, 22px)",
-                  lineHeight: 1.55,
+                  fontSize: "clamp(16px, 1.05vw, 19px)",
+                  lineHeight: 1.48,
                   marginBottom: 0,
                 }}
               >
                 {subtitle}
               </p>
 
-              <div style={{ marginTop: 28 }}>{children}</div>
+              <div style={{ marginTop: 24 }}>{children}</div>
             </section>
           </div>
         </div>

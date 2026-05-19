@@ -5,37 +5,37 @@ const modules = [
   {
     title: "HUB BONUS",
     description:
-      "Modelos, prompts, checklists, ferramentas rápidas, materiais técnicos e recursos digitais para acelerar a rotina de gestão.",
+      "Biblioteca de modelos, prompts, checklists e ferramentas digitais para acelerar entregas e padronizar a gestão.",
     href: "/hub-bonus",
   },
   {
     title: "Gestão de Obras",
     description:
-      "Controle de obras, cronogramas, medições, orçamento, avanço físico-financeiro, documentos e relatórios.",
+      "Controle de cronogramas, medições, orçamento, avanço físico-financeiro, documentos e relatórios executivos.",
     href: "/obras",
   },
   {
     title: "Franquias e Sociedades",
     description:
-      "Gestão de aportes, despesas, receitas, ativos, responsabilidades, documentos e indicadores de resultado.",
+      "Gestão de aportes, despesas, receitas, ativos, documentos, responsabilidades e indicadores do negócio.",
     href: "/franquias",
   },
   {
     title: "IA Corporativa",
     description:
-      "Agentes inteligentes, análise documental, geração de relatórios, classificação de informações e apoio à decisão.",
+      "Agentes inteligentes para análise documental, relatórios, classificação de informações e apoio à decisão.",
     href: "/ia",
   },
   {
     title: "Cursos e Treinamentos",
     description:
-      "Trilhas EAD, materiais técnicos, avaliações, certificados e treinamentos de IA aplicada à gestão.",
+      "Trilhas, materiais técnicos, avaliações, certificados e capacitações em IA aplicada à gestão.",
     href: "/cursos",
   },
   {
     title: "Automações e n8n",
     description:
-      "Fluxos de trabalho, webhooks, notificações, aprovações, alertas e automações integradas com IA.",
+      "Fluxos automatizados, webhooks, notificações, aprovações, alertas e integrações com IA.",
     href: "/automacoes",
   },
 ];
@@ -50,8 +50,8 @@ export default function DashboardPage() {
       <div
         className="grid"
         style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-          gap: 18,
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: 16,
         }}
       >
         {modules.map((module) => (
@@ -67,36 +67,48 @@ export default function DashboardPage() {
       <div
         className="card"
         style={{
-          marginTop: 22,
-          padding: 28,
-          borderRadius: 24,
+          marginTop: 20,
+          padding: 26,
+          borderRadius: 22,
+          overflow: "hidden",
         }}
       >
-        <span className="badge">Status da Plataforma</span>
+        <span
+          className="badge"
+          style={{
+            fontSize: 10,
+            padding: "7px 12px",
+          }}
+        >
+          Próxima geração da gestão digital
+        </span>
 
         <h2
           className="card-title-large"
           style={{
-            fontSize: "clamp(34px, 3.2vw, 56px)",
-            lineHeight: 1,
-            marginTop: 18,
-            marginBottom: 18,
+            fontSize: "clamp(30px, 2.6vw, 46px)",
+            lineHeight: 1.04,
+            marginTop: 16,
+            marginBottom: 14,
+            letterSpacing: "-0.055em",
           }}
         >
-          Ambiente interno em desenvolvimento
+          Uma plataforma em evolução para elevar performance, produtividade e decisão.
         </h2>
 
         <p
           style={{
-            fontSize: "clamp(16px, 1.1vw, 20px)",
-            lineHeight: 1.55,
+            fontSize: "clamp(15px, 0.95vw, 18px)",
+            lineHeight: 1.5,
             maxWidth: 1180,
+            margin: 0,
           }}
         >
-          Esta área será evoluída gradualmente com autenticação, usuários,
-          permissões, aprovação de acessos, banco de dados, auditoria e módulos
-          operacionais. A base visual inicial já está criada para permitir a
-          expansão segura do ecossistema.
+          O EQUATEC Platform Pro está sendo desenvolvido para integrar gestão,
+          engenharia, automação e inteligência artificial em uma experiência única.
+          A proposta é reduzir controles manuais, acelerar análises, padronizar
+          processos, apoiar decisões executivas e permitir o desenvolvimento de novos
+          sistemas com tecnologias modernas e orientadas a dados.
         </p>
       </div>
     </InternalShell>

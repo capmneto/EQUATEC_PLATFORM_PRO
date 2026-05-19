@@ -15,48 +15,47 @@ export function InternalCard({
     <div
       className="card"
       style={{
-        minHeight: 150,
-        padding: 24,
-        borderRadius: 22,
+        minHeight: 168,
+        padding: 22,
+        borderRadius: 20,
+        overflow: "hidden",
       }}
     >
-      <div
+      <span
+        className="badge"
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: 14,
-          alignItems: "flex-start",
-          marginBottom: 18,
+          display: "inline-flex",
+          width: "fit-content",
+          maxWidth: "100%",
+          fontSize: 9,
+          padding: "5px 9px",
+          marginBottom: 14,
+          whiteSpace: "normal",
+          lineHeight: 1.2,
         }}
       >
-        <h3
-          style={{
-            fontSize: "clamp(22px, 1.6vw, 30px)",
-            lineHeight: 1.12,
-            margin: 0,
-            letterSpacing: "-0.03em",
-          }}
-        >
-          {title}
-        </h3>
+        {status}
+      </span>
 
-        <span
-          className="badge"
-          style={{
-            fontSize: 10,
-            padding: "6px 10px",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {status}
-        </span>
-      </div>
+      <h3
+        style={{
+          fontSize: "clamp(20px, 1.25vw, 25px)",
+          lineHeight: 1.12,
+          margin: 0,
+          letterSpacing: "-0.03em",
+          maxWidth: "100%",
+        }}
+      >
+        {title}
+      </h3>
 
       <p
         style={{
-          fontSize: "clamp(15px, 1vw, 18px)",
-          lineHeight: 1.55,
-          margin: 0,
+          fontSize: "clamp(14px, 0.9vw, 16px)",
+          lineHeight: 1.48,
+          marginTop: 16,
+          marginBottom: 0,
+          maxWidth: "100%",
         }}
       >
         {description}
@@ -69,7 +68,7 @@ export function InternalCard({
   }
 
   return (
-    <a href={href} style={{ display: "block" }}>
+    <a href={href} style={{ display: "block", height: "100%" }}>
       {content}
     </a>
   );
