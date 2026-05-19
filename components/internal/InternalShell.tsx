@@ -14,39 +14,74 @@ const internalLinks = [
 type InternalShellProps = {
   title: string;
   subtitle: string;
+  eyebrow?: string;
   children: React.ReactNode;
 };
 
-export function InternalShell({ title, subtitle, children }: InternalShellProps) {
+export function InternalShell({
+  title,
+  subtitle,
+  eyebrow = "Ambiente de Gestão Integrada",
+  children,
+}: InternalShellProps) {
   return (
     <main className="page">
-      <section className="simple-page">
+      <section
+        className="simple-page"
+        style={{
+          paddingTop: 54,
+          paddingBottom: 54,
+        }}
+      >
         <div className="container">
           <div
             className="card"
             style={{
-              marginBottom: 24,
+              padding: 28,
               display: "grid",
-              gridTemplateColumns: "260px 1fr",
-              gap: 24,
+              gridTemplateColumns: "240px minmax(0, 1fr)",
+              gap: 28,
               alignItems: "start",
             }}
           >
             <aside>
               <span className="badge">EQUATEC Platform Pro</span>
 
-              <h2 style={{ marginTop: 18, fontSize: 28, letterSpacing: "-0.04em" }}>
-                Ambiente Interno
+              <h2
+                style={{
+                  marginTop: 18,
+                  marginBottom: 10,
+                  fontSize: "clamp(24px, 1.8vw, 32px)",
+                  lineHeight: 1.08,
+                  letterSpacing: "-0.04em",
+                }}
+              >
+                Painel Interno
               </h2>
 
-              <p style={{ marginTop: 12 }}>
-                Estrutura inicial da plataforma funcional para módulos, usuários,
-                aprovações, IA, automações e gestão integrada.
+              <p
+                style={{
+                  marginTop: 0,
+                  fontSize: 16,
+                  lineHeight: 1.55,
+                }}
+              >
+                Central de acesso aos módulos, recursos digitais, gestão,
+                automações, IA e ferramentas do ecossistema.
               </p>
 
-              <nav style={{ display: "grid", gap: 10, marginTop: 24 }}>
+              <nav style={{ display: "grid", gap: 10, marginTop: 22 }}>
                 {internalLinks.map((item) => (
-                  <Link key={item.href} href={item.href} className="btn btn-outline">
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="btn btn-outline"
+                    style={{
+                      minHeight: 48,
+                      padding: "12px 16px",
+                      fontSize: 16,
+                    }}
+                  >
                     {item.label}
                   </Link>
                 ))}
@@ -54,13 +89,32 @@ export function InternalShell({ title, subtitle, children }: InternalShellProps)
             </aside>
 
             <section>
-              <span className="badge">Fase 2 — Fundação Funcional</span>
-              <h1>{title}</h1>
-              <p>{subtitle}</p>
+              <span className="badge">{eyebrow}</span>
 
-              <div style={{ marginTop: 28 }}>
-                {children}
-              </div>
+              <h1
+                style={{
+                  marginTop: 12,
+                  marginBottom: 18,
+                  fontSize: "clamp(42px, 5vw, 78px)",
+                  lineHeight: 0.95,
+                  letterSpacing: "-0.07em",
+                }}
+              >
+                {title}
+              </h1>
+
+              <p
+                style={{
+                  maxWidth: 980,
+                  fontSize: "clamp(17px, 1.25vw, 22px)",
+                  lineHeight: 1.55,
+                  marginBottom: 0,
+                }}
+              >
+                {subtitle}
+              </p>
+
+              <div style={{ marginTop: 28 }}>{children}</div>
             </section>
           </div>
         </div>

@@ -5,7 +5,7 @@ const modules = [
   {
     title: "HUB BONUS",
     description:
-      "Área especial para prompts, modelos, checklists, ferramentas rápidas, materiais técnicos e recursos digitais de apoio.",
+      "Modelos, prompts, checklists, ferramentas rápidas, materiais técnicos e recursos digitais para acelerar a rotina de gestão.",
     href: "/hub-bonus",
   },
   {
@@ -15,9 +15,9 @@ const modules = [
     href: "/obras",
   },
   {
-    title: "Gestão de Franquias e Sociedades",
+    title: "Franquias e Sociedades",
     description:
-      "Controle societário, aportes, despesas, receitas, ativos, responsabilidades e indicadores de resultado.",
+      "Gestão de aportes, despesas, receitas, ativos, responsabilidades, documentos e indicadores de resultado.",
     href: "/franquias",
   },
   {
@@ -29,7 +29,7 @@ const modules = [
   {
     title: "Cursos e Treinamentos",
     description:
-      "Trilhas EAD, aulas, materiais técnicos, avaliações, certificados e treinamentos de IA aplicada à gestão.",
+      "Trilhas EAD, materiais técnicos, avaliações, certificados e treinamentos de IA aplicada à gestão.",
     href: "/cursos",
   },
   {
@@ -44,9 +44,16 @@ export default function DashboardPage() {
   return (
     <InternalShell
       title="Dashboard Principal"
-      subtitle="Visão executiva inicial da plataforma EQUATEC, reunindo os módulos estruturantes do ecossistema em uma base única, modular e escalável."
+      eyebrow="Ambiente de Gestão Integrada"
+      subtitle="Visão executiva dos módulos do ecossistema EQUATEC para gestão, engenharia, automação, inteligência artificial, treinamentos e tomada de decisão."
     >
-      <div className="grid grid-3">
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+          gap: 18,
+        }}
+      >
         {modules.map((module) => (
           <InternalCard
             key={module.title}
@@ -57,13 +64,39 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <div className="card" style={{ marginTop: 24 }}>
+      <div
+        className="card"
+        style={{
+          marginTop: 22,
+          padding: 28,
+          borderRadius: 24,
+        }}
+      >
         <span className="badge">Status da Plataforma</span>
-        <h2 className="card-title-large">Fundação funcional em implantação</h2>
-        <p>
-          Esta etapa cria a primeira camada visual do ambiente interno. As próximas
-          fases irão adicionar autenticação real, usuários, permissões, aprovação de
-          acessos, banco de dados, auditoria e módulos operacionais.
+
+        <h2
+          className="card-title-large"
+          style={{
+            fontSize: "clamp(34px, 3.2vw, 56px)",
+            lineHeight: 1,
+            marginTop: 18,
+            marginBottom: 18,
+          }}
+        >
+          Ambiente interno em desenvolvimento
+        </h2>
+
+        <p
+          style={{
+            fontSize: "clamp(16px, 1.1vw, 20px)",
+            lineHeight: 1.55,
+            maxWidth: 1180,
+          }}
+        >
+          Esta área será evoluída gradualmente com autenticação, usuários,
+          permissões, aprovação de acessos, banco de dados, auditoria e módulos
+          operacionais. A base visual inicial já está criada para permitir a
+          expansão segura do ecossistema.
         </p>
       </div>
     </InternalShell>
