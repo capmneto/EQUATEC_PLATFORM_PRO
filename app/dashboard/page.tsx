@@ -5,37 +5,37 @@ const modules = [
   {
     title: "HUB BONUS",
     description:
-      "Biblioteca de modelos, prompts, checklists e ferramentas digitais para acelerar entregas e padronizar a gestão.",
+      "Modelos, prompts, checklists e ferramentas digitais para acelerar entregas.",
     href: "/hub-bonus",
   },
   {
     title: "Gestão de Obras",
     description:
-      "Controle de cronogramas, medições, orçamento, avanço físico-financeiro, documentos e relatórios executivos.",
+      "Cronogramas, medições, orçamento, documentos e avanço físico-financeiro.",
     href: "/obras",
   },
   {
     title: "Franquias e Sociedades",
     description:
-      "Gestão de aportes, despesas, receitas, ativos, documentos, responsabilidades e indicadores do negócio.",
+      "Aportes, despesas, receitas, ativos, documentos e indicadores do negócio.",
     href: "/franquias",
   },
   {
     title: "IA Corporativa",
     description:
-      "Agentes inteligentes para análise documental, relatórios, classificação de informações e apoio à decisão.",
+      "Agentes inteligentes para documentos, relatórios e apoio à decisão.",
     href: "/ia",
   },
   {
     title: "Cursos e Treinamentos",
     description:
-      "Trilhas, materiais técnicos, avaliações, certificados e capacitações em IA aplicada à gestão.",
+      "Trilhas, materiais técnicos, avaliações, certificados e capacitações.",
     href: "/cursos",
   },
   {
     title: "Automações e n8n",
     description:
-      "Fluxos automatizados, webhooks, notificações, aprovações, alertas e integrações com IA.",
+      "Webhooks, notificações, aprovações, alertas e integrações com IA.",
     href: "/automacoes",
   },
 ];
@@ -44,14 +44,14 @@ export default function DashboardPage() {
   return (
     <InternalShell
       title="Dashboard Principal"
-      eyebrow="Ambiente de Gestão Integrada"
-      subtitle="Visão executiva dos módulos do ecossistema EQUATEC para gestão, engenharia, automação, inteligência artificial, treinamentos e tomada de decisão."
+      eyebrow="Gestão, Engenharia, Automação e IA"
+      subtitle="Visão executiva dos módulos do ecossistema EQUATEC para centralizar informações, acelerar análises, padronizar processos e apoiar decisões."
     >
       <div
         className="grid"
         style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: 16,
+          gridTemplateColumns: "repeat(auto-fit, minmax(245px, 1fr))",
+          gap: 14,
         }}
       >
         {modules.map((module) => (
@@ -67,48 +67,48 @@ export default function DashboardPage() {
       <div
         className="card"
         style={{
-          marginTop: 20,
-          padding: 26,
-          borderRadius: 22,
+          marginTop: 18,
+          padding: 22,
+          borderRadius: 20,
           overflow: "hidden",
         }}
       >
         <span
           className="badge"
           style={{
-            fontSize: 10,
-            padding: "7px 12px",
+            fontSize: 9,
+            padding: "6px 10px",
           }}
         >
           Próxima geração da gestão digital
         </span>
 
         <h2
-          className="card-title-large"
           style={{
-            fontSize: "clamp(30px, 2.6vw, 46px)",
-            lineHeight: 1.04,
-            marginTop: 16,
-            marginBottom: 14,
-            letterSpacing: "-0.055em",
+            fontSize: "clamp(26px, 2vw, 38px)",
+            lineHeight: 1.08,
+            marginTop: 14,
+            marginBottom: 12,
+            letterSpacing: "-0.05em",
           }}
         >
-          Uma plataforma em evolução para elevar performance, produtividade e decisão.
+          Tecnologia aplicada para elevar produtividade, performance e tomada de decisão.
         </h2>
 
         <p
           style={{
-            fontSize: "clamp(15px, 0.95vw, 18px)",
+            fontSize: 15,
             lineHeight: 1.5,
-            maxWidth: 1180,
+            maxWidth: 1100,
             margin: 0,
+            color: "rgba(226, 232, 240, 0.78)",
           }}
         >
           O EQUATEC Platform Pro está sendo desenvolvido para integrar gestão,
           engenharia, automação e inteligência artificial em uma experiência única.
-          A proposta é reduzir controles manuais, acelerar análises, padronizar
-          processos, apoiar decisões executivas e permitir o desenvolvimento de novos
-          sistemas com tecnologias modernas e orientadas a dados.
+          A proposta é reduzir controles manuais, acelerar análises, estruturar
+          dados, apoiar decisões executivas e permitir a criação de novos sistemas
+          com tecnologias modernas, escaláveis e orientadas à experiência do usuário.
         </p>
       </div>
     </InternalShell>

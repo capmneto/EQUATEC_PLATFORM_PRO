@@ -8,54 +8,60 @@
 export function InternalCard({
   title,
   description,
-  status = "Em desenvolvimento",
+  status = "Aguarde",
   href,
 }: InternalCardProps) {
   const content = (
     <div
       className="card"
       style={{
-        minHeight: 168,
-        padding: 22,
-        borderRadius: 20,
+        height: "100%",
+        minHeight: 132,
+        padding: 18,
+        borderRadius: 18,
         overflow: "hidden",
       }}
     >
-      <span
-        className="badge"
+      <div
         style={{
-          display: "inline-flex",
-          width: "fit-content",
-          maxWidth: "100%",
-          fontSize: 9,
-          padding: "5px 9px",
-          marginBottom: 14,
-          whiteSpace: "normal",
-          lineHeight: 1.2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
+          marginBottom: 12,
         }}
       >
-        {status}
-      </span>
+        <h3
+          style={{
+            fontSize: 21,
+            lineHeight: 1.15,
+            margin: 0,
+            letterSpacing: "-0.03em",
+            maxWidth: "75%",
+          }}
+        >
+          {title}
+        </h3>
 
-      <h3
-        style={{
-          fontSize: "clamp(20px, 1.25vw, 25px)",
-          lineHeight: 1.12,
-          margin: 0,
-          letterSpacing: "-0.03em",
-          maxWidth: "100%",
-        }}
-      >
-        {title}
-      </h3>
+        <span
+          className="badge"
+          style={{
+            flexShrink: 0,
+            fontSize: 9,
+            padding: "5px 8px",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {status}
+        </span>
+      </div>
 
       <p
         style={{
-          fontSize: "clamp(14px, 0.9vw, 16px)",
-          lineHeight: 1.48,
-          marginTop: 16,
-          marginBottom: 0,
-          maxWidth: "100%",
+          fontSize: 14,
+          lineHeight: 1.45,
+          margin: 0,
+          color: "rgba(226, 232, 240, 0.78)",
         }}
       >
         {description}
@@ -63,9 +69,7 @@ export function InternalCard({
     </div>
   );
 
-  if (!href) {
-    return content;
-  }
+  if (!href) return content;
 
   return (
     <a href={href} style={{ display: "block", height: "100%" }}>
