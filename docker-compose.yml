@@ -1,0 +1,36 @@
+services:
+  equatec-platform-pro:
+    build: .
+    container_name: equatec-platform-pro
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+    networks:
+      - equatec-network
+
+  mysql:
+    image: mysql:8.4
+    container_name: equatec-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_segura
+      MYSQL_DATABASE: equatec_platform
+      MYSQL_USER: equatec_user
+      MYSQL_PASSWORD: equatec_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - equatec-network
+
+volumes:
+  mysql_data:
+
+networks:
+  equatec-network:
+    driver: bridge
