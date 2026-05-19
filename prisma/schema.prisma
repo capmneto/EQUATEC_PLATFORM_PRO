@@ -16,24 +16,24 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  password      String?
-  image         String?
-  role          UserRole  @default(USER)
-  approved      Boolean   @default(false)
-  company       String?
-  phone         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  name           String?
+  email          String    @unique
+  emailVerified  DateTime?
+  password       String?
+  image          String?
+  role           UserRole  @default(USER)
+  approved       Boolean   @default(false)
+  company        String?
+  phone          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  accounts      Account[]
-  sessions      Session[]
-  permissions   ModulePermission[]
+  accounts       Account[]
+  sessions       Session[]
+  permissions    ModulePermission[]
   accessRequests AccessRequest[]
-  auditLogs     AuditLog[]
+  auditLogs      AuditLog[]
 }
 
 model Account {
@@ -79,37 +79,51 @@ model ModulePermission {
   id         String   @id @default(cuid())
   userId     String
   moduleKey  String
-  enabled    Boolean  @default(false)
+  canView    Boolean  @default(false)
+  canEdit    Boolean  @default(false)
+  canApprove Boolean  @default(false)
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, moduleKey])
-  @@index([userId])
+  @@index([moduleKey])
 }
 
 model AccessRequest {
-  id             String   @id @default(cuid())
-  userId         String
-  requestStatus  String   @default("pending")
-  notes          String?
-  reviewedBy     String?
-  reviewedAt     DateTime?
-  createdAt      DateTime @default(now())
+  id         String   @id @default(cuid())
+  userId     String
+  moduleKey  String
+  reason     String?  @db.Text
+  status     String   @default("PENDING")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([moduleKey])
+  @@index([status])
 }
 
 model AuditLog {
-  id        String   @id @default(cuid())
-  userId    String?
-  action    String
-  metadata  Json?
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  entityType String?
+  entityId   String?
+  oldValue   Json?
+  newValue   Json?
+  metadata   Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([userId])
+  @@index([action])
+  @@index([entityType])
+  @@index([createdAt])
 }
