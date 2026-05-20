@@ -17,21 +17,14 @@ export default async function AuditoriaPage() {
     redirect("/login");
   }
 
-  if (
-    currentUser.role !== "SUPER_ADMIN" &&
-    currentUser.role !== "ADMIN"
-  ) {
+  if (currentUser.role !== "SUPER_ADMIN" && currentUser.role !== "ADMIN") {
     redirect("/dashboard");
   }
 
   const logs = await prisma.auditLog.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: { createdAt: "desc" },
     take: 100,
-    include: {
-      user: true,
-    },
+    include: { user: true },
   });
 
   return (
@@ -39,9 +32,7 @@ export default async function AuditoriaPage() {
       <div className="container">
         <span className="badge">Governança e Compliance</span>
         <h1>Auditoria do Sistema</h1>
-        <p>
-          Histórico completo das ações realizadas pelos usuários.
-        </p>
+        <p>Histórico das ações realizadas na plataforma.</p>
 
         <div className="card" style={{ padding: 24, overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -54,21 +45,29 @@ export default async function AuditoriaPage() {
                 <th align="left">IP</th>
               </tr>
             </thead>
+
             <tbody>
               {logs.map((log) => (
-                <tr key={log.id} style={{ borderTop: "1px solid #eee" }}>
-                  <td style={{ padding: "8px 0" }}>
+                <tr key={log.id} style={{ borderTop: "1px solid rgba(148,163,184,.25)" }}>
+                  <td style={{ padding: "10px 8px" }}>
                     {new Date(log.createdAt).toLocaleString("pt-BR")}
                   </td>
-                  <td>{log.user?.email ?? "-"}</td>
-                  <td>{log.action}</td>
-                  <td>
+                  <td style={{ padding: "10px 8px" }}>{log.user?.email ?? "-"}</td>
+                  <td style={{ padding: "10px 8px" }}>{log.action}</td>
+                  <td style={{ padding: "10px 8px" }}>
                     {log.entityType ?? "-"}
-                    {log.entityId ? ` (${log.entityId})` : ""}
                   </td>
-                  <td>{log.ipAddress ?? "-"}</td>
+                  <td style={{ padding: "10px 8px" }}>{log.ipAddress ?? "-"}</td>
                 </tr>
               ))}
+
+              {logs.length === 0 && (
+                <tr>
+                  <td colSpan={5} style={{ padding: 16 }}>
+                    Nenhum registro de auditoria encontrado.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
