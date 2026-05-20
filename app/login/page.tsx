@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
@@ -15,6 +15,7 @@ function LoginForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     setError("");
     setLoading(true);
 
@@ -92,7 +93,11 @@ function LoginForm() {
               }}
             />
 
-            {error && <div style={{ color: "#fca5a5", fontSize: 14 }}>{error}</div>}
+            {error && (
+              <div style={{ color: "#fca5a5", fontSize: 14 }}>
+                {error}
+              </div>
+            )}
 
             <button
               type="submit"
