@@ -1,53 +1,32 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 
+const protectedRoutes = [
+  "/dashboard",
+  "/admin",
+  "/minha-conta",
+];
+
 export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const pathname = req.nextUrl.pathname;
+  const { pathname } = req.nextUrl;
 
-  // Rotas públicas
-  const publicRoutes = [
-    "/",
-    "/login",
-    "/cadastro",
-    "/sobre",
-    "/contato",
-    "/cursos",
-    "/franquias",
-    "/ia",
-  ];
-
-  const isPublicRoute = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  const isProtected = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
   );
 
-  if (isPublicRoute) {
+  if (!isProtected) {
     return NextResponse.next();
   }
 
-  // Usuário não autenticado
-  if (!isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-
-  // Usuário autenticado, mas não aprovado
-  if (req.auth?.user && !(req.auth.user as any).approved) {
-    return NextResponse.redirect(
-      new URL("/cadastro?status=aguardando-aprovacao", req.url)
-    );
+  if (!req.auth) {
+    const loginUrl = new URL("/login", req.nextUrl.origin);
+    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/admin/:path*",
-    "/modulos/:path*",
-    "/automacoes/:path*",
-    "/hub-bonus/:path*",
-    "/obras/:path*",
-  ],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/minha-conta/:path*"],
 };
