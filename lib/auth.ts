@@ -7,31 +7,49 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
   },
+
   providers: [
     Credentials({
       credentials: {
         email: {},
         password: {},
       },
+
       async authorize(credentials) {
-        const email = String(credentials?.email ?? "");
+        const email = String(credentials?.email ?? "").trim();
         const password = String(credentials?.password ?? "");
 
-        if (!email || !password) return null;
+        if (!email || !password) {
+          return null;
+        }
 
         const user = await prisma.user.findUnique({
           where: { email },
         });
 
-        if (!user || !user.password) return null;
+        if (!user) {
+          console.log("Usuário não encontrado");
+          return null;
+        }
+
+        if (!user.password) {
+          console.log("Usuário sem senha");
+          return null;
+        }
 
         if (!user.approved) {
           throw new Error("Usuário aguardando aprovação administrativa.");
         }
 
-        const passwordIsValid = await bcrypt.compare(password, user.password);
+        const passwordIsValid = await bcrypt.compare(
+          password,
+          user.password
+        );
 
-        if (!passwordIsValid) return null;
+        if (!passwordIsValid) {
+          console.log("Senha inválida");
+          return null;
+        }
 
         return {
           id: user.id,
@@ -43,9 +61,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+
   pages: {
     signIn: "/login",
   },
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -55,6 +75,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       return token;
     },
+
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.sub;
@@ -65,4 +86,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
+
+  trustHost: true,
 });
