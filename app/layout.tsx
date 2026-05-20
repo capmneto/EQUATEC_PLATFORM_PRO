@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 export const metadata: Metadata = {
   title: "EQUATEC — Ecossistema de Tecnologia e Gestão Integrada",
   description:
-    "Plataforma modular para gestão de obras, engenharia, IA corporativa, cursos EAD, automações e dashboards executivos.",
+    "Plataforma EQUATEC para tecnologia, engenharia, automação, inteligência artificial e gestão integrada.",
 };
 
 export default function RootLayout({
@@ -17,9 +16,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
-        <Header />
+        <AnalyticsTracker />
         {children}
-        <Footer />
       </body>
     </html>
   );
