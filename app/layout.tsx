@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import "./globals.css";
+import Link from "next/link";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 export const metadata: Metadata = {
@@ -19,20 +19,19 @@ export default function RootLayout({
       <body>
         <AnalyticsTracker />
 
-        <header className="topbar">
-          <div className="topbar-inner">
-            <Link href="/" className="logo">
-              EQUA<span>TEC</span>
+        <header className="site-header">
+          <div className="container nav">
+            <Link href="/" className="brand">
+              EQUATEC
             </Link>
 
-            <nav className="menu">
-              <Link href="/">Início</Link>
-              <Link href="/#ecossistema">Ecossistema</Link>
-              <Link href="/modulos">Módulos</Link>
+            <nav className="nav-links">
+              <Link href="/">Ecossistema</Link>
               <Link href="/sobre">Sobre</Link>
+              <Link href="/modulos">Módulos</Link>
               <Link href="/contato">Contato</Link>
-              <Link href="/login" className="login-button">
-                Entrar
+              <Link href="/login" className="btn btn-primary">
+                Acessar Plataforma
               </Link>
             </nav>
           </div>
