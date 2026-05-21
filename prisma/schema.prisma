@@ -197,3 +197,78 @@ model Lead {
   @@index([interest])
   @@index([createdAt])
 }
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  document  String?
+  email     String?
+  phone     String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscriptions Subscription[]
+  moduleAccesses ModuleAccess[]
+
+  @@index([name])
+  @@index([document])
+}
+
+model Plan {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  priceCents  Int      @default(0)
+  currency    String   @default("BRL")
+  active      Boolean  @default(true)
+  features    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  subscriptions Subscription[]
+
+  @@index([slug])
+  @@index([active])
+}
+
+model Subscription {
+  id             String   @id @default(cuid())
+  organizationId String
+  planId         String
+  status         String   @default("TRIAL")
+  startsAt       DateTime @default(now())
+  endsAt         DateTime?
+  trialEndsAt    DateTime?
+  provider       String?
+  providerRef    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  plan         Plan         @relation(fields: [planId], references: [id], onDelete: Restrict)
+
+  @@index([organizationId])
+  @@index([planId])
+  @@index([status])
+  @@index([startsAt])
+}
+
+model ModuleAccess {
+  id             String   @id @default(cuid())
+  organizationId String
+  moduleKey      String
+  enabled        Boolean  @default(false)
+  isFree         Boolean  @default(false)
+  expiresAt      DateTime?
+  limits         Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, moduleKey])
+  @@index([moduleKey])
+  @@index([enabled])
+}
