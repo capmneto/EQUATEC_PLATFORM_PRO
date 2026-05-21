@@ -176,20 +176,24 @@ model TrackingEvent {
   @@index([sessionId])
 }
 
+
 model Lead {
   id        String   @id @default(cuid())
-  name      String?
-  email     String?
+  name      String
+  email     String
   phone     String?
   company   String?
+  role      String?
   interest  String?
-  source    String?
   message   String?  @db.Text
+  source    String?
+  status    String   @default("NOVO")
   metadata  Json?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([email])
-  @@index([phone])
+  @@index([status])
   @@index([interest])
   @@index([createdAt])
 }
