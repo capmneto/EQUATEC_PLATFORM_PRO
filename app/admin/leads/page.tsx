@@ -9,83 +9,133 @@ export default async function AdminLeadsPage() {
     },
   });
 
+  const totalNovos = leads.filter((lead) => lead.status === "NOVO").length;
+  const totalBidAi = leads.filter((lead) => lead.interest === "BID_AI").length;
+
   return (
-    <main className="admin-page">
-      <section className="container">
-        <div className="hero">
-          <span className="badge">CRM EQUATEC</span>
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "#020617",
+        color: "white",
+        padding: "48px 24px",
+      }}
+    >
+      <section style={{ maxWidth: "1400px", margin: "0 auto" }}>
+        <div style={{ marginBottom: "32px" }}>
+          <span
+            style={{
+              display: "inline-flex",
+              padding: "10px 18px",
+              borderRadius: "999px",
+              border: "1px solid rgba(34, 211, 238, 0.35)",
+              background: "rgba(8, 47, 73, 0.4)",
+              color: "#67e8f9",
+              fontSize: "12px",
+              fontWeight: 900,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+            }}
+          >
+            CRM EQUATEC
+          </span>
 
-          <h1>Pipeline Comercial</h1>
+          <h1
+            style={{
+              marginTop: "22px",
+              fontSize: "58px",
+              lineHeight: 1,
+              fontWeight: 950,
+              letterSpacing: "-0.05em",
+            }}
+          >
+            Pipeline Comercial
+          </h1>
 
-          <p>
+          <p
+            style={{
+              marginTop: "18px",
+              maxWidth: "780px",
+              color: "#cbd5e1",
+              lineHeight: 1.7,
+              fontSize: "18px",
+            }}
+          >
             Gestão de leads, oportunidades, interessados e solicitações de
             acesso do Ecossistema EQUATEC.
           </p>
         </div>
 
-        <div className="stats-grid">
-          <div className="stat-card">
-            <span>Total Leads</span>
-            <strong>{leads.length}</strong>
-          </div>
-
-          <div className="stat-card">
-            <span>Status NOVO</span>
-            <strong>
-              {leads.filter((lead) => lead.status === "NOVO").length}
-            </strong>
-          </div>
-
-          <div className="stat-card">
-            <span>Módulos BID AI</span>
-            <strong>
-              {
-                leads.filter((lead) => lead.interest === "BID_AI").length
-              }
-            </strong>
-          </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+            gap: "18px",
+            marginBottom: "28px",
+          }}
+        >
+          <StatCard label="Total Leads" value={leads.length} />
+          <StatCard label="Status NOVO" value={totalNovos} />
+          <StatCard label="Módulos BID AI" value={totalBidAi} />
         </div>
 
-        <div className="table-wrapper">
-          <table>
-            <thead>
+        <div
+          style={{
+            overflowX: "auto",
+            borderRadius: "28px",
+            background: "rgba(15, 23, 42, 0.9)",
+            border: "1px solid rgba(148, 163, 184, 0.2)",
+          }}
+        >
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead style={{ background: "rgba(15, 23, 42, 1)" }}>
               <tr>
-                <th>Nome</th>
-                <th>Empresa</th>
-                <th>Interesse</th>
-                <th>Status</th>
-                <th>Contato</th>
-                <th>Data</th>
+                {["Nome", "Empresa", "Interesse", "Status", "Contato", "Data"].map(
+                  (header) => (
+                    <th
+                      key={header}
+                      style={{
+                        textAlign: "left",
+                        padding: "18px",
+                        fontSize: "13px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em",
+                        color: "#94a3b8",
+                        borderBottom: "1px solid rgba(148, 163, 184, 0.14)",
+                      }}
+                    >
+                      {header}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
 
             <tbody>
               {leads.map((lead) => (
                 <tr key={lead.id}>
-                  <td>
-                    <div className="lead-name">
+                  <td style={tdStyle}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                       <strong>{lead.name}</strong>
-                      <span>{lead.email}</span>
+                      <span style={{ color: "#94a3b8", fontSize: "13px" }}>
+                        {lead.email}
+                      </span>
                     </div>
                   </td>
 
-                  <td>{lead.company || "-"}</td>
+                  <td style={tdStyle}>{lead.company || "-"}</td>
 
-                  <td>
-                    <span className="tag">
-                      {lead.interest || "GERAL"}
-                    </span>
+                  <td style={tdStyle}>
+                    <span style={tagStyle}>{lead.interest || "GERAL"}</span>
                   </td>
 
-                  <td>
-                    <span className={`status ${lead.status.toLowerCase()}`}>
-                      {lead.status}
-                    </span>
+                  <td style={tdStyle}>
+                    <span style={statusStyle}>{lead.status}</span>
                   </td>
 
-                  <td>{lead.phone || "-"}</td>
+                  <td style={tdStyle}>{lead.phone || "-"}</td>
 
-                  <td>
+                  <td style={tdStyle}>
                     {new Date(lead.createdAt).toLocaleDateString("pt-BR")}
                   </td>
                 </tr>
@@ -94,172 +144,71 @@ export default async function AdminLeadsPage() {
           </table>
 
           {leads.length === 0 && (
-            <div className="empty">
+            <div
+              style={{
+                padding: "42px",
+                textAlign: "center",
+                color: "#94a3b8",
+              }}
+            >
               Nenhum lead cadastrado até o momento.
             </div>
           )}
         </div>
       </section>
-
-      <style jsx>{`
-        .admin-page {
-          min-height: 100vh;
-          background: #020617;
-          color: white;
-          padding: 48px 24px;
-        }
-
-        .container {
-          max-width: 1400px;
-          margin: 0 auto;
-        }
-
-        .hero {
-          margin-bottom: 32px;
-        }
-
-        .badge {
-          display: inline-flex;
-          padding: 10px 18px;
-          border-radius: 999px;
-          border: 1px solid rgba(34, 211, 238, 0.35);
-          background: rgba(8, 47, 73, 0.4);
-          color: #67e8f9;
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-        }
-
-        h1 {
-          margin-top: 22px;
-          font-size: 58px;
-          line-height: 1;
-          font-weight: 950;
-          letter-spacing: -0.05em;
-        }
-
-        .hero p {
-          margin-top: 18px;
-          max-width: 780px;
-          color: #cbd5e1;
-          line-height: 1.7;
-          font-size: 18px;
-        }
-
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 18px;
-          margin-bottom: 28px;
-        }
-
-        .stat-card {
-          border-radius: 24px;
-          padding: 24px;
-          background: rgba(15, 23, 42, 0.88);
-          border: 1px solid rgba(148, 163, 184, 0.2);
-        }
-
-        .stat-card span {
-          display: block;
-          color: #94a3b8;
-          font-size: 14px;
-          margin-bottom: 12px;
-        }
-
-        .stat-card strong {
-          font-size: 42px;
-          font-weight: 950;
-        }
-
-        .table-wrapper {
-          overflow-x: auto;
-          border-radius: 28px;
-          background: rgba(15, 23, 42, 0.9);
-          border: 1px solid rgba(148, 163, 184, 0.2);
-        }
-
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        thead {
-          background: rgba(15, 23, 42, 1);
-        }
-
-        th {
-          text-align: left;
-          padding: 18px;
-          font-size: 13px;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: #94a3b8;
-          border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-        }
-
-        td {
-          padding: 18px;
-          border-bottom: 1px solid rgba(148, 163, 184, 0.08);
-          color: #e2e8f0;
-        }
-
-        tr:hover {
-          background: rgba(30, 41, 59, 0.4);
-        }
-
-        .lead-name {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-
-        .lead-name span {
-          color: #94a3b8;
-          font-size: 13px;
-        }
-
-        .tag {
-          display: inline-flex;
-          padding: 8px 12px;
-          border-radius: 999px;
-          background: rgba(34, 211, 238, 0.12);
-          border: 1px solid rgba(34, 211, 238, 0.24);
-          color: #67e8f9;
-          font-size: 12px;
-          font-weight: 800;
-        }
-
-        .status {
-          display: inline-flex;
-          padding: 8px 12px;
-          border-radius: 999px;
-          font-size: 12px;
-          font-weight: 900;
-        }
-
-        .status.novo {
-          background: rgba(59, 130, 246, 0.14);
-          color: #93c5fd;
-        }
-
-        .empty {
-          padding: 42px;
-          text-align: center;
-          color: #94a3b8;
-        }
-
-        @media (max-width: 900px) {
-          .stats-grid {
-            grid-template-columns: 1fr;
-          }
-
-          h1 {
-            font-size: 42px;
-          }
-        }
-      `}</style>
     </main>
   );
 }
+
+function StatCard({ label, value }: { label: string; value: number }) {
+  return (
+    <div
+      style={{
+        borderRadius: "24px",
+        padding: "24px",
+        background: "rgba(15, 23, 42, 0.88)",
+        border: "1px solid rgba(148, 163, 184, 0.2)",
+      }}
+    >
+      <span
+        style={{
+          display: "block",
+          color: "#94a3b8",
+          fontSize: "14px",
+          marginBottom: "12px",
+        }}
+      >
+        {label}
+      </span>
+
+      <strong style={{ fontSize: "42px", fontWeight: 950 }}>{value}</strong>
+    </div>
+  );
+}
+
+const tdStyle: React.CSSProperties = {
+  padding: "18px",
+  borderBottom: "1px solid rgba(148, 163, 184, 0.08)",
+  color: "#e2e8f0",
+};
+
+const tagStyle: React.CSSProperties = {
+  display: "inline-flex",
+  padding: "8px 12px",
+  borderRadius: "999px",
+  background: "rgba(34, 211, 238, 0.12)",
+  border: "1px solid rgba(34, 211, 238, 0.24)",
+  color: "#67e8f9",
+  fontSize: "12px",
+  fontWeight: 800,
+};
+
+const statusStyle: React.CSSProperties = {
+  display: "inline-flex",
+  padding: "8px 12px",
+  borderRadius: "999px",
+  fontSize: "12px",
+  fontWeight: 900,
+  background: "rgba(59, 130, 246, 0.14)",
+  color: "#93c5fd",
+};
