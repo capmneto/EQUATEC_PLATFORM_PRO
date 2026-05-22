@@ -212,5 +212,9 @@ const statusStyle: React.CSSProperties = {
   fontWeight: 900,
   background: "rgba(59, 130, 246, 0.14)",
   color: "#93c5fd",
+<<<<<<< HEAD
 };
 ```
+=======
+};
+>>>>>>> fix/admin-leads-server-style
