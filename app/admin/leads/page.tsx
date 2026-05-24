@@ -1,4 +1,5 @@
-﻿import { prisma } from "@/lib/prisma";
+﻿import type { CSSProperties } from "react";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -10,52 +11,246 @@ export default async function AdminLeadsPage() {
   });
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white p-8 md:p-10">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-black text-white mb-8">
-          CRM EQUATEC <span className="text-cyan-500">- Leads</span>
-        </h1>
+    <main style={mainStyle}>
+      <section style={headerStyle}>
+        <div>
+          <p style={eyebrowStyle}>CRM EQUATEC</p>
+          <h1 style={titleStyle}>Leads cadastrados</h1>
+          <p style={subtitleStyle}>
+            Painel administrativo inicial para acompanhamento dos contatos
+            capturados pelo formulário comercial da plataforma.
+          </p>
+        </div>
+      </section>
 
-        <div className="overflow-x-auto bg-slate-900 rounded-2xl border border-slate-800 shadow-xl">
-          <table className="w-full border-collapse">
-            <thead className="bg-slate-800/50">
-              <tr>
-                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Nome</th>
-                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Empresa</th>
-                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Interesse</th>
-                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Status</th>
-                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">E-mail</th>
-                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Telefone</th>
+      <section style={summaryGridStyle}>
+        <div style={cardStyle}>
+          <span style={cardLabelStyle}>Total de leads</span>
+          <strong style={cardValueStyle}>{leads.length}</strong>
+        </div>
+
+        <div style={cardStyle}>
+          <span style={cardLabelStyle}>Novos</span>
+          <strong style={cardValueStyle}>
+            {leads.filter((lead) => lead.status === "NOVO").length}
+          </strong>
+        </div>
+
+        <div style={cardStyle}>
+          <span style={cardLabelStyle}>Em acompanhamento</span>
+          <strong style={cardValueStyle}>
+            {
+              leads.filter(
+                (lead) =>
+                  lead.status !== "NOVO" &&
+                  lead.status !== "GANHO" &&
+                  lead.status !== "PERDIDO",
+              ).length
+            }
+          </strong>
+        </div>
+      </section>
+
+      <section style={tableWrapperStyle}>
+        <div style={tableHeaderStyle}>
+          <h2 style={sectionTitleStyle}>Base de contatos</h2>
+          <span style={tableInfoStyle}>
+            Dados ordenados do mais recente para o mais antigo.
+          </span>
+        </div>
+
+        <div style={scrollStyle}>
+          <table style={tableStyle}>
+            <thead>
+              <tr style={headRowStyle}>
+                <th style={thStyle}>Nome</th>
+                <th style={thStyle}>Empresa</th>
+                <th style={thStyle}>Interesse</th>
+                <th style={thStyle}>Status</th>
+                <th style={thStyle}>E-mail</th>
+                <th style={thStyle}>Telefone</th>
+                <th style={thStyle}>Criado em</th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-800/50">
+            <tbody>
               {leads.map((lead) => (
-                /* Sugestão do Claude aplicada aqui: hover transition */
-                <tr key={lead.id} className="hover:bg-slate-800/30 transition-colors duration-200">
-                  <td className="p-5 text-sm font-medium text-white">{lead.name}</td>
-                  <td className="p-5 text-sm text-slate-300">{lead.company || "-"}</td>
-                  <td className="p-5 text-sm text-slate-300">{lead.interest || "-"}</td>
-                  <td className="p-5 text-sm">
-                    /* Sugestão do Claude aplicada aqui: Badge Pill */
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                      {lead.status}
-                    </span>
+                <tr key={lead.id}>
+                  <td style={tdStrongStyle}>{lead.name}</td>
+                  <td style={tdStyle}>{lead.company || "-"}</td>
+                  <td style={tdStyle}>{lead.interest || "-"}</td>
+                  <td style={tdStyle}>
+                    <span style={badgeStyle}>{lead.status}</span>
                   </td>
-                  <td className="p-5 text-sm text-slate-400">{lead.email}</td>
-                  <td className="p-5 text-sm text-slate-400">{lead.phone || "-"}</td>
+                  <td style={tdStyle}>{lead.email}</td>
+                  <td style={tdStyle}>{lead.phone || "-"}</td>
+                  <td style={tdStyle}>
+                    {new Intl.DateTimeFormat("pt-BR", {
+                      dateStyle: "short",
+                      timeStyle: "short",
+                    }).format(lead.createdAt)}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-
-          {leads.length === 0 && (
-            <div className="p-10 text-center text-slate-400">
-              <p className="text-sm">Nenhum lead cadastrado no momento.</p>
-            </div>
-          )}
         </div>
-      </div>
+
+        {leads.length === 0 && (
+          <div style={emptyStyle}>
+            Nenhum lead cadastrado até o momento.
+          </div>
+        )}
+      </section>
     </main>
   );
 }
+
+const mainStyle: CSSProperties = {
+  minHeight: "100vh",
+  background: "#020617",
+  color: "#ffffff",
+  padding: "40px",
+};
+
+const headerStyle: CSSProperties = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "flex-start",
+  gap: "24px",
+  marginBottom: "28px",
+};
+
+const eyebrowStyle: CSSProperties = {
+  color: "#22d3ee",
+  fontSize: "13px",
+  fontWeight: 800,
+  letterSpacing: "0.14em",
+  textTransform: "uppercase",
+  marginBottom: "10px",
+};
+
+const titleStyle: CSSProperties = {
+  fontSize: "42px",
+  lineHeight: 1.1,
+  fontWeight: 900,
+  margin: 0,
+};
+
+const subtitleStyle: CSSProperties = {
+  maxWidth: "760px",
+  color: "#cbd5e1",
+  fontSize: "16px",
+  lineHeight: 1.6,
+  marginTop: "14px",
+};
+
+const summaryGridStyle: CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+  gap: "16px",
+  marginBottom: "24px",
+};
+
+const cardStyle: CSSProperties = {
+  background: "#0f172a",
+  border: "1px solid rgba(148, 163, 184, 0.18)",
+  borderRadius: "20px",
+  padding: "22px",
+};
+
+const cardLabelStyle: CSSProperties = {
+  display: "block",
+  color: "#94a3b8",
+  fontSize: "13px",
+  marginBottom: "10px",
+};
+
+const cardValueStyle: CSSProperties = {
+  display: "block",
+  color: "#ffffff",
+  fontSize: "34px",
+  fontWeight: 900,
+};
+
+const tableWrapperStyle: CSSProperties = {
+  background: "#0f172a",
+  borderRadius: "22px",
+  border: "1px solid rgba(148, 163, 184, 0.18)",
+  overflow: "hidden",
+};
+
+const tableHeaderStyle: CSSProperties = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: "16px",
+  padding: "22px",
+  borderBottom: "1px solid rgba(148, 163, 184, 0.14)",
+};
+
+const sectionTitleStyle: CSSProperties = {
+  margin: 0,
+  fontSize: "20px",
+  fontWeight: 800,
+};
+
+const tableInfoStyle: CSSProperties = {
+  color: "#94a3b8",
+  fontSize: "13px",
+};
+
+const scrollStyle: CSSProperties = {
+  overflowX: "auto",
+};
+
+const tableStyle: CSSProperties = {
+  width: "100%",
+  borderCollapse: "collapse",
+  minWidth: "980px",
+};
+
+const headRowStyle: CSSProperties = {
+  background: "#111827",
+};
+
+const thStyle: CSSProperties = {
+  padding: "16px",
+  textAlign: "left",
+  color: "#94a3b8",
+  fontSize: "12px",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
+};
+
+const tdStyle: CSSProperties = {
+  padding: "16px",
+  color: "#cbd5e1",
+  borderBottom: "1px solid rgba(148, 163, 184, 0.08)",
+  fontSize: "14px",
+};
+
+const tdStrongStyle: CSSProperties = {
+  ...tdStyle,
+  color: "#ffffff",
+  fontWeight: 700,
+};
+
+const badgeStyle: CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  borderRadius: "999px",
+  padding: "6px 10px",
+  background: "rgba(34, 211, 238, 0.12)",
+  color: "#67e8f9",
+  border: "1px solid rgba(34, 211, 238, 0.25)",
+  fontSize: "12px",
+  fontWeight: 800,
+};
+
+const emptyStyle: CSSProperties = {
+  padding: "32px",
+  color: "#94a3b8",
+  textAlign: "center",
+};
