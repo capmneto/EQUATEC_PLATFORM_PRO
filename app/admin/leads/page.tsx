@@ -1,5 +1,4 @@
-﻿import type { CSSProperties } from "react";
-import { prisma } from "@/lib/prisma";
+﻿import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -11,88 +10,52 @@ export default async function AdminLeadsPage() {
   });
 
   return (
-    <main style={mainStyle}>
-      <h1 style={titleStyle}>CRM EQUATEC - Leads</h1>
+    <main className="min-h-screen bg-slate-950 text-white p-8 md:p-10">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl md:text-4xl font-black text-white mb-8">
+          CRM EQUATEC <span className="text-cyan-500">- Leads</span>
+        </h1>
 
-      <div style={tableWrapperStyle}>
-        <table style={tableStyle}>
-          <thead>
-            <tr style={headRowStyle}>
-              <th style={thStyle}>Nome</th>
-              <th style={thStyle}>Empresa</th>
-              <th style={thStyle}>Interesse</th>
-              <th style={thStyle}>Status</th>
-              <th style={thStyle}>E-mail</th>
-              <th style={thStyle}>Telefone</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {leads.map((lead) => (
-              <tr key={lead.id}>
-                <td style={tdStyle}>{lead.name}</td>
-                <td style={tdStyle}>{lead.company || "-"}</td>
-                <td style={tdStyle}>{lead.interest || "-"}</td>
-                <td style={tdStyle}>{lead.status}</td>
-                <td style={tdStyle}>{lead.email}</td>
-                <td style={tdStyle}>{lead.phone || "-"}</td>
+        <div className="overflow-x-auto bg-slate-900 rounded-2xl border border-slate-800 shadow-xl">
+          <table className="w-full border-collapse">
+            <thead className="bg-slate-800/50">
+              <tr>
+                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Nome</th>
+                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Empresa</th>
+                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Interesse</th>
+                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Status</th>
+                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">E-mail</th>
+                <th className="p-5 text-left text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-800/50">Telefone</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
 
-        {leads.length === 0 && (
-          <div style={emptyStyle}>Nenhum lead cadastrado.</div>
-        )}
+            <tbody className="divide-y divide-slate-800/50">
+              {leads.map((lead) => (
+                /* Sugestão do Claude aplicada aqui: hover transition */
+                <tr key={lead.id} className="hover:bg-slate-800/30 transition-colors duration-200">
+                  <td className="p-5 text-sm font-medium text-white">{lead.name}</td>
+                  <td className="p-5 text-sm text-slate-300">{lead.company || "-"}</td>
+                  <td className="p-5 text-sm text-slate-300">{lead.interest || "-"}</td>
+                  <td className="p-5 text-sm">
+                    /* Sugestão do Claude aplicada aqui: Badge Pill */
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                      {lead.status}
+                    </span>
+                  </td>
+                  <td className="p-5 text-sm text-slate-400">{lead.email}</td>
+                  <td className="p-5 text-sm text-slate-400">{lead.phone || "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {leads.length === 0 && (
+            <div className="p-10 text-center text-slate-400">
+              <p className="text-sm">Nenhum lead cadastrado no momento.</p>
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );
 }
-
-const mainStyle: CSSProperties = {
-  minHeight: "100vh",
-  background: "#020617",
-  color: "#fff",
-  padding: "40px",
-};
-
-const titleStyle: CSSProperties = {
-  fontSize: "42px",
-  fontWeight: 900,
-  marginBottom: "24px",
-};
-
-const tableWrapperStyle: CSSProperties = {
-  overflowX: "auto",
-  background: "#0f172a",
-  borderRadius: "20px",
-  border: "1px solid rgba(148,163,184,0.2)",
-};
-
-const tableStyle: CSSProperties = {
-  width: "100%",
-  borderCollapse: "collapse",
-};
-
-const headRowStyle: CSSProperties = {
-  background: "#111827",
-};
-
-const thStyle: CSSProperties = {
-  padding: "16px",
-  textAlign: "left",
-  color: "#94a3b8",
-  fontSize: "12px",
-  textTransform: "uppercase",
-  borderBottom: "1px solid rgba(148,163,184,0.2)",
-};
-
-const tdStyle: CSSProperties = {
-  padding: "16px",
-  borderBottom: "1px solid rgba(148,163,184,0.08)",
-};
-
-const emptyStyle: CSSProperties = {
-  padding: "30px",
-  color: "#94a3b8",
-};
