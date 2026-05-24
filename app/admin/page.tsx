@@ -1,177 +1,294 @@
-﻿import Link from "next/link";
+﻿import type { CSSProperties } from "react";
+import { prisma } from "@/lib/prisma";
 
-const modules = [
-  {
-    title: "BID AI",
-    description: "Propostas técnicas, comerciais, checklist, riscos e precificação.",
-    href: "/admin/bid",
-    status: "Em implantação",
-  },
-  {
-    title: "CRM de Leads",
-    description: "Base comercial inicial com contatos, interesses e status.",
-    href: "/admin/leads",
-    status: "Operacional",
-  },
-  {
-    title: "Auditoria",
-    description: "Rastreabilidade das ações críticas e eventos do sistema.",
-    href: "/admin/auditoria",
-    status: "Operacional",
-  },
-  {
-    title: "Usuários",
-    description: "Gestão de acessos, aprovações e perfis da plataforma.",
-    href: "/admin/usuarios",
-    status: "Estrutural",
-  },
-  {
-    title: "Obras",
-    description: "Gestão físico-financeira, etapas, documentos e medições.",
-    href: "/obras",
-    status: "Planejado",
-  },
-  {
-    title: "IA Corporativa",
-    description: "Agentes, análises documentais e automações inteligentes.",
-    href: "/ia",
-    status: "Planejado",
-  },
-];
+export const dynamic = "force-dynamic";
 
-const kpis = [
-  { label: "Módulos mapeados", value: "12+" },
-  { label: "Rotas validadas no build", value: "23" },
-  { label: "Status da plataforma", value: "Core OK" },
-  { label: "Fase atual", value: "SaaS Core" },
-];
+function getStatusStyle(status: string): CSSProperties {
+  const base: CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    borderRadius: "999px",
+    padding: "6px 10px",
+    fontSize: "12px",
+    fontWeight: 800,
+    border: "1px solid",
+    whiteSpace: "nowrap",
+  };
 
-export default function AdminPage() {
+  if (status === "GANHO") {
+    return {
+      ...base,
+      background: "rgba(16, 185, 129, 0.12)",
+      color: "#6ee7b7",
+      borderColor: "rgba(16, 185, 129, 0.35)",
+    };
+  }
+
+  if (status === "PERDIDO") {
+    return {
+      ...base,
+      background: "rgba(248, 113, 113, 0.12)",
+      color: "#fca5a5",
+      borderColor: "rgba(248, 113, 113, 0.35)",
+    };
+  }
+
+  if (status === "NOVO") {
+    return {
+      ...base,
+      background: "rgba(34, 211, 238, 0.12)",
+      color: "#67e8f9",
+      borderColor: "rgba(34, 211, 238, 0.35)",
+    };
+  }
+
+  return {
+    ...base,
+    background: "rgba(250, 204, 21, 0.12)",
+    color: "#fde68a",
+    borderColor: "rgba(250, 204, 21, 0.35)",
+  };
+}
+
+export default async function AdminLeadsPage() {
+  const leads = await prisma.lead.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <section className="mx-auto max-w-7xl px-6 py-10">
-        <div className="mb-10 rounded-3xl border border-cyan-400/20 bg-slate-900/70 p-8 shadow-2xl">
-          <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-cyan-300">
-            EQUATEC Control Hub
+    <main style={mainStyle}>
+      <section style={headerStyle}>
+        <div>
+          <p style={eyebrowStyle}>CRM EQUATEC</p>
+          <h1 style={titleStyle}>Leads cadastrados</h1>
+          <p style={subtitleStyle}>
+            Painel administrativo inicial para acompanhamento dos contatos
+            capturados pelo formulário comercial da plataforma.
           </p>
+        </div>
+      </section>
 
-          <div className="grid gap-8 lg:grid-cols-[1.5fr_0.8fr] lg:items-end">
-            <div>
-              <h1 className="text-4xl font-black tracking-tight md:text-5xl">
-                Cockpit Executivo da Plataforma
-              </h1>
-
-              <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
-                Núcleo central para governança dos módulos, acompanhamento da
-                evolução SaaS, gestão administrativa, inteligência artificial,
-                propostas comerciais, CRM, auditoria e futuras automações do
-                ecossistema EQUATEC.
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-slate-700 bg-slate-950/80 p-5">
-              <p className="text-sm text-slate-400">Ambiente atual</p>
-              <strong className="mt-2 block text-2xl text-cyan-300">
-                Produção preparada
-              </strong>
-              <p className="mt-3 text-sm leading-6 text-slate-400">
-                Build validado, rotas principais reconhecidas e base pronta para
-                avanço modular controlado.
-              </p>
-            </div>
-          </div>
+      <section style={summaryGridStyle}>
+        <div style={cardStyle}>
+          <span style={cardLabelStyle}>Total de leads</span>
+          <strong style={cardValueStyle}>{leads.length}</strong>
         </div>
 
-        <div className="mb-8 grid gap-4 md:grid-cols-4">
-          {kpis.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-2xl border border-slate-800 bg-slate-900 p-5"
-            >
-              <p className="text-sm text-slate-400">{item.label}</p>
-              <strong className="mt-2 block text-2xl font-black text-white">
-                {item.value}
-              </strong>
-            </div>
-          ))}
+        <div style={cardStyle}>
+          <span style={cardLabelStyle}>Novos</span>
+          <strong style={cardValueStyle}>
+            {leads.filter((lead) => lead.status === "NOVO").length}
+          </strong>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_0.42fr]">
-          <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-            <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-2xl font-black">Módulos da Plataforma</h2>
-                <p className="mt-1 text-sm text-slate-400">
-                  Acesso rápido aos blocos operacionais e administrativos.
-                </p>
-              </div>
-            </div>
+        <div style={cardStyle}>
+          <span style={cardLabelStyle}>Em acompanhamento</span>
+          <strong style={cardValueStyle}>
+            {
+              leads.filter(
+                (lead) =>
+                  lead.status !== "NOVO" &&
+                  lead.status !== "GANHO" &&
+                  lead.status !== "PERDIDO",
+              ).length
+            }
+          </strong>
+        </div>
+      </section>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              {modules.map((module) => (
-                <Link
-                  key={module.title}
-                  href={module.href}
-                  className="group rounded-2xl border border-slate-800 bg-slate-950 p-5 transition hover:border-cyan-400/60 hover:bg-slate-900"
+      <section style={tableWrapperStyle}>
+        <div style={tableHeaderStyle}>
+          <h2 style={sectionTitleStyle}>Base de contatos</h2>
+          <span style={tableInfoStyle}>
+            Dados ordenados do mais recente para o mais antigo.
+          </span>
+        </div>
+
+        <div style={scrollStyle}>
+          <table style={tableStyle}>
+            <thead>
+              <tr style={headRowStyle}>
+                <th style={thStyle}>Nome</th>
+                <th style={thStyle}>Empresa</th>
+                <th style={thStyle}>Interesse</th>
+                <th style={thStyle}>Status</th>
+                <th style={thStyle}>E-mail</th>
+                <th style={thStyle}>Telefone</th>
+                <th style={thStyle}>Criado em</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {leads.map((lead) => (
+                <tr
+                  key={lead.id}
+                  className="transition-colors hover:bg-slate-800/30"
                 >
-                  <div className="mb-4 flex items-start justify-between gap-4">
-                    <h3 className="text-lg font-black text-white">
-                      {module.title}
-                    </h3>
-
-                    <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-300">
-                      {module.status}
+                  <td style={tdStrongStyle}>{lead.name}</td>
+                  <td style={tdStyle}>{lead.company || "-"}</td>
+                  <td style={tdStyle}>{lead.interest || "-"}</td>
+                  <td style={tdStyle}>
+                    <span style={getStatusStyle(lead.status)}>
+                      {lead.status}
                     </span>
-                  </div>
-
-                  <p className="text-sm leading-6 text-slate-400">
-                    {module.description}
-                  </p>
-
-                  <p className="mt-4 text-sm font-bold text-cyan-300">
-                    Abrir módulo →
-                  </p>
-                </Link>
+                  </td>
+                  <td style={tdStyle}>{lead.email}</td>
+                  <td style={tdStyle}>{lead.phone || "-"}</td>
+                  <td style={tdStyle}>
+                    {new Intl.DateTimeFormat("pt-BR", {
+                      dateStyle: "short",
+                      timeStyle: "short",
+                    }).format(lead.createdAt)}
+                  </td>
+                </tr>
               ))}
-            </div>
-          </section>
-
-          <aside className="space-y-6">
-            <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-              <h2 className="text-xl font-black">Próximos Marcos</h2>
-
-              <div className="mt-5 space-y-4">
-                {[
-                  "Criar estrutura oficial de módulos",
-                  "Implantar controle de acesso modular",
-                  "Criar base AI Core com Gemini",
-                  "Criar documentos inteligentes",
-                  "Preparar billing SaaS futuro",
-                ].map((item, index) => (
-                  <div key={item} className="flex gap-3">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-sm font-black text-cyan-300">
-                      {index + 1}
-                    </span>
-                    <p className="text-sm leading-6 text-slate-300">{item}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-6">
-              <h2 className="text-xl font-black text-cyan-200">
-                Diretriz de Governança
-              </h2>
-
-              <p className="mt-4 text-sm leading-6 text-slate-200">
-                Toda nova funcionalidade deve preservar o core, respeitar
-                permissões, manter rastreabilidade e nascer preparada para
-                operação SaaS, módulos pagos e uso futuro de IA.
-              </p>
-            </section>
-          </aside>
+            </tbody>
+          </table>
         </div>
+
+        {leads.length === 0 && (
+          <div style={emptyStyle}>Nenhum lead cadastrado até o momento.</div>
+        )}
       </section>
     </main>
   );
 }
+
+const mainStyle: CSSProperties = {
+  minHeight: "100vh",
+  background: "#020617",
+  color: "#ffffff",
+  padding: "40px",
+};
+
+const headerStyle: CSSProperties = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "flex-start",
+  gap: "24px",
+  marginBottom: "28px",
+};
+
+const eyebrowStyle: CSSProperties = {
+  color: "#22d3ee",
+  fontSize: "13px",
+  fontWeight: 800,
+  letterSpacing: "0.14em",
+  textTransform: "uppercase",
+  marginBottom: "10px",
+};
+
+const titleStyle: CSSProperties = {
+  fontSize: "42px",
+  lineHeight: 1.1,
+  fontWeight: 900,
+  margin: 0,
+};
+
+const subtitleStyle: CSSProperties = {
+  maxWidth: "760px",
+  color: "#cbd5e1",
+  fontSize: "16px",
+  lineHeight: 1.6,
+  marginTop: "14px",
+};
+
+const summaryGridStyle: CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+  gap: "16px",
+  marginBottom: "24px",
+};
+
+const cardStyle: CSSProperties = {
+  background: "#0f172a",
+  border: "1px solid rgba(148, 163, 184, 0.18)",
+  borderRadius: "20px",
+  padding: "22px",
+};
+
+const cardLabelStyle: CSSProperties = {
+  display: "block",
+  color: "#94a3b8",
+  fontSize: "13px",
+  marginBottom: "10px",
+};
+
+const cardValueStyle: CSSProperties = {
+  display: "block",
+  color: "#ffffff",
+  fontSize: "34px",
+  fontWeight: 900,
+};
+
+const tableWrapperStyle: CSSProperties = {
+  background: "#0f172a",
+  borderRadius: "22px",
+  border: "1px solid rgba(148, 163, 184, 0.18)",
+  overflow: "hidden",
+};
+
+const tableHeaderStyle: CSSProperties = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: "16px",
+  padding: "22px",
+  borderBottom: "1px solid rgba(148, 163, 184, 0.14)",
+};
+
+const sectionTitleStyle: CSSProperties = {
+  margin: 0,
+  fontSize: "20px",
+  fontWeight: 800,
+};
+
+const tableInfoStyle: CSSProperties = {
+  color: "#94a3b8",
+  fontSize: "13px",
+};
+
+const scrollStyle: CSSProperties = {
+  overflowX: "auto",
+};
+
+const tableStyle: CSSProperties = {
+  width: "100%",
+  borderCollapse: "collapse",
+  minWidth: "980px",
+};
+
+const headRowStyle: CSSProperties = {
+  background: "#111827",
+};
+
+const thStyle: CSSProperties = {
+  padding: "16px",
+  textAlign: "left",
+  color: "#94a3b8",
+  fontSize: "12px",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
+};
+
+const tdStyle: CSSProperties = {
+  padding: "16px",
+  color: "#cbd5e1",
+  borderBottom: "1px solid rgba(148, 163, 184, 0.08)",
+  fontSize: "14px",
+};
+
+const tdStrongStyle: CSSProperties = {
+  ...tdStyle,
+  color: "#ffffff",
+  fontWeight: 700,
+};
+
+const emptyStyle: CSSProperties = {
+  padding: "32px",
+  color: "#94a3b8",
+  textAlign: "center",
+};
