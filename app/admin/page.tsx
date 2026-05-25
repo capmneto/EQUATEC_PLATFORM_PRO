@@ -9,9 +9,15 @@ const modules = [
   },
   {
     title: "Document AI",
-    description: "Upload TXT/PDF, extração documental e análise inteligente por IA.",
+    description: "Upload TXT/PDF/imagens, OCR, extração documental e análise inteligente.",
     href: "/admin/document-ai",
-    status: "V2 Upload Real",
+    status: "V3 OCR",
+  },
+  {
+    title: "RAG Playground",
+    description: "Consulta contextual na memória vetorial local do EQUATEC.",
+    href: "/admin/rag",
+    status: "RAG V1",
   },
   {
     title: "AI Playground",
@@ -31,19 +37,13 @@ const modules = [
     href: "/admin/auditoria",
     status: "Operacional",
   },
-  {
-    title: "Usuários",
-    description: "Gestão de acessos, aprovações e perfis da plataforma.",
-    href: "/admin/usuarios",
-    status: "Estrutural",
-  },
 ];
 
 const kpis = [
-  { label: "Módulos IA ativos", value: "3" },
-  { label: "Rotas validadas", value: "28" },
-  { label: "Document AI", value: "TXT/PDF" },
-  { label: "Fase atual", value: "AI Product" },
+  { label: "Módulos IA ativos", value: "4" },
+  { label: "Rotas validadas", value: "33" },
+  { label: "Memória IA", value: "RAG V1" },
+  { label: "Fase atual", value: "AI Memory" },
 ];
 
 export default function AdminPage() {
@@ -61,8 +61,8 @@ export default function AdminPage() {
 
           <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
             Núcleo central para governança dos módulos, inteligência artificial,
-            propostas comerciais, análise documental, CRM, auditoria e evolução
-            SaaS do ecossistema EQUATEC.
+            propostas comerciais, análise documental, memória vetorial, RAG, CRM,
+            auditoria e evolução SaaS do ecossistema EQUATEC.
           </p>
         </div>
 
