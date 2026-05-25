@@ -1,294 +1,121 @@
-﻿import type { CSSProperties } from "react";
-import { prisma } from "@/lib/prisma";
+﻿import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+const modules = [
+  {
+    title: "BID AI",
+    description: "Propostas técnicas, comerciais, checklist, riscos e precificação.",
+    href: "/admin/bid",
+    status: "V2 Export Engine",
+  },
+  {
+    title: "Document AI",
+    description: "Upload TXT/PDF, extração documental e análise inteligente por IA.",
+    href: "/admin/document-ai",
+    status: "V2 Upload Real",
+  },
+  {
+    title: "AI Playground",
+    description: "Ambiente de teste da camada Gemini, prompts e personas corporativas.",
+    href: "/admin/ia",
+    status: "Operacional",
+  },
+  {
+    title: "CRM de Leads",
+    description: "Base comercial inicial com contatos, interesses e status.",
+    href: "/admin/leads",
+    status: "Operacional",
+  },
+  {
+    title: "Auditoria",
+    description: "Rastreabilidade das ações críticas e eventos do sistema.",
+    href: "/admin/auditoria",
+    status: "Operacional",
+  },
+  {
+    title: "Usuários",
+    description: "Gestão de acessos, aprovações e perfis da plataforma.",
+    href: "/admin/usuarios",
+    status: "Estrutural",
+  },
+];
 
-function getStatusStyle(status: string): CSSProperties {
-  const base: CSSProperties = {
-    display: "inline-flex",
-    alignItems: "center",
-    borderRadius: "999px",
-    padding: "6px 10px",
-    fontSize: "12px",
-    fontWeight: 800,
-    border: "1px solid",
-    whiteSpace: "nowrap",
-  };
+const kpis = [
+  { label: "Módulos IA ativos", value: "3" },
+  { label: "Rotas validadas", value: "28" },
+  { label: "Document AI", value: "TXT/PDF" },
+  { label: "Fase atual", value: "AI Product" },
+];
 
-  if (status === "GANHO") {
-    return {
-      ...base,
-      background: "rgba(16, 185, 129, 0.12)",
-      color: "#6ee7b7",
-      borderColor: "rgba(16, 185, 129, 0.35)",
-    };
-  }
-
-  if (status === "PERDIDO") {
-    return {
-      ...base,
-      background: "rgba(248, 113, 113, 0.12)",
-      color: "#fca5a5",
-      borderColor: "rgba(248, 113, 113, 0.35)",
-    };
-  }
-
-  if (status === "NOVO") {
-    return {
-      ...base,
-      background: "rgba(34, 211, 238, 0.12)",
-      color: "#67e8f9",
-      borderColor: "rgba(34, 211, 238, 0.35)",
-    };
-  }
-
-  return {
-    ...base,
-    background: "rgba(250, 204, 21, 0.12)",
-    color: "#fde68a",
-    borderColor: "rgba(250, 204, 21, 0.35)",
-  };
-}
-
-export default async function AdminLeadsPage() {
-  const leads = await prisma.lead.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
+export default function AdminPage() {
   return (
-    <main style={mainStyle}>
-      <section style={headerStyle}>
-        <div>
-          <p style={eyebrowStyle}>CRM EQUATEC</p>
-          <h1 style={titleStyle}>Leads cadastrados</h1>
-          <p style={subtitleStyle}>
-            Painel administrativo inicial para acompanhamento dos contatos
-            capturados pelo formulário comercial da plataforma.
+    <main className="min-h-screen bg-slate-950 text-white">
+      <section className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mb-10 rounded-3xl border border-cyan-400/20 bg-slate-900/70 p-8 shadow-2xl">
+          <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-cyan-300">
+            EQUATEC Control Hub
+          </p>
+
+          <h1 className="text-4xl font-black tracking-tight md:text-5xl">
+            Cockpit Executivo da Plataforma
+          </h1>
+
+          <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
+            Núcleo central para governança dos módulos, inteligência artificial,
+            propostas comerciais, análise documental, CRM, auditoria e evolução
+            SaaS do ecossistema EQUATEC.
           </p>
         </div>
-      </section>
 
-      <section style={summaryGridStyle}>
-        <div style={cardStyle}>
-          <span style={cardLabelStyle}>Total de leads</span>
-          <strong style={cardValueStyle}>{leads.length}</strong>
+        <div className="mb-8 grid gap-4 md:grid-cols-4">
+          {kpis.map((item) => (
+            <div
+              key={item.label}
+              className="rounded-2xl border border-slate-800 bg-slate-900 p-5"
+            >
+              <p className="text-sm text-slate-400">{item.label}</p>
+              <strong className="mt-2 block text-2xl font-black text-white">
+                {item.value}
+              </strong>
+            </div>
+          ))}
         </div>
 
-        <div style={cardStyle}>
-          <span style={cardLabelStyle}>Novos</span>
-          <strong style={cardValueStyle}>
-            {leads.filter((lead) => lead.status === "NOVO").length}
-          </strong>
-        </div>
+        <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+          <h2 className="text-2xl font-black">Módulos da Plataforma</h2>
 
-        <div style={cardStyle}>
-          <span style={cardLabelStyle}>Em acompanhamento</span>
-          <strong style={cardValueStyle}>
-            {
-              leads.filter(
-                (lead) =>
-                  lead.status !== "NOVO" &&
-                  lead.status !== "GANHO" &&
-                  lead.status !== "PERDIDO",
-              ).length
-            }
-          </strong>
-        </div>
-      </section>
+          <p className="mt-2 text-sm text-slate-400">
+            Acesso rápido aos blocos operacionais, administrativos e módulos de IA.
+          </p>
 
-      <section style={tableWrapperStyle}>
-        <div style={tableHeaderStyle}>
-          <h2 style={sectionTitleStyle}>Base de contatos</h2>
-          <span style={tableInfoStyle}>
-            Dados ordenados do mais recente para o mais antigo.
-          </span>
-        </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {modules.map((module) => (
+              <Link
+                key={module.title}
+                href={module.href}
+                className="group rounded-2xl border border-slate-800 bg-slate-950 p-5 transition hover:border-cyan-400/60 hover:bg-slate-900"
+              >
+                <div className="mb-4 flex items-start justify-between gap-4">
+                  <h3 className="text-lg font-black text-white">
+                    {module.title}
+                  </h3>
 
-        <div style={scrollStyle}>
-          <table style={tableStyle}>
-            <thead>
-              <tr style={headRowStyle}>
-                <th style={thStyle}>Nome</th>
-                <th style={thStyle}>Empresa</th>
-                <th style={thStyle}>Interesse</th>
-                <th style={thStyle}>Status</th>
-                <th style={thStyle}>E-mail</th>
-                <th style={thStyle}>Telefone</th>
-                <th style={thStyle}>Criado em</th>
-              </tr>
-            </thead>
+                  <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-300">
+                    {module.status}
+                  </span>
+                </div>
 
-            <tbody>
-              {leads.map((lead) => (
-                <tr
-                  key={lead.id}
-                  className="transition-colors hover:bg-slate-800/30"
-                >
-                  <td style={tdStrongStyle}>{lead.name}</td>
-                  <td style={tdStyle}>{lead.company || "-"}</td>
-                  <td style={tdStyle}>{lead.interest || "-"}</td>
-                  <td style={tdStyle}>
-                    <span style={getStatusStyle(lead.status)}>
-                      {lead.status}
-                    </span>
-                  </td>
-                  <td style={tdStyle}>{lead.email}</td>
-                  <td style={tdStyle}>{lead.phone || "-"}</td>
-                  <td style={tdStyle}>
-                    {new Intl.DateTimeFormat("pt-BR", {
-                      dateStyle: "short",
-                      timeStyle: "short",
-                    }).format(lead.createdAt)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                <p className="text-sm leading-6 text-slate-400">
+                  {module.description}
+                </p>
 
-        {leads.length === 0 && (
-          <div style={emptyStyle}>Nenhum lead cadastrado até o momento.</div>
-        )}
+                <p className="mt-4 text-sm font-bold text-cyan-300">
+                  Abrir módulo →
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
       </section>
     </main>
   );
 }
-
-const mainStyle: CSSProperties = {
-  minHeight: "100vh",
-  background: "#020617",
-  color: "#ffffff",
-  padding: "40px",
-};
-
-const headerStyle: CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "flex-start",
-  gap: "24px",
-  marginBottom: "28px",
-};
-
-const eyebrowStyle: CSSProperties = {
-  color: "#22d3ee",
-  fontSize: "13px",
-  fontWeight: 800,
-  letterSpacing: "0.14em",
-  textTransform: "uppercase",
-  marginBottom: "10px",
-};
-
-const titleStyle: CSSProperties = {
-  fontSize: "42px",
-  lineHeight: 1.1,
-  fontWeight: 900,
-  margin: 0,
-};
-
-const subtitleStyle: CSSProperties = {
-  maxWidth: "760px",
-  color: "#cbd5e1",
-  fontSize: "16px",
-  lineHeight: 1.6,
-  marginTop: "14px",
-};
-
-const summaryGridStyle: CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-  gap: "16px",
-  marginBottom: "24px",
-};
-
-const cardStyle: CSSProperties = {
-  background: "#0f172a",
-  border: "1px solid rgba(148, 163, 184, 0.18)",
-  borderRadius: "20px",
-  padding: "22px",
-};
-
-const cardLabelStyle: CSSProperties = {
-  display: "block",
-  color: "#94a3b8",
-  fontSize: "13px",
-  marginBottom: "10px",
-};
-
-const cardValueStyle: CSSProperties = {
-  display: "block",
-  color: "#ffffff",
-  fontSize: "34px",
-  fontWeight: 900,
-};
-
-const tableWrapperStyle: CSSProperties = {
-  background: "#0f172a",
-  borderRadius: "22px",
-  border: "1px solid rgba(148, 163, 184, 0.18)",
-  overflow: "hidden",
-};
-
-const tableHeaderStyle: CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  gap: "16px",
-  padding: "22px",
-  borderBottom: "1px solid rgba(148, 163, 184, 0.14)",
-};
-
-const sectionTitleStyle: CSSProperties = {
-  margin: 0,
-  fontSize: "20px",
-  fontWeight: 800,
-};
-
-const tableInfoStyle: CSSProperties = {
-  color: "#94a3b8",
-  fontSize: "13px",
-};
-
-const scrollStyle: CSSProperties = {
-  overflowX: "auto",
-};
-
-const tableStyle: CSSProperties = {
-  width: "100%",
-  borderCollapse: "collapse",
-  minWidth: "980px",
-};
-
-const headRowStyle: CSSProperties = {
-  background: "#111827",
-};
-
-const thStyle: CSSProperties = {
-  padding: "16px",
-  textAlign: "left",
-  color: "#94a3b8",
-  fontSize: "12px",
-  textTransform: "uppercase",
-  letterSpacing: "0.08em",
-  borderBottom: "1px solid rgba(148, 163, 184, 0.18)",
-};
-
-const tdStyle: CSSProperties = {
-  padding: "16px",
-  color: "#cbd5e1",
-  borderBottom: "1px solid rgba(148, 163, 184, 0.08)",
-  fontSize: "14px",
-};
-
-const tdStrongStyle: CSSProperties = {
-  ...tdStyle,
-  color: "#ffffff",
-  fontWeight: 700,
-};
-
-const emptyStyle: CSSProperties = {
-  padding: "32px",
-  color: "#94a3b8",
-  textAlign: "center",
-};
