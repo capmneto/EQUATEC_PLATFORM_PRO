@@ -14,6 +14,12 @@ const modules = [
     status: "V3 OCR",
   },
   {
+    title: "Memory Dashboard",
+    description: "Visualização da memória documental, registros vetoriais e busca semântica.",
+    href: "/admin/memory",
+    status: "Memory V1",
+  },
+  {
     title: "RAG Playground",
     description: "Consulta contextual na memória vetorial local do EQUATEC.",
     href: "/admin/rag",
@@ -31,18 +37,12 @@ const modules = [
     href: "/admin/leads",
     status: "Operacional",
   },
-  {
-    title: "Auditoria",
-    description: "Rastreabilidade das ações críticas e eventos do sistema.",
-    href: "/admin/auditoria",
-    status: "Operacional",
-  },
 ];
 
 const kpis = [
-  { label: "Módulos IA ativos", value: "4" },
-  { label: "Rotas validadas", value: "33" },
-  { label: "Memória IA", value: "RAG V1" },
+  { label: "Módulos IA ativos", value: "5" },
+  { label: "Rotas validadas", value: "34" },
+  { label: "Memória IA", value: "Memory V1" },
   { label: "Fase atual", value: "AI Memory" },
 ];
 
