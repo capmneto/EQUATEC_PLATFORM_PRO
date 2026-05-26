@@ -1,35 +1,35 @@
 model BidProject {
-  id                    String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  name                  String
-  client                String?
-  unit                  String?
-  contractType          String?
-  status                String   @default("NOVO")
+  name         String
+  client       String?
+  unit         String?
+  contractType String?
+  status       String  @default("NOVO")
 
-  responsibleName       String?
-  proposalDeadline      DateTime?
+  responsibleName  String?
+  proposalDeadline DateTime?
 
-  paymentTermDays       Int?
-  capitalCostRate       Float    @default(1.5)
+  paymentTermDays Int?
+  capitalCostRate Float @default(1.5)
 
-  mobilizationRequired  Boolean  @default(false)
-  officeRequired        Boolean  @default(false)
-  workshopRequired      Boolean  @default(false)
-  containerRequired     Boolean  @default(false)
+  mobilizationRequired Boolean @default(false)
+  officeRequired       Boolean @default(false)
+  workshopRequired     Boolean @default(false)
+  containerRequired    Boolean @default(false)
 
-  transportationScope   String?
-  mealsScope            String?
+  transportationScope String?
+  mealsScope          String?
 
-  notes                 String?
+  notes String?
 
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  questions             BidQuestion[]
-  assumptions           BidAssumption[]
-  risks                 BidRisk[]
-  outputs               BidOutput[]
+  questions   BidQuestion[]
+  assumptions BidAssumption[]
+  risks       BidRisk[]
+  outputs     BidOutput[]
 
   @@index([client])
   @@index([status])
@@ -37,79 +37,79 @@ model BidProject {
 }
 
 model BidQuestion {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  projectId     String
-  category      String?
-  question      String
-  answer        String?
-  required      Boolean  @default(true)
+  projectId String
+  category  String?
+  question  String
+  answer    String?
+  required  Boolean @default(true)
 
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  project       BidProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project BidProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
 }
 
 model BidAssumption {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  projectId     String
-  title         String
-  description   String
+  projectId   String
+  title       String
+  description String
 
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  project       BidProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project BidProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
 }
 
 model BidRisk {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  projectId     String
+  projectId String
 
-  category      String?
-  severity      String?
-  description   String
-  mitigation    String?
+  category    String?
+  severity    String?
+  description String
+  mitigation  String?
 
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  project       BidProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project BidProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
   @@index([severity])
 }
 
 model BidOutput {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  projectId     String
+  projectId String
 
-  outputType    String
-  content       String
+  outputType String
+  content    String
 
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  project       BidProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project BidProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
   @@index([outputType])
 }
 
 model BidDisclaimerAcceptance {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  userEmail     String
-  acceptedAt    DateTime @default(now())
+  userEmail  String
+  acceptedAt DateTime @default(now())
 
-  lgpdAccepted  Boolean  @default(false)
-  termsAccepted Boolean  @default(false)
+  lgpdAccepted  Boolean @default(false)
+  termsAccepted Boolean @default(false)
 
-  ipAddress     String?
+  ipAddress String?
 
   @@index([userEmail])
 }
