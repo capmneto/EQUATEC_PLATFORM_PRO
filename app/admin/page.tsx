@@ -2,6 +2,12 @@
 
 const modules = [
   {
+    title: "Agents Foundation",
+    description: "Console multiagente com especialistas em SSMA, PMOC, RTM, propostas, facilities e jurídico técnico.",
+    href: "/admin/agents",
+    status: "Agents V1",
+  },
+  {
     title: "BID AI",
     description: "Propostas técnicas, comerciais, checklist, riscos e precificação.",
     href: "/admin/bid",
@@ -26,24 +32,18 @@ const modules = [
     status: "RAG V1",
   },
   {
-    title: "AI Playground",
-    description: "Ambiente de teste da camada Gemini, prompts e personas corporativas.",
-    href: "/admin/ia",
-    status: "Operacional",
-  },
-  {
-    title: "CRM de Leads",
-    description: "Base comercial inicial com contatos, interesses e status.",
-    href: "/admin/leads",
-    status: "Operacional",
+    title: "RAG Agent",
+    description: "Agente especialista com recuperação contextual e memória técnica.",
+    href: "/admin/rag-agent",
+    status: "Agent V1",
   },
 ];
 
 const kpis = [
-  { label: "Módulos IA ativos", value: "5" },
-  { label: "Rotas validadas", value: "34" },
-  { label: "Memória IA", value: "Memory V1" },
-  { label: "Fase atual", value: "AI Memory" },
+  { label: "Módulos IA ativos", value: "7" },
+  { label: "Memória IA", value: "RAG + Agents" },
+  { label: "Base técnica", value: "OCR + Vector" },
+  { label: "Fase atual", value: "Multiagent" },
 ];
 
 export default function AdminPage() {
@@ -60,9 +60,9 @@ export default function AdminPage() {
           </h1>
 
           <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
-            Núcleo central para governança dos módulos, inteligência artificial,
-            propostas comerciais, análise documental, memória vetorial, RAG, CRM,
-            auditoria e evolução SaaS do ecossistema EQUATEC.
+            Núcleo central para governança dos módulos, agentes especialistas,
+            inteligência artificial, análise documental, memória vetorial, RAG,
+            propostas comerciais e evolução SaaS do ecossistema EQUATEC.
           </p>
         </div>
 
