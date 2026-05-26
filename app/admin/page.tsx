@@ -20,28 +20,10 @@ const modules = [
     status: "Agent",
   },
   {
-    title: "RTM Agent",
-    description: "Agente para relatórios técnicos, integridade, manutenção e recomendações.",
-    href: "/admin/agents/rtm",
-    status: "Agent",
-  },
-  {
-    title: "Shutdown Planner",
-    description: "Agente para planejamento de paradas, caminho crítico, recursos e riscos.",
-    href: "/admin/agents/shutdown",
-    status: "Agent",
-  },
-  {
-    title: "Facilities Agent",
-    description: "Agente para manutenção predial, SLA, contratos e rotinas operacionais.",
-    href: "/admin/agents/facilities",
-    status: "Agent",
-  },
-  {
-    title: "Document AI",
-    description: "Upload TXT/PDF/imagens, OCR, extração documental e análise inteligente.",
-    href: "/admin/document-ai",
-    status: "V3 OCR",
+    title: "Histórico dos Agentes",
+    description: "Consulta ao histórico persistente das interações dos agentes especialistas.",
+    href: "/admin/agent-history",
+    status: "History",
   },
   {
     title: "Memory Dashboard",
@@ -50,18 +32,18 @@ const modules = [
     status: "Memory V1",
   },
   {
-    title: "RAG Playground",
-    description: "Consulta contextual na memória vetorial local do EQUATEC.",
-    href: "/admin/rag",
-    status: "RAG V1",
+    title: "Document AI",
+    description: "Upload TXT/PDF/imagens, OCR, extração documental e análise inteligente.",
+    href: "/admin/document-ai",
+    status: "V3 OCR",
   },
 ];
 
 const kpis = [
   { label: "Agentes ativos", value: "6" },
-  { label: "Módulos IA", value: "9" },
+  { label: "Histórico", value: "Ativo" },
   { label: "Base técnica", value: "OCR + RAG" },
-  { label: "Fase atual", value: "Specialists" },
+  { label: "Fase atual", value: "Enterprise AI" },
 ];
 
 export default function AdminPage() {
@@ -78,8 +60,8 @@ export default function AdminPage() {
           </h1>
 
           <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
-            Núcleo central para agentes especialistas, inteligência artificial,
-            análise documental, memória vetorial, RAG, propostas comerciais e
+            Núcleo central para agentes especialistas, histórico inteligente,
+            memória técnica, RAG, análise documental, propostas comerciais e
             evolução SaaS do ecossistema EQUATEC.
           </p>
         </div>
@@ -100,10 +82,6 @@ export default function AdminPage() {
 
         <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
           <h2 className="text-2xl font-black">Agentes e Módulos da Plataforma</h2>
-
-          <p className="mt-2 text-sm text-slate-400">
-            Acesso rápido aos agentes especialistas, módulos de IA e memória técnica.
-          </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {modules.map((module) => (
