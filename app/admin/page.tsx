@@ -2,16 +2,40 @@
 
 const modules = [
   {
-    title: "Agents Foundation",
-    description: "Console multiagente com especialistas em SSMA, PMOC, RTM, propostas, facilities e jurídico técnico.",
-    href: "/admin/agents",
-    status: "Agents V1",
+    title: "Proposal Copilot",
+    description: "Agente para propostas técnicas, premissas, riscos, escopo e estratégia comercial.",
+    href: "/admin/agents/proposal",
+    status: "Agent",
   },
   {
-    title: "BID AI",
-    description: "Propostas técnicas, comerciais, checklist, riscos e precificação.",
-    href: "/admin/bid",
-    status: "V2 Export Engine",
+    title: "SSMA Agent",
+    description: "Agente para riscos, APR, PT, bloqueios, desvios e segurança operacional.",
+    href: "/admin/agents/ssma",
+    status: "Agent",
+  },
+  {
+    title: "PMOC Agent",
+    description: "Agente para PMOC, climatização, ANVISA, manutenção preventiva e facilities.",
+    href: "/admin/agents/pmoc",
+    status: "Agent",
+  },
+  {
+    title: "RTM Agent",
+    description: "Agente para relatórios técnicos, integridade, manutenção e recomendações.",
+    href: "/admin/agents/rtm",
+    status: "Agent",
+  },
+  {
+    title: "Shutdown Planner",
+    description: "Agente para planejamento de paradas, caminho crítico, recursos e riscos.",
+    href: "/admin/agents/shutdown",
+    status: "Agent",
+  },
+  {
+    title: "Facilities Agent",
+    description: "Agente para manutenção predial, SLA, contratos e rotinas operacionais.",
+    href: "/admin/agents/facilities",
+    status: "Agent",
   },
   {
     title: "Document AI",
@@ -31,19 +55,13 @@ const modules = [
     href: "/admin/rag",
     status: "RAG V1",
   },
-  {
-    title: "RAG Agent",
-    description: "Agente especialista com recuperação contextual e memória técnica.",
-    href: "/admin/rag-agent",
-    status: "Agent V1",
-  },
 ];
 
 const kpis = [
-  { label: "Módulos IA ativos", value: "7" },
-  { label: "Memória IA", value: "RAG + Agents" },
-  { label: "Base técnica", value: "OCR + Vector" },
-  { label: "Fase atual", value: "Multiagent" },
+  { label: "Agentes ativos", value: "6" },
+  { label: "Módulos IA", value: "9" },
+  { label: "Base técnica", value: "OCR + RAG" },
+  { label: "Fase atual", value: "Specialists" },
 ];
 
 export default function AdminPage() {
@@ -60,9 +78,9 @@ export default function AdminPage() {
           </h1>
 
           <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
-            Núcleo central para governança dos módulos, agentes especialistas,
-            inteligência artificial, análise documental, memória vetorial, RAG,
-            propostas comerciais e evolução SaaS do ecossistema EQUATEC.
+            Núcleo central para agentes especialistas, inteligência artificial,
+            análise documental, memória vetorial, RAG, propostas comerciais e
+            evolução SaaS do ecossistema EQUATEC.
           </p>
         </div>
 
@@ -81,10 +99,10 @@ export default function AdminPage() {
         </div>
 
         <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-          <h2 className="text-2xl font-black">Módulos da Plataforma</h2>
+          <h2 className="text-2xl font-black">Agentes e Módulos da Plataforma</h2>
 
           <p className="mt-2 text-sm text-slate-400">
-            Acesso rápido aos blocos operacionais, administrativos e módulos de IA.
+            Acesso rápido aos agentes especialistas, módulos de IA e memória técnica.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -109,7 +127,7 @@ export default function AdminPage() {
                 </p>
 
                 <p className="mt-4 text-sm font-bold text-cyan-300">
-                  Abrir módulo →
+                  Abrir →
                 </p>
               </Link>
             ))}
