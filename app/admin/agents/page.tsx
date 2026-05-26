@@ -1,6 +1,7 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const agents = [
   { key: "proposal", name: "Proposal Copilot" },
@@ -12,8 +13,24 @@ const agents = [
   { key: "juridico", name: "Jurídico Técnico" },
 ];
 
+function getInitialAgent(pathname: string) {
+  if (pathname.includes("/ssma")) return "ssma";
+  if (pathname.includes("/pmoc")) return "pmoc";
+  if (pathname.includes("/rtm")) return "rtm";
+  if (pathname.includes("/shutdown")) return "shutdown";
+  if (pathname.includes("/proposal")) return "proposal";
+
+  return "proposal";
+}
+
 export default function AgentsPage() {
-  const [agentKey, setAgentKey] = useState("proposal");
+  const pathname = usePathname();
+
+  const initialAgent = useMemo(() => {
+    return getInitialAgent(pathname);
+  }, [pathname]);
+
+  const [agentKey, setAgentKey] = useState(initialAgent);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [retrievedContexts, setRetrievedContexts] = useState(0);
