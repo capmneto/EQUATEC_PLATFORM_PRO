@@ -1,5 +1,7 @@
 ﻿import { generateGeminiCompletion } from "@/lib/ai/gemini";
 import { retrieveRelevantContext } from "@/lib/rag/retriever";
+import { createAgentHistoryRecord } from "@/lib/agent-history/types";
+import { saveAgentHistoryRecord } from "@/lib/agent-history/store";
 
 import { getAgent } from "./registry";
 
@@ -39,9 +41,22 @@ INSTRUÇÕES:
     action: agent.key,
   });
 
+  const answer = response.content || "";
+
+  if (response.success) {
+    const history = createAgentHistoryRecord({
+      agentKey: agent.key,
+      question: data.question,
+      answer,
+      retrievedContexts: retrieval.results.length,
+    });
+
+    await saveAgentHistoryRecord(history);
+  }
+
   return {
     success: response.success,
-    answer: response.content,
+    answer,
     error: response.error,
     agent,
     retrievedContexts: retrieval.results.length,
