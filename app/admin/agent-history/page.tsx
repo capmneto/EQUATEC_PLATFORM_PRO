@@ -21,6 +21,45 @@ export default function AgentHistoryPage() {
     setRecords(data.records || []);
   }
 
+  function exportHistory() {
+    const content = records
+      .map((item) => {
+        return `
+====================================================
+AGENTE: ${item.agentKey}
+DATA: ${new Date(item.createdAt).toLocaleString("pt-BR")}
+CONTEXTOS: ${item.retrievedContexts}
+
+PERGUNTA:
+${item.question}
+
+RESPOSTA:
+${item.answer}
+====================================================
+`;
+      })
+      .join("\n");
+
+    const blob = new Blob([content], {
+      type: "text/plain;charset=utf-8",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "equatec-agent-history.txt";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    URL.revokeObjectURL(url);
+  }
+
   useEffect(() => {
     loadHistory();
   }, []);
@@ -33,22 +72,23 @@ export default function AgentHistoryPage() {
             EQUATEC AGENT HISTORY
           </p>
 
-          <h1 className="text-4xl font-black tracking-tight">
-            Histórico dos Agentes
-          </h1>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h1 className="text-4xl font-black tracking-tight">
+                Histórico dos Agentes
+              </h1>
 
-          <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
-            Registro das consultas realizadas pelos agentes especialistas,
-            respostas geradas e contextos técnicos recuperados.
-          </p>
-        </div>
+              <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
+                Registro das consultas realizadas pelos agentes especialistas.
+              </p>
+            </div>
 
-        <div className="mb-8 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-            <p className="text-sm text-slate-400">Consultas registradas</p>
-            <strong className="mt-2 block text-3xl font-black">
-              {records.length}
-            </strong>
+            <button
+              onClick={exportHistory}
+              className="rounded-2xl bg-cyan-400 px-5 py-4 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
+            >
+              Exportar TXT
+            </button>
           </div>
         </div>
 
@@ -70,11 +110,13 @@ export default function AgentHistoryPage() {
                 </div>
 
                 <h2 className="text-lg font-black">Pergunta</h2>
+
                 <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-300">
                   {item.question}
                 </p>
 
                 <h2 className="mt-6 text-lg font-black">Resposta</h2>
+
                 <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-slate-300">
                   {item.answer}
                 </p>
