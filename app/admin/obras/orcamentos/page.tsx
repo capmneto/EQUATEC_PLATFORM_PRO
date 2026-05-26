@@ -1,9 +1,9 @@
 ﻿export default function ObrasSubmoduloPage() {
   const kpis = [
-    { label: "Obras ativas", value: "0" },
-    { label: "Em planejamento", value: "0" },
-    { label: "Em execução", value: "0" },
-    { label: "Concluídas", value: "0" },
+    { label: "Orçamentos", value: "0" },
+    { label: "Em análise", value: "0" },
+    { label: "Aprovados", value: "0" },
+    { label: "Desvio previsto", value: "0" },
   ];
 
   const actions = [
@@ -22,11 +22,11 @@
           </p>
 
           <h1 className="text-4xl font-black tracking-tight md:text-5xl">
-            Projetos e Obras
+            Orçamentos da Obra
           </h1>
 
           <p className="mt-5 max-w-4xl text-base leading-7 text-slate-300">
-            Cadastro, acompanhamento e visão executiva das obras.
+            Análise de orçamentos, propostas, previsto x contratado x realizado.
           </p>
         </div>
 

@@ -1,9 +1,9 @@
 ﻿export default function ObrasSubmoduloPage() {
   const kpis = [
-    { label: "Obras ativas", value: "0" },
-    { label: "Em planejamento", value: "0" },
-    { label: "Em execução", value: "0" },
-    { label: "Concluídas", value: "0" },
+    { label: "Registros", value: "0" },
+    { label: "Ocorrências", value: "0" },
+    { label: "Fotos", value: "0" },
+    { label: "Pendências", value: "0" },
   ];
 
   const actions = [
@@ -22,11 +22,11 @@
           </p>
 
           <h1 className="text-4xl font-black tracking-tight md:text-5xl">
-            Projetos e Obras
+            Diário de Obra
           </h1>
 
           <p className="mt-5 max-w-4xl text-base leading-7 text-slate-300">
-            Cadastro, acompanhamento e visão executiva das obras.
+            Registros diários de avanço, ocorrências, clima, equipe, fotos e decisões.
           </p>
         </div>
 
