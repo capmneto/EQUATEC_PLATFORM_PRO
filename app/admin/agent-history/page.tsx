@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type AgentHistoryRecord = {
   id: string;
@@ -11,8 +11,27 @@ type AgentHistoryRecord = {
   createdAt: string;
 };
 
+const agentOptions = [
+  { key: "all", name: "Todos os agentes" },
+  { key: "proposal", name: "Proposal Copilot" },
+  { key: "ssma", name: "SSMA Agent" },
+  { key: "pmoc", name: "PMOC Agent" },
+  { key: "rtm", name: "RTM Agent" },
+  { key: "shutdown", name: "Shutdown Planner" },
+  { key: "facilities", name: "Facilities Agent" },
+];
+
 export default function AgentHistoryPage() {
   const [records, setRecords] = useState<AgentHistoryRecord[]>([]);
+  const [selectedAgent, setSelectedAgent] = useState("all");
+
+  const filteredRecords = useMemo(() => {
+    if (selectedAgent === "all") {
+      return records;
+    }
+
+    return records.filter((item) => item.agentKey === selectedAgent);
+  }, [records, selectedAgent]);
 
   async function loadHistory() {
     const response = await fetch("/api/agent-history");
@@ -22,7 +41,7 @@ export default function AgentHistoryPage() {
   }
 
   function exportHistory() {
-    const content = records
+    const content = filteredRecords
       .map((item) => {
         return `
 ====================================================
@@ -45,16 +64,13 @@ ${item.answer}
     });
 
     const url = URL.createObjectURL(blob);
-
     const link = document.createElement("a");
 
     link.href = url;
     link.download = "equatec-agent-history.txt";
 
     document.body.appendChild(link);
-
     link.click();
-
     link.remove();
 
     URL.revokeObjectURL(url);
@@ -79,22 +95,56 @@ ${item.answer}
               </h1>
 
               <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
-                Registro das consultas realizadas pelos agentes especialistas.
+                Registro das consultas realizadas pelos agentes especialistas,
+                com filtro por domínio e exportação TXT.
               </p>
             </div>
 
             <button
               onClick={exportHistory}
-              className="rounded-2xl bg-cyan-400 px-5 py-4 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
+              disabled={!filteredRecords.length}
+              className="rounded-2xl bg-cyan-400 px-5 py-4 text-sm font-black text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Exportar TXT
             </button>
           </div>
         </div>
 
+        <div className="mb-8 grid gap-4 md:grid-cols-[1fr_220px_220px]">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <p className="text-sm text-slate-400">Filtro por agente</p>
+
+            <select
+              value={selectedAgent}
+              onChange={(event) => setSelectedAgent(event.target.value)}
+              className="mt-3 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm outline-none focus:border-cyan-400"
+            >
+              {agentOptions.map((agent) => (
+                <option key={agent.key} value={agent.key}>
+                  {agent.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <p className="text-sm text-slate-400">Total geral</p>
+            <strong className="mt-2 block text-3xl font-black">
+              {records.length}
+            </strong>
+          </div>
+
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <p className="text-sm text-slate-400">Filtrados</p>
+            <strong className="mt-2 block text-3xl font-black">
+              {filteredRecords.length}
+            </strong>
+          </div>
+        </div>
+
         <section className="space-y-4">
-          {records.length ? (
-            records.map((item) => (
+          {filteredRecords.length ? (
+            filteredRecords.map((item) => (
               <article
                 key={item.id}
                 className="rounded-3xl border border-slate-800 bg-slate-900 p-6"
@@ -128,7 +178,7 @@ ${item.answer}
             ))
           ) : (
             <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8 text-center text-sm text-slate-500">
-              Nenhum histórico registrado ainda.
+              Nenhum histórico encontrado para o filtro selecionado.
             </div>
           )}
         </section>
