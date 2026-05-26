@@ -1,13 +1,15 @@
 ﻿import { NextResponse } from "next/server";
 
 import { executeAgent } from "@/lib/agents/executor";
+import { extractTextFromFile } from "@/lib/document-ai/extractor";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const formData = await request.formData();
 
-    const agentKey = body?.agentKey || "proposal";
-    const question = body?.question || "";
+    const agentKey = String(formData.get("agentKey") || "proposal");
+    const question = String(formData.get("question") || "");
+    const file = formData.get("file");
 
     if (!question.trim()) {
       return NextResponse.json({
@@ -16,9 +18,23 @@ export async function POST(request: Request) {
       });
     }
 
+    let finalQuestion = question;
+
+    if (file instanceof File) {
+      const extractedContent = await extractTextFromFile(file);
+
+      finalQuestion = `
+PERGUNTA DO USUÁRIO:
+${question}
+
+CONTEÚDO EXTRAÍDO DO DOCUMENTO ANEXADO:
+${extractedContent}
+`;
+    }
+
     const result = await executeAgent({
       agentKey,
-      question,
+      question: finalQuestion,
     });
 
     return NextResponse.json(result);
@@ -28,7 +44,7 @@ export async function POST(request: Request) {
       error:
         error instanceof Error
           ? error.message
-          : "Erro interno no agente.",
+          : "Erro interno no agente com upload.",
     });
   }
 }
