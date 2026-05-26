@@ -5,7 +5,7 @@
   | "shutdown"
   | "proposal"
   | "facilities"
-  | "juridico";
+;
 
 export type AgentDefinition = {
   key: AgentKey;

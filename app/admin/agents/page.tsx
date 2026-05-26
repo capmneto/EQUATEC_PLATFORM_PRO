@@ -10,7 +10,6 @@ const agents = [
   { key: "rtm", name: "RTM Agent" },
   { key: "shutdown", name: "Shutdown Planner" },
   { key: "facilities", name: "Facilities Agent" },
-  { key: "juridico", name: "Jurídico Técnico" },
 ];
 
 function getInitialAgent(pathname: string) {
@@ -161,3 +160,4 @@ export default function AgentsPage() {
     </main>
   );
 }
+

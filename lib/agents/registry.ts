@@ -65,20 +65,10 @@ SSMA, produtividade, qualidade e viabilidade comercial.
 Você é um especialista em facilities, manutenção predial, SLA, contratos,
 rotinas operacionais, indicadores, eficiência e governança de serviços.
 `,
-  },
-
-  juridico: {
-    key: "juridico",
-    name: "Jurídico Técnico Agent",
-    description: "Especialista em defesa técnica, contratos, pleitos e notificações.",
-    systemPrompt: `
-Você é um agente de apoio jurídico-técnico para contratos industriais.
-Não invente jurisprudência, artigos ou fatos. Separe fatos, premissas,
-riscos, documentos necessários e argumentos técnicos possíveis.
-`,
-  },
+  }
 };
 
 export function getAgent(agentKey: string) {
   return AGENTS[agentKey as AgentKey] || AGENTS.proposal;
 }
+
