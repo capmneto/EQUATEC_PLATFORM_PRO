@@ -1,4 +1,18 @@
-﻿const ecosystemModules = [
+﻿const topNav = [
+  { label: "Início", href: "/" },
+  { label: "Admin Hub", href: "/admin" },
+  { label: "Financeiro Contratos", href: "/admin/financeiro-contratos" },
+  { label: "Obras", href: "/admin/obras" },
+  { label: "FACILMART", href: "/franquias" },
+  { label: "Financeiro Pessoal", href: "/financeiro-pessoal" },
+  { label: "BID AI", href: "/admin/bid" },
+  { label: "HUB IA", href: "/admin/agents" },
+  { label: "Document AI", href: "/admin/document-ai" },
+  { label: "Cursos/EAD", href: "/cursos" },
+  { label: "Automações", href: "/automacoes" },
+];
+
+const ecosystemModules = [
   {
     title: "Gestão Financeira de Contratos",
     description:
@@ -135,31 +149,47 @@ export default function HomePage() {
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_32rem),radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_34rem)]" />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 py-10">
-          <header className="mb-16 flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-black uppercase tracking-[0.35em] text-cyan-300">
-                EQUATEC
-              </p>
-              <p className="mt-2 text-sm text-slate-400">
-                Tecnologia • Gestão Integrada • Engenharia • Inteligência Aplicada
-              </p>
+        <div className="relative z-10 mx-auto max-w-7xl px-6 py-8">
+          <header className="mb-10">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+              <a href="/" className="block">
+                <p className="text-sm font-black uppercase tracking-[0.35em] text-cyan-300">
+                  EQUATEC
+                </p>
+                <p className="mt-2 text-sm text-slate-400">
+                  Tecnologia • Gestão Integrada • Engenharia • Inteligência Aplicada
+                </p>
+              </a>
+
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="/login"
+                  className="inline-flex rounded-full border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
+                >
+                  Login
+                </a>
+
+                <a
+                  href="/admin"
+                  className="inline-flex rounded-full bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
+                >
+                  Acessar Admin Hub
+                </a>
+              </div>
             </div>
 
-            <nav className="flex flex-wrap gap-3">
-              <a
-                href="/login"
-                className="inline-flex rounded-full border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
-              >
-                Login
-              </a>
-
-              <a
-                href="/admin"
-                className="inline-flex rounded-full bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
-              >
-                Acessar Admin Hub
-              </a>
+            <nav className="rounded-3xl border border-slate-800 bg-slate-900/80 p-3">
+              <div className="flex flex-wrap gap-2">
+                {topNav.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className="inline-flex rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-slate-300 transition hover:border-cyan-400/60 hover:bg-cyan-400/10 hover:text-cyan-300"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
             </nav>
           </header>
 
@@ -212,11 +242,15 @@ export default function HomePage() {
             </div>
 
             <div className="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-6 shadow-2xl">
-              <div className="overflow-hidden rounded-[1.5rem] border border-slate-800 bg-slate-950">
+              <div className="relative overflow-hidden rounded-[1.5rem] border border-slate-800 bg-slate-950">
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-950 text-center text-sm text-slate-500">
+                  Foto do idealizador
+                </div>
+
                 <img
                   src="/carlos-machado.jpg"
                   alt="Carlos Machado - idealizador do Ecossistema EQUATEC"
-                  className="h-[360px] w-full object-cover object-top"
+                  className="relative z-10 h-[360px] w-full object-cover object-top"
                 />
               </div>
 
