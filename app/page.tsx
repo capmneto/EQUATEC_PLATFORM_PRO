@@ -4,88 +4,130 @@ const ecosystemModules = [
   {
     title: "Gestão Financeira de Contratos",
     description:
-      "Diagnóstico contratual, revisão orçamentária e provisão mensal de Resultado/EBITDA com 7.5, 9.1, 8.2.1, PEC, DFP e regras contábeis.",
+      "Controle gerencial de contratos com diagnóstico de desempenho, revisão orçamentária, provisão mensal de resultado, margem, EBITDA, análise de desvios e apoio à decisão executiva.",
     href: "/admin/financeiro-contratos",
-    status: "Novo módulo",
-  },
-  {
-    title: "Admin Hub",
-    description:
-      "Painel central do ecossistema, com acesso aos módulos administrativos, IA, governança, usuários, auditoria e operações.",
-    href: "/admin",
-    status: "Core",
+    status: "Financeiro",
   },
   {
     title: "Gestão de Obras",
     description:
-      "Controle operacional de obras com projetos, documentos, diário, checklist, pagamentos, orçamento, automações e IA.",
+      "Planejamento, orçamento, pagamentos, documentos, diário de obra, checklist, marcos físicos, evidências e visão executiva para obras residenciais, industriais e corporativas.",
     href: "/admin/obras",
-    status: "Produto",
+    status: "Operacional",
+  },
+  {
+    title: "FACILMART / Gestão Societária",
+    description:
+      "Organização societária, operação comercial, gestão de investimentos, estrutura de franquias, ativos, expansão e acompanhamento estratégico de negócios físicos.",
+    href: "/franquias",
+    status: "Negócios",
+  },
+  {
+    title: "Gestão Financeira Pessoal",
+    description:
+      "Planejamento financeiro, patrimônio, fluxo de caixa, metas, investimentos, compromissos, cenários e visão consolidada para decisões pessoais e familiares de alto impacto.",
+    href: "/financeiro-pessoal",
+    status: "Finanças",
   },
   {
     title: "BID AI",
     description:
-      "Inteligência para propostas técnicas e comerciais, premissas, riscos, composição de escopo e estratégia de contratação.",
+      "Inteligência para propostas técnicas e comerciais, análise de escopo, premissas, riscos, diferenciais competitivos e estruturação de soluções para clientes estratégicos.",
     href: "/admin/bid",
-    status: "IA Comercial",
+    status: "Comercial",
   },
   {
     title: "HUB IA",
     description:
-      "Laboratório corporativo de agentes, RAG, memória, playground de IA e especialistas técnicos do ecossistema.",
+      "Central de agentes especialistas, memória técnica, RAG, copilotos corporativos e inteligência aplicada à rotina de engenharia, gestão, SSMA, documentos e operações.",
     href: "/admin/agents",
     status: "IA",
   },
   {
     title: "Document AI",
     description:
-      "Upload, OCR, análise documental, extração de texto e base para inteligência documental em todos os produtos.",
+      "Leitura, organização e análise inteligente de documentos, contratos, memoriais, planilhas, evidências, relatórios e bases técnicas críticas para gestão rastreável.",
     href: "/admin/document-ai",
     status: "Documentos",
   },
   {
     title: "Cursos / EAD",
     description:
-      "Base para trilhas de capacitação, treinamentos, materiais, conteúdos técnicos e expansão educacional da EQUATEC.",
+      "Ambiente para treinamentos, trilhas técnicas, capacitação profissional, conteúdos digitais, materiais de apoio e produtos educacionais da EQUATEC.",
     href: "/cursos",
     status: "Educação",
   },
   {
-    title: "Automações",
+    title: "Automações e Integrações",
     description:
-      "Preparação para n8n, integrações, notificações, fluxos automáticos, WhatsApp, Telegram e rotinas inteligentes.",
+      "Preparação para fluxos automáticos com WhatsApp, Telegram, n8n, alertas, aprovações, relatórios executivos e integração entre sistemas.",
     href: "/automacoes",
-    status: "Integração",
+    status: "Automação",
   },
 ];
 
 const valuePillars = [
-  "Gestão integrada",
+  "Gestão multidisciplinar",
+  "Decisão executiva",
   "IA aplicada",
   "Engenharia",
-  "Financeiro",
+  "Contratos",
   "Obras",
-  "Documentos",
-  "Automação",
+  "Finanças",
   "Governança",
 ];
 
-const highlights = [
+const executiveHighlights = [
   {
-    label: "Ecossistema",
-    value: "SaaS + IA",
+    label: "Visão integrada",
+    value: "Operação + Finanças + IA",
+    description:
+      "Unifica informações que normalmente ficam dispersas em planilhas, mensagens, documentos e sistemas isolados.",
   },
   {
-    label: "Módulos estratégicos",
-    value: "7+",
+    label: "Gestão multidisciplinar",
+    value: "Engenharia, obras e contratos",
+    description:
+      "Conecta disciplinas técnicas, financeiras, documentais e operacionais em uma mesma lógica de gestão.",
   },
   {
-    label: "Novo produto",
-    value: "Financeiro",
+    label: "Decisão gerencial",
+    value: "Indicadores e rastreabilidade",
+    description:
+      "Transforma dados operacionais em leitura executiva para coordenadores, gerentes, diretores e clientes.",
   },
   {
-    label: "Base técnica",
-    value: "Next.js",
+    label: "Produtividade com IA",
+    value: "Análise, memória e automação",
+    description:
+      "Apoia diagnóstico, leitura documental, geração de relatórios, alertas e padronização de rotinas críticas.",
+  },
+];
+
+const managementFlows = [
+  {
+    step: "01",
+    title: "Centralizar",
+    description:
+      "Reunir dados, documentos, planilhas, rotinas e decisões em um ambiente único e organizado.",
+  },
+  {
+    step: "02",
+    title: "Analisar",
+    description:
+      "Interpretar comportamento financeiro, técnico e operacional com visão histórica, comparativa e gerencial.",
+  },
+  {
+    step: "03",
+    title: "Decidir",
+    description:
+      "Apoiar decisões de orçamento, priorização, risco, produtividade, contratos, obras e investimentos.",
+  },
+  {
+    step: "04",
+    title: "Automatizar",
+    description:
+      "Criar fluxos de acompanhamento, alertas, relatórios, integrações e rotinas assistidas por IA.",
   },
 ];
 
@@ -102,7 +144,7 @@ export default function HomePage() {
                 EQUATEC
               </p>
               <p className="mt-2 text-sm text-slate-400">
-                Tecnologia • Gestão Integrada • Engenharia • IA Aplicada
+                Tecnologia • Gestão Integrada • Engenharia • Inteligência Aplicada
               </p>
             </div>
 
@@ -137,15 +179,21 @@ export default function HomePage() {
               </div>
 
               <h1 className="max-w-5xl text-5xl font-black tracking-tight md:text-7xl">
-                Ecossistema EQUATEC para gestão, engenharia e inteligência
-                operacional.
+                Gerenciamento Multidisciplinar Integrado para decisões de alto impacto.
               </h1>
 
               <p className="mt-6 max-w-4xl text-lg leading-8 text-slate-300">
-                Plataforma modular para transformar planilhas, documentos,
-                rotinas operacionais, obras, contratos financeiros e decisões
-                executivas em um ambiente integrado com IA, rastreabilidade,
-                padronização e automações.
+                O Ecossistema EQUATEC conecta engenharia, contratos, finanças,
+                obras, documentos, inteligência artificial e automações em uma
+                plataforma criada para transformar informações dispersas em
+                controle, produtividade, rastreabilidade e decisão executiva.
+              </p>
+
+              <p className="mt-4 max-w-4xl text-base leading-7 text-slate-400">
+                Uma estrutura pensada para profissionais que precisam enxergar o
+                todo: coordenadores, engenheiros, gerentes, diretores, gestores
+                financeiros, empreendedores e equipes que trabalham com dados,
+                performance, margem, prazo, qualidade e governança.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
@@ -157,10 +205,10 @@ export default function HomePage() {
                 </Link>
 
                 <Link
-                  href="/admin/obras"
+                  href="/admin"
                   className="rounded-2xl border border-slate-700 bg-slate-900 px-6 py-4 text-sm font-black text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
                 >
-                  Abrir Gestão de Obras
+                  Explorar Ecossistema
                 </Link>
               </div>
             </div>
@@ -216,16 +264,19 @@ export default function HomePage() {
             </div>
           </div>
 
-          <section className="mt-16 grid gap-4 md:grid-cols-4">
-            {highlights.map((item) => (
+          <section className="mt-16 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {executiveHighlights.map((item) => (
               <div
                 key={item.label}
                 className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6"
               >
-                <p className="text-sm text-slate-400">{item.label}</p>
-                <strong className="mt-2 block text-3xl font-black text-white">
+                <p className="text-sm text-cyan-300">{item.label}</p>
+                <strong className="mt-2 block text-2xl font-black text-white">
                   {item.value}
                 </strong>
+                <p className="mt-3 text-sm leading-6 text-slate-400">
+                  {item.description}
+                </p>
               </div>
             ))}
           </section>
@@ -235,21 +286,40 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-6 pb-16">
         <div className="mb-8 rounded-3xl border border-slate-800 bg-slate-900 p-8">
           <p className="text-sm font-black uppercase tracking-[0.25em] text-cyan-300">
-            Módulos do Ecossistema
+            Arquitetura do Ecossistema
           </p>
 
           <h2 className="mt-4 text-4xl font-black">
-            Um hub modular para operação, gestão e tomada de decisão.
+            Um hub modular para operação, gestão, finanças e tomada de decisão.
           </h2>
 
-          <p className="mt-4 max-w-4xl text-base leading-7 text-slate-400">
-            A arquitetura permite evoluir cada produto de forma independente,
-            reaproveitando autenticação, IA, documentos inteligentes, memória,
-            RAG, auditoria, logs, uploads e automações.
+          <p className="mt-4 max-w-5xl text-base leading-7 text-slate-400">
+            Cada módulo foi pensado como uma frente de gestão conectada: contratos,
+            obras, negócios, finanças pessoais, propostas, documentos, educação,
+            IA e automações. O objetivo é criar uma plataforma prática, executiva
+            e escalável para ambientes onde informação, prazo, custo, qualidade e
+            decisão precisam andar juntos.
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mb-8 grid gap-4 md:grid-cols-4">
+          {managementFlows.map((item) => (
+            <div
+              key={item.step}
+              className="rounded-3xl border border-slate-800 bg-slate-900 p-6"
+            >
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-300">
+                {item.step}
+              </p>
+              <h3 className="mt-3 text-2xl font-black">{item.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-400">
+                {item.description}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {ecosystemModules.map((module) => (
             <Link
               key={module.title}
