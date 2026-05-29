@@ -37,7 +37,13 @@ const modules = [
     href: "/admin/document-ai",
     status: "V3 OCR",
   },
-];
+
+  {
+    title: "Gestão Financeira de Contratos",
+    description: "Diagnóstico contratual, revisão orçamentária e provisão mensal de Resultado/EBITDA com upload de 7.5, 9.1, 8.2.1, PEC, DFP e regras contábeis.",
+    href: "/admin/financeiro-contratos",
+    status: "Financeiro",
+  },];
 
 const kpis = [
   { label: "Agentes ativos", value: "6" },
@@ -115,4 +121,5 @@ export default function AdminPage() {
     </main>
   );
 }
+
 
