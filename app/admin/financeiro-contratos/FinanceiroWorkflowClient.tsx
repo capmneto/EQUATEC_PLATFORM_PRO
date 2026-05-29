@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 type WorkflowProps = {
@@ -27,6 +28,25 @@ function brl(value: number) {
     currency: "BRL",
   });
 }
+
+const workflowLinks = [
+  {
+    label: "Cockpit",
+    href: "/admin/financeiro-contratos",
+  },
+  {
+    label: "Diagnóstico",
+    href: "/admin/financeiro-contratos/diagnostico",
+  },
+  {
+    label: "Revisão",
+    href: "/admin/financeiro-contratos/revisao-orcamentaria",
+  },
+  {
+    label: "Provisão",
+    href: "/admin/financeiro-contratos/provisao-mensal",
+  },
+];
 
 export default function FinanceiroWorkflowClient({
   moduleKey,
@@ -63,8 +83,16 @@ export default function FinanceiroWorkflowClient({
       account32201: revenue * 0.0875,
       laborProvision: laborCost * 0.2625,
       preliminaryResult: revenue - revenue * 0.0875 - laborCost * 0.2625,
+      adjustedRevenue:
+        revenue * (1 + Number(form.contractAdjustmentPercent || 0) / 100),
+      dissidioImpact: laborCost * (Number(form.dissidioPercent || 0) / 100),
     };
-  }, [form.revenue, form.laborCost]);
+  }, [
+    form.revenue,
+    form.laborCost,
+    form.contractAdjustmentPercent,
+    form.dissidioPercent,
+  ]);
 
   async function loadJobs() {
     const response = await fetch(`/api/financeiro-contratos/jobs?module=${moduleKey}`);
@@ -125,21 +153,52 @@ export default function FinanceiroWorkflowClient({
     loadJobs();
   }, []);
 
+  const selectedFiles = Object.values(files).filter(Boolean).length;
+
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <section className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <Link
+            href="/admin"
+            className="rounded-full border border-slate-800 bg-slate-900 px-4 py-2 text-sm font-bold text-slate-300 transition hover:border-cyan-400/60 hover:text-cyan-300"
+          >
+            ← Admin Hub
+          </Link>
+
+          <div className="flex flex-wrap gap-2">
+            {workflowLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-full border border-slate-800 bg-slate-900 px-4 py-2 text-xs font-black uppercase text-slate-300 transition hover:border-cyan-400/60 hover:text-cyan-300"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
         <div className="mb-10 rounded-3xl border border-cyan-400/20 bg-slate-900/70 p-8 shadow-2xl">
           <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-cyan-300">
             EQUATEC • GESTÃO FINANCEIRA DE CONTRATOS
           </p>
 
-          <h1 className="text-4xl font-black tracking-tight md:text-5xl">
-            {title}
-          </h1>
+          <div className="flex flex-wrap items-start justify-between gap-6">
+            <div>
+              <h1 className="max-w-5xl text-4xl font-black tracking-tight md:text-5xl">
+                {title}
+              </h1>
 
-          <p className="mt-5 max-w-4xl text-base leading-7 text-slate-300">
-            {subtitle}
-          </p>
+              <p className="mt-5 max-w-5xl text-base leading-7 text-slate-300">
+                {subtitle}
+              </p>
+            </div>
+
+            <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-cyan-300">
+              {moduleKey}
+            </span>
+          </div>
         </div>
 
         <div className="mb-8 grid gap-4 md:grid-cols-4">
@@ -149,25 +208,33 @@ export default function FinanceiroWorkflowClient({
           </div>
 
           <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <p className="text-sm text-slate-400">Arquivos selecionados</p>
+            <strong className="mt-2 block text-3xl font-black">{selectedFiles}</strong>
+          </div>
+
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
             <p className="text-sm text-slate-400">32201 estimado</p>
-            <strong className="mt-2 block text-xl font-black">{brl(totals.account32201)}</strong>
+            <strong className="mt-2 block text-xl font-black">
+              {brl(totals.account32201)}
+            </strong>
           </div>
 
           <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
             <p className="text-sm text-slate-400">Prov. trabalhista</p>
-            <strong className="mt-2 block text-xl font-black">{brl(totals.laborProvision)}</strong>
-          </div>
-
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-            <p className="text-sm text-slate-400">Base</p>
-            <strong className="mt-2 block text-xl font-black text-cyan-300">
-              MySQL + Upload
+            <strong className="mt-2 block text-xl font-black">
+              {brl(totals.laborProvision)}
             </strong>
           </div>
         </div>
 
         <section className="mb-8 rounded-3xl border border-slate-800 bg-slate-900 p-6">
           <h2 className="text-2xl font-black">Dados do processamento</h2>
+
+          <p className="mt-2 text-sm leading-6 text-slate-400">
+            Informe os dados conhecidos. Campos não preenchidos serão tratados nas
+            próximas fases pelo motor de estimativa com base em histórico, média
+            móvel e correlação contábil.
+          </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <input
@@ -269,8 +336,46 @@ export default function FinanceiroWorkflowClient({
           </div>
         </section>
 
+        {(showProvisionFields || showRevisionFields) && (
+          <section className="mb-8 grid gap-4 md:grid-cols-4">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+              <p className="text-sm text-slate-400">Receita ajustada</p>
+              <strong className="mt-2 block text-xl font-black">
+                {brl(totals.adjustedRevenue)}
+              </strong>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+              <p className="text-sm text-slate-400">Impacto dissídio</p>
+              <strong className="mt-2 block text-xl font-black">
+                {brl(totals.dissidioImpact)}
+              </strong>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+              <p className="text-sm text-slate-400">Resultado preliminar</p>
+              <strong className="mt-2 block text-xl font-black">
+                {brl(totals.preliminaryResult)}
+              </strong>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+              <p className="text-sm text-slate-400">Rastreabilidade</p>
+              <strong className="mt-2 block text-xl font-black text-cyan-300">
+                Oficial • Estimado • Editado
+              </strong>
+            </div>
+          </section>
+        )}
+
         <section className="mb-8 rounded-3xl border border-slate-800 bg-slate-900 p-6">
           <h2 className="text-2xl font-black">Arquivos de entrada</h2>
+
+          <p className="mt-2 text-sm leading-6 text-slate-400">
+            Anexe as bases disponíveis. A fase atual salva os arquivos e registra
+            o processamento; a próxima etapa fará leitura estruturada real das
+            planilhas Excel.
+          </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {fileLabels.map((label) => (
