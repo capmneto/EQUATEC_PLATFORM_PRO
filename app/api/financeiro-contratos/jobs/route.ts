@@ -4,6 +4,7 @@ import {
   createFinancialContractJob,
   listFinancialContractJobs,
 } from "@/lib/financeiro-contratos/jobs-db";
+import { parseFinancialContractFile } from "@/lib/financeiro-contratos/parser";
 import { generateFinancialContractResult } from "@/lib/financeiro-contratos/rules";
 import { saveFinancialContractFile } from "@/lib/financeiro-contratos/uploads";
 
@@ -62,8 +63,26 @@ export async function POST(request: Request) {
       const item = fileItems[index];
 
       if (item instanceof File && item.size > 0) {
-        const saved = await saveFinancialContractFile(item, labels[index]);
-        savedFiles.push(saved);
+        const label = labels[index] || item.name;
+        const saved = await saveFinancialContractFile(item, label);
+
+        try {
+          const parsed = await parseFinancialContractFile(item, label);
+
+          savedFiles.push({
+            ...saved,
+            parsed,
+          });
+        } catch (error) {
+          savedFiles.push({
+            ...saved,
+            parsed: null,
+            parseError:
+              error instanceof Error
+                ? error.message
+                : "Erro desconhecido ao interpretar arquivo.",
+          });
+        }
       }
     }
 

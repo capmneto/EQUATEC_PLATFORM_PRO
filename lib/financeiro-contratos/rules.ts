@@ -1,4 +1,6 @@
-﻿type RulePayload = {
+﻿import type { ParsedFinancialFile } from "@/lib/financeiro-contratos/parser";
+
+type RulePayload = {
   jobModule: string;
   title?: string;
   pec?: string;
@@ -12,6 +14,15 @@
   budgetValidity?: string;
 };
 
+type SavedFinancialFile = {
+  label?: string;
+  originalName?: string;
+  fileUrl?: string;
+  type?: string;
+  parsed?: ParsedFinancialFile | null;
+  parseError?: string;
+};
+
 function money(value: number) {
   return Number(value || 0).toLocaleString("pt-BR", {
     style: "currency",
@@ -19,7 +30,80 @@ function money(value: number) {
   });
 }
 
-export function generateFinancialContractResult(payload: RulePayload, files: unknown[]) {
+function summarizeParsedFiles(files: SavedFinancialFile[]) {
+  return files.map((file) => {
+    const parsed = file.parsed;
+
+    if (!parsed) {
+      return {
+        label: file.label,
+        originalName: file.originalName,
+        fileUrl: file.fileUrl,
+        classification: "NAO_PROCESSADO",
+        parseError: file.parseError || null,
+      };
+    }
+
+    return {
+      label: parsed.label,
+      originalName: parsed.originalName,
+      classification: parsed.classification,
+      sheetNames: parsed.sheetNames,
+      detectedBases: parsed.detectedBases,
+      warnings: parsed.warnings,
+      sheets: parsed.sheets.map((sheet) => ({
+        sheetName: sheet.sheetName,
+        rowCount: sheet.rowCount,
+        headerRowIndex: sheet.headerRowIndex,
+        detectedColumns: sheet.detectedColumns,
+        headers: sheet.headers.slice(0, 30),
+        preview: sheet.preview,
+      })),
+    };
+  });
+}
+
+function getDetectedClassifications(files: SavedFinancialFile[]) {
+  return [
+    ...new Set(
+      files
+        .map((file) => file.parsed?.classification)
+        .filter(Boolean),
+    ),
+  ];
+}
+
+function getColumnCoverage(files: SavedFinancialFile[]) {
+  const coverage = {
+    pec: false,
+    conta: false,
+    contaSup: false,
+    fornecedor: false,
+    rol: false,
+    verbaPagamento: false,
+    valor: false,
+    receita: false,
+    salario: false,
+    pessoal: false,
+  };
+
+  for (const file of files) {
+    for (const sheet of file.parsed?.sheets || []) {
+      Object.entries(sheet.detectedColumns).forEach(([key, value]) => {
+        if (value && key in coverage) {
+          coverage[key as keyof typeof coverage] = true;
+        }
+      });
+    }
+  }
+
+  return coverage;
+}
+
+export function generateFinancialContractResult(
+  payload: RulePayload,
+  files: SavedFinancialFile[],
+) {
   const revenue = Number(payload.revenue || 0);
   const laborCost = Number(payload.laborCost || 0);
   const dissidioPercent = Number(payload.dissidioPercent || 0);
@@ -29,6 +113,10 @@ export function generateFinancialContractResult(payload: RulePayload, files: unk
   const laborProvision = laborCost * 0.2625;
   const dissidioImpact = laborCost * (dissidioPercent / 100);
   const adjustedRevenue = revenue * (1 + contractAdjustmentPercent / 100);
+
+  const parsedSummary = summarizeParsedFiles(files);
+  const detectedClassifications = getDetectedClassifications(files);
+  const columnCoverage = getColumnCoverage(files);
 
   const baseRules = [
     "32201 TOTAL = 8,75% da receita total por PEC.",
@@ -40,11 +128,26 @@ export function generateFinancialContractResult(payload: RulePayload, files: unk
     "Depreciações gerenciais devem repetir o valor do mês anterior quando estiverem reduzindo ao longo do tempo.",
   ];
 
+  const dataIntelligence = {
+    detectedClassifications,
+    columnCoverage,
+    parsedFiles: parsedSummary,
+    nextEngineActions: [
+      "Normalizar nomes de colunas por tipo de base.",
+      "Converter valores monetários em número padronizado.",
+      "Agrupar 7.5 por PEC / CONTA / CONTA SUP.",
+      "Agrupar 9.1 por PEC / CONTA / CONTA SUP / FORNECEDOR.",
+      "Agrupar 8.2.1 por PEC / CONTA CONTÁBIL / VERBA DE PAGAMENTO.",
+      "Comparar base de precificação contra histórico realizado.",
+      "Aplicar regras de estimativa, lacunas e divergências.",
+    ],
+  };
+
   if (payload.jobModule === "diagnostico") {
     return {
       title: "Diagnóstico do Contrato",
       executiveSummary: [
-        "Arquivos recebidos para formação da base de diagnóstico contratual.",
+        "Arquivos recebidos e classificados para formação da base de diagnóstico contratual.",
         "O objetivo é cruzar a precificação original com 7.5, 9.1 e 8.2.1 para identificar limites, estouros, desvios e lançamentos suspeitos.",
         "A análise deve respeitar a visão separada por PEC ou estudo de custo.",
       ],
@@ -57,6 +160,7 @@ export function generateFinancialContractResult(payload: RulePayload, files: unk
         "Localizar fornecedor com crescimento/redução relevante.",
         "Sinalizar possível conta contábil incorreta, como táxi em transporte fretado.",
       ],
+      dataIntelligence,
       filesReceived: files,
       rules: baseRules,
     };
@@ -90,6 +194,7 @@ export function generateFinancialContractResult(payload: RulePayload, files: unk
         "Usar 9.1 para fornecedor e conta contábil.",
         "Usar 8.2.1 para verba de pagamento e comportamento de folha/benefícios.",
       ],
+      dataIntelligence,
       filesReceived: files,
       rules: baseRules,
     };
@@ -117,6 +222,7 @@ export function generateFinancialContractResult(payload: RulePayload, files: unk
       { state: "ESTIMADO", meaning: "Dado calculado por regra, média móvel ou IA", color: "âmbar" },
       { state: "EDITADO", meaning: "Valor fixado manualmente pelo usuário", color: "azul" },
     ],
+    dataIntelligence,
     filesReceived: files,
     rules: baseRules,
   };

@@ -373,8 +373,7 @@ export default function FinanceiroWorkflowClient({
 
           <p className="mt-2 text-sm leading-6 text-slate-400">
             Anexe as bases disponíveis. A fase atual salva os arquivos e registra
-            o processamento; a próxima etapa fará leitura estruturada real das
-            planilhas Excel.
+            o processamento; o sistema já faz leitura estrutural preliminar de XLSX/CSV, detectando abas, cabeçalhos e colunas críticas.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -458,3 +457,4 @@ export default function FinanceiroWorkflowClient({
     </main>
   );
 }
+
