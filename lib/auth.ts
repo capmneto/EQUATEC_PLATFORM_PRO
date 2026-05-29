@@ -1,4 +1,4 @@
-import { getServerSession, type NextAuthOptions } from "next-auth";
+﻿import { getServerSession, type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
@@ -25,6 +25,26 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
+      const inputEmail = String(credentials?.email || "").trim().toLowerCase();
+      const inputPassword = String(credentials?.password || "");
+      const localAdminEmail = process.env.LOCAL_DEV_ADMIN_EMAIL?.trim().toLowerCase();
+      const localAdminPassword = process.env.LOCAL_DEV_ADMIN_PASSWORD;
+
+      if (
+        process.env.NODE_ENV !== "production" &&
+        localAdminEmail &&
+        localAdminPassword &&
+        inputEmail === localAdminEmail &&
+        inputPassword === localAdminPassword
+      ) {
+        return {
+          id: "local-dev-super-admin",
+          name: "Carlos Machado",
+          email: localAdminEmail,
+          role: "SUPER_ADMIN",
+          status: "APPROVED",
+        } as any;
+      }
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
