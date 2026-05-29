@@ -1,6 +1,4 @@
-﻿import Link from "next/link";
-
-const ecosystemModules = [
+﻿const ecosystemModules = [
   {
     title: "Gestão Financeira de Contratos",
     description:
@@ -135,9 +133,9 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_32rem),radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_34rem)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_32rem),radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_34rem)]" />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-10">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 py-10">
           <header className="mb-16 flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.35em] text-cyan-300">
@@ -149,19 +147,19 @@ export default function HomePage() {
             </div>
 
             <nav className="flex flex-wrap gap-3">
-              <Link
+              <a
                 href="/login"
-                className="rounded-full border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
+                className="inline-flex rounded-full border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
               >
                 Login
-              </Link>
+              </a>
 
-              <Link
+              <a
                 href="/admin"
-                className="rounded-full bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
+                className="inline-flex rounded-full bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
               >
                 Acessar Admin Hub
-              </Link>
+              </a>
             </nav>
           </header>
 
@@ -197,26 +195,26 @@ export default function HomePage() {
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <Link
+                <a
                   href="/admin/financeiro-contratos"
-                  className="rounded-2xl bg-cyan-400 px-6 py-4 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
+                  className="inline-flex rounded-2xl bg-cyan-400 px-6 py-4 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
                 >
                   Abrir Gestão Financeira de Contratos
-                </Link>
+                </a>
 
-                <Link
+                <a
                   href="/admin"
-                  className="rounded-2xl border border-slate-700 bg-slate-900 px-6 py-4 text-sm font-black text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
+                  className="inline-flex rounded-2xl border border-slate-700 bg-slate-900 px-6 py-4 text-sm font-black text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
                 >
                   Explorar Ecossistema
-                </Link>
+                </a>
               </div>
             </div>
 
             <div className="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-6 shadow-2xl">
               <div className="overflow-hidden rounded-[1.5rem] border border-slate-800 bg-slate-950">
                 <img
-                  src="/home/carlos-machado.jpg"
+                  src="/carlos-machado.jpg"
                   alt="Carlos Machado - idealizador do Ecossistema EQUATEC"
                   className="h-[360px] w-full object-cover object-top"
                 />
@@ -239,14 +237,14 @@ export default function HomePage() {
                     href="https://wa.me/5522998578981"
                     target="_blank"
                     rel="noreferrer"
-                    className="rounded-full border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300"
+                    className="inline-flex rounded-full border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300"
                   >
                     WhatsApp
                   </a>
 
                   <a
                     href="mailto:capmneto@gmail.com"
-                    className="rounded-full border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300"
+                    className="inline-flex rounded-full border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300"
                   >
                     E-mail
                   </a>
@@ -255,7 +253,7 @@ export default function HomePage() {
                     href="https://www.linkedin.com/in/carlos-machado-95917433/"
                     target="_blank"
                     rel="noreferrer"
-                    className="rounded-full border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300"
+                    className="inline-flex rounded-full border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300"
                   >
                     LinkedIn
                   </a>
@@ -321,10 +319,10 @@ export default function HomePage() {
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {ecosystemModules.map((module) => (
-            <Link
+            <a
               key={module.title}
               href={module.href}
-              className="group rounded-3xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-400/60 hover:bg-slate-900/80"
+              className="group block rounded-3xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-400/60 hover:bg-slate-900/80"
             >
               <div className="mb-5 flex items-start justify-between gap-4">
                 <h3 className="text-xl font-black">{module.title}</h3>
@@ -341,11 +339,10 @@ export default function HomePage() {
               <p className="mt-5 text-sm font-black text-cyan-300">
                 Acessar módulo →
               </p>
-            </Link>
+            </a>
           ))}
         </div>
       </section>
     </main>
   );
 }
-
