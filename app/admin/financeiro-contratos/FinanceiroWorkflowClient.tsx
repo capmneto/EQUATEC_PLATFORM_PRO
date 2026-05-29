@@ -22,6 +22,8 @@ type Job = {
   createdAt: string;
 };
 
+type AnyResult = Record<string, any>;
+
 function brl(value: number) {
   return Number(value || 0).toLocaleString("pt-BR", {
     style: "currency",
@@ -30,22 +32,10 @@ function brl(value: number) {
 }
 
 const workflowLinks = [
-  {
-    label: "Cockpit",
-    href: "/admin/financeiro-contratos",
-  },
-  {
-    label: "Diagnóstico",
-    href: "/admin/financeiro-contratos/diagnostico",
-  },
-  {
-    label: "Revisão",
-    href: "/admin/financeiro-contratos/revisao-orcamentaria",
-  },
-  {
-    label: "Provisão",
-    href: "/admin/financeiro-contratos/provisao-mensal",
-  },
+  { label: "Cockpit", href: "/admin/financeiro-contratos" },
+  { label: "Diagnóstico", href: "/admin/financeiro-contratos/diagnostico" },
+  { label: "Revisão", href: "/admin/financeiro-contratos/revisao-orcamentaria" },
+  { label: "Provisão", href: "/admin/financeiro-contratos/provisao-mensal" },
 ];
 
 export default function FinanceiroWorkflowClient({
@@ -58,7 +48,7 @@ export default function FinanceiroWorkflowClient({
 }: WorkflowProps) {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [files, setFiles] = useState<Record<string, File | null>>({});
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<AnyResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -154,6 +144,8 @@ export default function FinanceiroWorkflowClient({
   }, []);
 
   const selectedFiles = Object.values(files).filter(Boolean).length;
+  const parsedFiles = result?.dataIntelligence?.parsedFiles || [];
+  const columnCoverage = result?.dataIntelligence?.columnCoverage || {};
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
@@ -372,8 +364,9 @@ export default function FinanceiroWorkflowClient({
           <h2 className="text-2xl font-black">Arquivos de entrada</h2>
 
           <p className="mt-2 text-sm leading-6 text-slate-400">
-            Anexe as bases disponíveis. A fase atual salva os arquivos e registra
-            o processamento; o sistema já faz leitura estrutural preliminar de XLSX/CSV, detectando abas, cabeçalhos e colunas críticas.
+            Anexe as bases disponíveis. O sistema salva os arquivos e já executa
+            leitura estrutural preliminar de XLSX/CSV, detectando abas,
+            cabeçalhos, colunas críticas, amostras e totais monetários.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -411,12 +404,182 @@ export default function FinanceiroWorkflowClient({
         </section>
 
         {result && (
-          <section className="mb-8 rounded-3xl border border-cyan-400/20 bg-slate-900 p-6">
-            <h2 className="text-2xl font-black">Resultado preliminar</h2>
+          <section className="mb-8 space-y-6">
+            <div className="rounded-3xl border border-cyan-400/20 bg-slate-900 p-6">
+              <h2 className="text-2xl font-black">Resultado gerencial preliminar</h2>
 
-            <pre className="mt-5 max-h-[520px] overflow-auto whitespace-pre-wrap rounded-2xl border border-slate-800 bg-slate-950 p-5 text-sm leading-7 text-slate-300">
-              {JSON.stringify(result, null, 2)}
-            </pre>
+              <div className="mt-5 grid gap-4 md:grid-cols-4">
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+                  <p className="text-sm text-slate-400">Linhas lidas</p>
+                  <strong className="mt-2 block text-3xl font-black">
+                    {result.dataIntelligence?.totalRowsRead || 0}
+                  </strong>
+                </div>
+
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+                  <p className="text-sm text-slate-400">Total detectado</p>
+                  <strong className="mt-2 block text-xl font-black">
+                    {result.dataIntelligence?.detectedValueTotalFormatted || "R$ 0,00"}
+                  </strong>
+                </div>
+
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+                  <p className="text-sm text-slate-400">Arquivos lidos</p>
+                  <strong className="mt-2 block text-3xl font-black">
+                    {parsedFiles.length}
+                  </strong>
+                </div>
+
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+                  <p className="text-sm text-slate-400">Classificações</p>
+                  <strong className="mt-2 block text-sm font-black text-cyan-300">
+                    {(result.dataIntelligence?.detectedClassifications || []).join(", ") ||
+                      "Não detectado"}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <p className="mb-3 text-sm font-black uppercase tracking-[0.2em] text-cyan-300">
+                  Cobertura de colunas críticas
+                </p>
+
+                <div className="grid gap-3 md:grid-cols-4">
+                  {Object.entries(columnCoverage).map(([key, value]) => (
+                    <div
+                      key={key}
+                      className={`rounded-2xl border p-4 text-sm font-bold ${
+                        value
+                          ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
+                          : "border-slate-800 bg-slate-950 text-slate-500"
+                      }`}
+                    >
+                      {key}: {value ? "detectado" : "não detectado"}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+              <h2 className="text-2xl font-black">Resumo executivo</h2>
+
+              <div className="mt-5 space-y-3">
+                {(result.executiveSummary || []).map((item: string) => (
+                  <p
+                    key={item}
+                    className="rounded-2xl border border-slate-800 bg-slate-950 p-4 text-sm leading-6 text-slate-300"
+                  >
+                    {item}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {parsedFiles.map((file: any) => (
+                <article
+                  key={`${file.originalName}-${file.label}`}
+                  className="rounded-3xl border border-slate-800 bg-slate-900 p-6"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-2xl font-black">{file.originalName}</h3>
+                      <p className="mt-2 text-sm text-slate-400">{file.label}</p>
+                    </div>
+
+                    <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase text-cyan-300">
+                      {file.classification}
+                    </span>
+                  </div>
+
+                  <div className="mt-5 grid gap-4 md:grid-cols-3">
+                    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                      <p className="text-sm text-slate-400">Linhas</p>
+                      <strong className="mt-2 block text-2xl font-black">
+                        {file.totalRows || 0}
+                      </strong>
+                    </div>
+
+                    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                      <p className="text-sm text-slate-400">Total detectado</p>
+                      <strong className="mt-2 block text-lg font-black">
+                        {brl(file.detectedValueTotal || 0)}
+                      </strong>
+                    </div>
+
+                    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                      <p className="text-sm text-slate-400">Abas</p>
+                      <strong className="mt-2 block text-lg font-black">
+                        {(file.sheetNames || []).length}
+                      </strong>
+                    </div>
+                  </div>
+
+                  {(file.detectedBases || []).length > 0 && (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {file.detectedBases.map((item: string) => (
+                        <span
+                          key={item}
+                          className="rounded-full border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-slate-300"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {(file.warnings || []).length > 0 && (
+                    <div className="mt-5 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4">
+                      <p className="mb-2 text-xs font-black uppercase text-amber-300">
+                        Alertas
+                      </p>
+                      <ul className="space-y-1 text-sm text-amber-100">
+                        {file.warnings.map((warning: string) => (
+                          <li key={warning}>• {warning}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {(file.sheets || []).slice(0, 3).map((sheet: any) => (
+                    <div
+                      key={sheet.sheetName}
+                      className="mt-5 rounded-2xl border border-slate-800 bg-slate-950 p-4"
+                    >
+                      <p className="text-sm font-black text-cyan-300">
+                        Aba: {sheet.sheetName}
+                      </p>
+                      <p className="mt-2 text-xs text-slate-500">
+                        Cabeçalho na linha {Number(sheet.headerRowIndex || 0) + 1} •{" "}
+                        {sheet.rowCount || 0} linhas
+                      </p>
+
+                      <pre className="mt-4 max-h-[220px] overflow-auto whitespace-pre-wrap rounded-xl border border-slate-800 bg-slate-900 p-4 text-xs leading-6 text-slate-300">
+                        {JSON.stringify(
+                          {
+                            colunasDetectadas: sheet.detectedColumns,
+                            amostraNormalizada: sheet.normalizedPreview,
+                          },
+                          null,
+                          2,
+                        )}
+                      </pre>
+                    </div>
+                  ))}
+                </article>
+              ))}
+            </div>
+
+            <details className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+              <summary className="cursor-pointer text-xl font-black text-cyan-300">
+                Ver JSON técnico completo
+              </summary>
+
+              <pre className="mt-5 max-h-[520px] overflow-auto whitespace-pre-wrap rounded-2xl border border-slate-800 bg-slate-950 p-5 text-sm leading-7 text-slate-300">
+                {JSON.stringify(result, null, 2)}
+              </pre>
+            </details>
           </section>
         )}
 
@@ -457,4 +620,3 @@ export default function FinanceiroWorkflowClient({
     </main>
   );
 }
-

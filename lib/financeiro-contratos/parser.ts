@@ -20,6 +20,8 @@ export type DetectedColumnMap = {
   receita?: string;
   salario?: string;
   pessoal?: string;
+  data?: string;
+  centroResultado?: string;
 };
 
 export type ParsedSheetSummary = {
@@ -29,6 +31,8 @@ export type ParsedSheetSummary = {
   headers: string[];
   detectedColumns: DetectedColumnMap;
   preview: Record<string, string>[];
+  normalizedPreview: Record<string, string>[];
+  detectedValueTotal: number;
 };
 
 export type ParsedFinancialFile = {
@@ -39,6 +43,8 @@ export type ParsedFinancialFile = {
   sheets: ParsedSheetSummary[];
   warnings: string[];
   detectedBases: string[];
+  totalRows: number;
+  detectedValueTotal: number;
 };
 
 function normalizeText(value: unknown) {
@@ -53,8 +59,32 @@ function compactText(value: unknown) {
   return normalizeText(value).replace(/[^A-Z0-9]/g, "");
 }
 
-function classifyFile(label: string, fileName: string, mimeType?: string): FinancialFileClassification {
-  const source = `${label} ${fileName}`.toUpperCase();
+function parseMoney(value: unknown) {
+  if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+
+  const raw = String(value ?? "").trim();
+
+  if (!raw) return 0;
+
+  const clean = raw
+    .replace(/\s/g, "")
+    .replace(/R\$/gi, "")
+    .replace(/\./g, "")
+    .replace(",", ".")
+    .replace(/[^\d.-]/g, "");
+
+  const parsed = Number(clean);
+
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function classifyFile(
+  label: string,
+  fileName: string,
+  mimeType?: string,
+): FinancialFileClassification {
+  const source = `${label} ${fileName}`;
+  const normalized = normalizeText(source);
   const compact = compactText(source);
 
   if (mimeType?.includes("pdf") || compact.includes("PDF")) {
@@ -62,49 +92,44 @@ function classifyFile(label: string, fileName: string, mimeType?: string): Finan
   }
 
   if (
+    normalized.includes("7.5") ||
     compact.includes("75") ||
-    source.includes("7.5") ||
-    source.includes("PLANILHA 7.5") ||
-    source.includes("HISTÓRICO 7.5") ||
-    source.includes("HISTORICO 7.5")
+    normalized.includes("HISTORICO 7.5") ||
+    normalized.includes("HISTÓRICO 7.5")
   ) {
     return "HISTORICO_7_5";
   }
 
-  if (
-    compact.includes("91") ||
-    source.includes("9.1") ||
-    source.includes("PLANILHA 9.1")
-  ) {
+  if (normalized.includes("9.1") || compact.includes("91")) {
     return "DETALHE_9_1";
   }
 
   if (
+    normalized.includes("8.2.1") ||
     compact.includes("821") ||
-    source.includes("8.2.1") ||
-    source.includes("FOLHA") ||
-    source.includes("PESSOAL") ||
-    source.includes("VERBA DE PAGAMENTO")
+    normalized.includes("FOLHA") ||
+    normalized.includes("PESSOAL") ||
+    normalized.includes("VERBA DE PAGAMENTO")
   ) {
     return "FOLHA_8_2_1";
   }
 
   if (
-    source.includes("PROVISÃO") ||
-    source.includes("PROVISAO") ||
-    source.includes("RESULTADO MENSAL")
+    normalized.includes("PROVISAO") ||
+    normalized.includes("PROVISÃO") ||
+    normalized.includes("RESULTADO MENSAL")
   ) {
     return "PROVISAO_MENSAL";
   }
 
   if (
-    source.includes("PEC") ||
-    source.includes("DFP") ||
-    source.includes("PPU") ||
-    source.includes("PREÇOS UNITÁRIOS") ||
-    source.includes("PRECOS UNITARIOS") ||
-    source.includes("PRECIFICAÇÃO") ||
-    source.includes("PRECIFICACAO")
+    normalized.includes("PEC") ||
+    normalized.includes("DFP") ||
+    normalized.includes("PPU") ||
+    normalized.includes("PRECO UNITARIO") ||
+    normalized.includes("PREÇO UNITÁRIO") ||
+    normalized.includes("PRECIFICACAO") ||
+    normalized.includes("PRECIFICAÇÃO")
   ) {
     return "BASE_PRECIFICACAO";
   }
@@ -114,33 +139,40 @@ function classifyFile(label: string, fileName: string, mimeType?: string): Finan
 
 function isLikelyHeaderRow(row: unknown[]) {
   const normalized = row.map(normalizeText).join(" | ");
-  const hits = [
+
+  const keywords = [
     "PEC",
     "CONTA",
     "CONTA SUP",
+    "CONTA SUPERIOR",
     "FORNECEDOR",
     "ROL",
     "VERBA",
     "VALOR",
     "TOTAL",
     "RECEITA",
+    "FATURAMENTO",
     "SALARIO",
     "SALÁRIO",
     "PESSOAL",
-  ].filter((term) => normalized.includes(normalizeText(term)));
+    "DATA",
+    "CR",
+  ];
+
+  const hits = keywords.filter((keyword) =>
+    normalized.includes(normalizeText(keyword)),
+  ).length;
 
   const nonEmpty = row.filter((cell) => String(cell ?? "").trim()).length;
 
-  return hits.length >= 2 || (hits.length >= 1 && nonEmpty >= 4);
+  return hits >= 2 || (hits >= 1 && nonEmpty >= 4);
 }
 
 function detectHeaderRow(rows: unknown[][]) {
-  const limit = Math.min(rows.length, 25);
+  const limit = Math.min(rows.length, 35);
 
   for (let index = 0; index < limit; index += 1) {
-    if (isLikelyHeaderRow(rows[index] || [])) {
-      return index;
-    }
+    if (isLikelyHeaderRow(rows[index] || [])) return index;
   }
 
   return 0;
@@ -159,22 +191,18 @@ function detectColumns(headers: string[]): DetectedColumnMap {
 
     if (
       !map.contaSup &&
-      (
-        normalized.includes("CONTA SUP") ||
+      (normalized.includes("CONTA SUP") ||
         normalized.includes("CONTA SUPERIOR") ||
-        compact.includes("CONTASUP")
-      )
+        compact.includes("CONTASUP"))
     ) {
       map.contaSup = header;
     }
 
     if (
       !map.conta &&
-      (
-        normalized === "CONTA" ||
+      (normalized === "CONTA" ||
         normalized.includes("CONTA CONTABIL") ||
-        normalized.includes("CONTA CONTÁBIL")
-      ) &&
+        normalized.includes("CONTA CONTÁBIL")) &&
       !normalized.includes("SUP")
     ) {
       map.conta = header;
@@ -190,30 +218,21 @@ function detectColumns(headers: string[]): DetectedColumnMap {
 
     if (
       !map.verbaPagamento &&
-      (
-        normalized.includes("VERBA") ||
-        normalized.includes("PAGAMENTO")
-      )
+      (normalized.includes("VERBA") || normalized.includes("PAGAMENTO"))
     ) {
       map.verbaPagamento = header;
     }
 
     if (
       !map.receita &&
-      (
-        normalized.includes("RECEITA") ||
-        normalized.includes("FATURAMENTO")
-      )
+      (normalized.includes("RECEITA") || normalized.includes("FATURAMENTO"))
     ) {
       map.receita = header;
     }
 
     if (
       !map.salario &&
-      (
-        normalized.includes("SALARIO") ||
-        normalized.includes("SALÁRIO")
-      )
+      (normalized.includes("SALARIO") || normalized.includes("SALÁRIO"))
     ) {
       map.salario = header;
     }
@@ -223,13 +242,32 @@ function detectColumns(headers: string[]): DetectedColumnMap {
     }
 
     if (
+      !map.data &&
+      (normalized === "DATA" ||
+        normalized.includes("COMPETENCIA") ||
+        normalized.includes("COMPETÊNCIA") ||
+        normalized.includes("MES") ||
+        normalized.includes("MÊS"))
+    ) {
+      map.data = header;
+    }
+
+    if (
+      !map.centroResultado &&
+      (normalized === "CR" ||
+        normalized.includes("CENTRO DE RESULTADO") ||
+        normalized.includes("CENTRO RESULTADO"))
+    ) {
+      map.centroResultado = header;
+    }
+
+    if (
       !map.valor &&
-      (
-        normalized === "VALOR" ||
+      (normalized === "VALOR" ||
         normalized.includes("VALOR") ||
         normalized.includes("TOTAL") ||
-        normalized.includes("MONTANTE")
-      )
+        normalized.includes("MONTANTE") ||
+        normalized.includes("CUSTO"))
     ) {
       map.valor = header;
     }
@@ -238,25 +276,57 @@ function detectColumns(headers: string[]): DetectedColumnMap {
   return map;
 }
 
-function buildPreview(
-  rows: unknown[][],
-  headerRowIndex: number,
-  headers: string[],
-) {
-  const previewRows = rows.slice(headerRowIndex + 1, headerRowIndex + 6);
+function buildPreview(rows: unknown[][], headerRowIndex: number, headers: string[]) {
+  const previewRows = rows.slice(headerRowIndex + 1, headerRowIndex + 8);
 
   return previewRows.map((row) => {
     const record: Record<string, string> = {};
 
     headers.forEach((header, index) => {
-      const cleanHeader = header || `COLUNA_${index + 1}`;
-      const value = row[index];
-
-      record[cleanHeader] = String(value ?? "");
+      const key = header || `COLUNA_${index + 1}`;
+      record[key] = String(row[index] ?? "");
     });
 
     return record;
   });
+}
+
+function buildNormalizedPreview(
+  preview: Record<string, string>[],
+  columns: DetectedColumnMap,
+) {
+  return preview.map((row) => {
+    return {
+      pec: columns.pec ? row[columns.pec] || "" : "",
+      conta: columns.conta ? row[columns.conta] || "" : "",
+      contaSup: columns.contaSup ? row[columns.contaSup] || "" : "",
+      fornecedor: columns.fornecedor ? row[columns.fornecedor] || "" : "",
+      verbaPagamento: columns.verbaPagamento
+        ? row[columns.verbaPagamento] || ""
+        : "",
+      receita: columns.receita ? row[columns.receita] || "" : "",
+      valor: columns.valor ? row[columns.valor] || "" : "",
+      salario: columns.salario ? row[columns.salario] || "" : "",
+      pessoal: columns.pessoal ? row[columns.pessoal] || "" : "",
+    };
+  });
+}
+
+function calculateDetectedValueTotal(
+  rows: unknown[][],
+  headerRowIndex: number,
+  headers: string[],
+  columns: DetectedColumnMap,
+) {
+  if (!columns.valor) return 0;
+
+  const valueIndex = headers.findIndex((header) => header === columns.valor);
+
+  if (valueIndex < 0) return 0;
+
+  return rows
+    .slice(headerRowIndex + 1)
+    .reduce((sum, row) => sum + parseMoney(row[valueIndex]), 0);
 }
 
 function detectBasesFromColumns(
@@ -265,80 +335,73 @@ function detectBasesFromColumns(
 ) {
   const bases: string[] = [];
 
-  if (classification === "HISTORICO_7_5") {
-    bases.push("Base histórica 7.5");
-  }
-
-  if (classification === "DETALHE_9_1") {
-    bases.push("Base detalhada 9.1");
-  }
-
-  if (classification === "FOLHA_8_2_1") {
-    bases.push("Base folha/pessoal 8.2.1");
-  }
-
   if (classification === "BASE_PRECIFICACAO") {
     bases.push("Base de precificação contratual");
   }
 
+  if (classification === "HISTORICO_7_5") {
+    bases.push("Histórico gerencial por conta");
+  }
+
+  if (classification === "DETALHE_9_1") {
+    bases.push("Detalhamento por fornecedor");
+  }
+
+  if (classification === "FOLHA_8_2_1") {
+    bases.push("Folha, pessoal e verba de pagamento");
+  }
+
   if (classification === "PROVISAO_MENSAL") {
-    bases.push("Planilha de provisão mensal");
+    bases.push("Provisão mensal");
   }
 
-  if (columns.pec) {
-    bases.push("Dimensão PEC detectada");
-  }
-
-  if (columns.conta) {
-    bases.push("Dimensão Conta Contábil detectada");
-  }
-
-  if (columns.contaSup) {
-    bases.push("Dimensão Conta Sup detectada");
-  }
-
-  if (columns.fornecedor) {
-    bases.push("Dimensão Fornecedor detectada");
-  }
-
-  if (columns.verbaPagamento) {
-    bases.push("Dimensão Verba de Pagamento detectada");
-  }
+  if (columns.pec) bases.push("Dimensão PEC detectada");
+  if (columns.conta) bases.push("Dimensão Conta Contábil detectada");
+  if (columns.contaSup) bases.push("Dimensão Conta Sup detectada");
+  if (columns.fornecedor) bases.push("Dimensão Fornecedor detectada");
+  if (columns.verbaPagamento) bases.push("Dimensão Verba de Pagamento detectada");
+  if (columns.valor) bases.push("Coluna de valor detectada");
 
   return [...new Set(bases)];
 }
 
 function buildWarnings(
   classification: FinancialFileClassification,
-  sheetSummaries: ParsedSheetSummary[],
+  sheets: ParsedSheetSummary[],
 ) {
   const warnings: string[] = [];
 
-  const allColumns = sheetSummaries.reduce<DetectedColumnMap>((acc, sheet) => {
-    return { ...acc, ...sheet.detectedColumns };
-  }, {});
+  const mergedColumns = sheets.reduce<DetectedColumnMap>(
+    (acc, sheet) => ({ ...acc, ...sheet.detectedColumns }),
+    {},
+  );
 
   if (classification === "HISTORICO_7_5") {
-    if (!allColumns.pec) warnings.push("7.5 sem coluna PEC detectada automaticamente.");
-    if (!allColumns.conta) warnings.push("7.5 sem coluna CONTA detectada automaticamente.");
-    if (!allColumns.contaSup) warnings.push("7.5 sem coluna CONTA SUP detectada automaticamente.");
+    if (!mergedColumns.pec) warnings.push("Histórico sem PEC detectada.");
+    if (!mergedColumns.conta) warnings.push("Histórico sem Conta detectada.");
+    if (!mergedColumns.contaSup)
+      warnings.push("Histórico sem Conta Sup detectada.");
   }
 
   if (classification === "DETALHE_9_1") {
-    if (!allColumns.pec) warnings.push("9.1 sem coluna PEC detectada automaticamente.");
-    if (!allColumns.conta) warnings.push("9.1 sem coluna CONTA detectada automaticamente.");
-    if (!allColumns.contaSup) warnings.push("9.1 sem coluna CONTA SUP detectada automaticamente.");
-    if (!allColumns.fornecedor) warnings.push("9.1 sem coluna FORNECEDOR detectada automaticamente.");
+    if (!mergedColumns.pec) warnings.push("Detalhamento sem PEC detectada.");
+    if (!mergedColumns.conta) warnings.push("Detalhamento sem Conta detectada.");
+    if (!mergedColumns.contaSup)
+      warnings.push("Detalhamento sem Conta Sup detectada.");
+    if (!mergedColumns.fornecedor)
+      warnings.push("Detalhamento sem Fornecedor detectado.");
   }
 
   if (classification === "FOLHA_8_2_1") {
-    if (!allColumns.pec) warnings.push("8.2.1 sem coluna PEC detectada automaticamente.");
-    if (!allColumns.conta) warnings.push("8.2.1 sem coluna CONTA CONTÁBIL detectada automaticamente.");
-    if (!allColumns.verbaPagamento) warnings.push("8.2.1 sem coluna VERBA DE PAGAMENTO detectada automaticamente.");
+    if (!mergedColumns.pec) warnings.push("Folha/Pessoal sem PEC detectada.");
+    if (!mergedColumns.conta)
+      warnings.push("Folha/Pessoal sem Conta Contábil detectada.");
+    if (!mergedColumns.verbaPagamento)
+      warnings.push("Folha/Pessoal sem Verba de Pagamento detectada.");
   }
 
-  if (!sheetSummaries.length && classification !== "DOCUMENTO_PDF") {
-    warnings.push("Nenhuma aba útil foi lida no arquivo.");
+  if (!sheets.length && classification !== "DOCUMENTO_PDF") {
+    warnings.push("Nenhuma aba útil foi lida automaticamente.");
   }
 
   return warnings;
@@ -357,8 +420,12 @@ export async function parseFinancialContractFile(
       classification,
       sheetNames: [],
       sheets: [],
-      warnings: ["PDF recebido. A leitura estruturada será tratada por OCR/Document AI em etapa posterior."],
+      warnings: [
+        "PDF recebido. A leitura estruturada será tratada por OCR/Document AI em etapa posterior.",
+      ],
       detectedBases: ["Documento PDF"],
+      totalRows: 0,
+      detectedValueTotal: 0,
     };
   }
 
@@ -370,7 +437,7 @@ export async function parseFinancialContractFile(
     raw: false,
   });
 
-  const sheets = workbook.SheetNames.slice(0, 8).map((sheetName) => {
+  const sheets = workbook.SheetNames.slice(0, 10).map((sheetName) => {
     const sheet = workbook.Sheets[sheetName];
 
     const rows = XLSX.utils.sheet_to_json(sheet, {
@@ -380,14 +447,21 @@ export async function parseFinancialContractFile(
     }) as unknown[][];
 
     const headerRowIndex = detectHeaderRow(rows);
+
     const headers = (rows[headerRowIndex] || []).map((cell, index) => {
       const value = String(cell ?? "").trim();
-
       return value || `COLUNA_${index + 1}`;
     });
 
     const detectedColumns = detectColumns(headers);
     const preview = buildPreview(rows, headerRowIndex, headers);
+    const normalizedPreview = buildNormalizedPreview(preview, detectedColumns);
+    const detectedValueTotal = calculateDetectedValueTotal(
+      rows,
+      headerRowIndex,
+      headers,
+      detectedColumns,
+    );
 
     return {
       sheetName,
@@ -396,12 +470,18 @@ export async function parseFinancialContractFile(
       headers,
       detectedColumns,
       preview,
+      normalizedPreview,
+      detectedValueTotal,
     };
   });
 
-  const allDetectedBases = sheets.flatMap((sheet) =>
-    detectBasesFromColumns(classification, sheet.detectedColumns),
-  );
+  const detectedBases = [
+    ...new Set(
+      sheets.flatMap((sheet) =>
+        detectBasesFromColumns(classification, sheet.detectedColumns),
+      ),
+    ),
+  ];
 
   return {
     label,
@@ -410,6 +490,11 @@ export async function parseFinancialContractFile(
     sheetNames: workbook.SheetNames,
     sheets,
     warnings: buildWarnings(classification, sheets),
-    detectedBases: [...new Set(allDetectedBases)],
+    detectedBases,
+    totalRows: sheets.reduce((sum, sheet) => sum + sheet.rowCount, 0),
+    detectedValueTotal: sheets.reduce(
+      (sum, sheet) => sum + sheet.detectedValueTotal,
+      0,
+    ),
   };
 }

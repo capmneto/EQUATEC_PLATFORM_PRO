@@ -47,17 +47,21 @@ function summarizeParsedFiles(files: SavedFinancialFile[]) {
     return {
       label: parsed.label,
       originalName: parsed.originalName,
+      fileUrl: file.fileUrl,
       classification: parsed.classification,
       sheetNames: parsed.sheetNames,
       detectedBases: parsed.detectedBases,
       warnings: parsed.warnings,
+      totalRows: parsed.totalRows,
+      detectedValueTotal: parsed.detectedValueTotal,
       sheets: parsed.sheets.map((sheet) => ({
         sheetName: sheet.sheetName,
         rowCount: sheet.rowCount,
         headerRowIndex: sheet.headerRowIndex,
         detectedColumns: sheet.detectedColumns,
-        headers: sheet.headers.slice(0, 30),
-        preview: sheet.preview,
+        detectedValueTotal: sheet.detectedValueTotal,
+        headers: sheet.headers.slice(0, 40),
+        normalizedPreview: sheet.normalizedPreview,
       })),
     };
   });
@@ -66,9 +70,7 @@ function summarizeParsedFiles(files: SavedFinancialFile[]) {
 function getDetectedClassifications(files: SavedFinancialFile[]) {
   return [
     ...new Set(
-      files
-        .map((file) => file.parsed?.classification)
-        .filter(Boolean),
+      files.map((file) => file.parsed?.classification).filter(Boolean),
     ),
   ];
 }
@@ -85,6 +87,8 @@ function getColumnCoverage(files: SavedFinancialFile[]) {
     receita: false,
     salario: false,
     pessoal: false,
+    data: false,
+    centroResultado: false,
   };
 
   for (const file of files) {
@@ -117,6 +121,14 @@ export function generateFinancialContractResult(
   const parsedSummary = summarizeParsedFiles(files);
   const detectedClassifications = getDetectedClassifications(files);
   const columnCoverage = getColumnCoverage(files);
+  const totalRowsRead = files.reduce(
+    (sum, file) => sum + Number(file.parsed?.totalRows || 0),
+    0,
+  );
+  const detectedValueTotal = files.reduce(
+    (sum, file) => sum + Number(file.parsed?.detectedValueTotal || 0),
+    0,
+  );
 
   const baseRules = [
     "32201 TOTAL = 8,75% da receita total por PEC.",
@@ -131,15 +143,18 @@ export function generateFinancialContractResult(
   const dataIntelligence = {
     detectedClassifications,
     columnCoverage,
+    totalRowsRead,
+    detectedValueTotal,
+    detectedValueTotalFormatted: money(detectedValueTotal),
     parsedFiles: parsedSummary,
     nextEngineActions: [
-      "Normalizar nomes de colunas por tipo de base.",
-      "Converter valores monetários em número padronizado.",
-      "Agrupar 7.5 por PEC / CONTA / CONTA SUP.",
-      "Agrupar 9.1 por PEC / CONTA / CONTA SUP / FORNECEDOR.",
-      "Agrupar 8.2.1 por PEC / CONTA CONTÁBIL / VERBA DE PAGAMENTO.",
-      "Comparar base de precificação contra histórico realizado.",
-      "Aplicar regras de estimativa, lacunas e divergências.",
+      "Normalizar valores monetários por tipo de base.",
+      "Agrupar histórico por PEC / Conta / Conta Sup.",
+      "Agrupar detalhamento por PEC / Conta / Conta Sup / Fornecedor.",
+      "Agrupar folha/pessoal por PEC / Conta / Verba de Pagamento.",
+      "Criar tabela comparativa entre precificação original, histórico e realizado.",
+      "Aplicar regras de provisão, lacunas, divergências e rastreabilidade por origem.",
+      "Gerar resultado consolidado por PEC e análise executiva.",
     ],
   };
 
@@ -147,18 +162,18 @@ export function generateFinancialContractResult(
     return {
       title: "Diagnóstico do Contrato",
       executiveSummary: [
-        "Arquivos recebidos e classificados para formação da base de diagnóstico contratual.",
-        "O objetivo é cruzar a precificação original com 7.5, 9.1 e 8.2.1 para identificar limites, estouros, desvios e lançamentos suspeitos.",
+        "Arquivos recebidos, classificados e lidos estruturalmente para formação da base de diagnóstico contratual.",
+        "O objetivo é cruzar precificação original, histórico, detalhamento por fornecedor e dados de folha/pessoal.",
         "A análise deve respeitar a visão separada por PEC ou estudo de custo.",
       ],
       checks: [
-        "Identificar estrutura original: PEC, DFP Horizontal, DFP Vertical ou Planilha de Preços Unitários.",
+        "Identificar estrutura original de precificação.",
         "Extrair limites macro por grupo de custo e limites micro por conta contábil.",
-        "Cruzar 7.5 configurado como PEC / CONTA / CONTA SUP.",
-        "Cruzar 9.1 configurado como PEC / CONTA / CONTA SUP / FORNECEDOR.",
+        "Cruzar histórico por PEC / Conta / Conta Sup.",
+        "Cruzar detalhamento por PEC / Conta / Conta Sup / Fornecedor.",
         "Comparar comportamento das contas frente à receita.",
         "Localizar fornecedor com crescimento/redução relevante.",
-        "Sinalizar possível conta contábil incorreta, como táxi em transporte fretado.",
+        "Sinalizar possível conta contábil incorreta.",
       ],
       dataIntelligence,
       filesReceived: files,
@@ -172,7 +187,7 @@ export function generateFinancialContractResult(
       executiveSummary: [
         "Módulo preparado para transformar valores macro da precificação em orçamento micro por conta contábil.",
         "Os campos de dissídio, database, reajuste contratual e data de aplicação foram capturados para compor a revisão.",
-        "Quando não houver dado preciso, deve-se utilizar histórico 7.5, 9.1 e 8.2.1, sempre por PEC ou estudo de custo separado.",
+        "Quando não houver dado preciso, o sistema deve utilizar histórico, detalhamento por fornecedor e dados de folha/pessoal.",
       ],
       calculatedReferences: {
         laborCostBase: money(laborCost),
@@ -186,13 +201,13 @@ export function generateFinancialContractResult(
         budgetValidity: payload.budgetValidity || "não informada",
       },
       checks: [
-        "Abrir macro da PEC/DFP/PPU em contas contábeis propostas.",
+        "Abrir macro da precificação em contas contábeis propostas.",
         "Aplicar dissídio nos itens de folha.",
         "Aplicar reajuste contratual na receita a partir da data informada.",
         "Separar análise por PEC ou estudo de custo.",
-        "Usar 7.5 para histórico mensal por conta.",
-        "Usar 9.1 para fornecedor e conta contábil.",
-        "Usar 8.2.1 para verba de pagamento e comportamento de folha/benefícios.",
+        "Usar histórico para comportamento mensal por conta.",
+        "Usar detalhamento para fornecedor e conta contábil.",
+        "Usar folha/pessoal para verba de pagamento e benefícios.",
       ],
       dataIntelligence,
       filesReceived: files,
@@ -203,8 +218,8 @@ export function generateFinancialContractResult(
   return {
     title: "Provisão de Resultado Mensal",
     executiveSummary: [
-      "Módulo preparado para calcular provisão mensal de resultado e EBITDA com rastreabilidade.",
-      "As planilhas mensais devem alimentar custos oficiais, estimados e editados.",
+      "Módulo preparado para calcular provisão mensal de Resultado e EBITDA com rastreabilidade.",
+      "As planilhas mensais alimentam custos oficiais, estimados e editados.",
       "O fechamento mensal deve registrar desvio entre provisão e realizado para aprendizado futuro.",
     ],
     calculatedReferences: {
