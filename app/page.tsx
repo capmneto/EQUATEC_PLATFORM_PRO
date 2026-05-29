@@ -1,240 +1,281 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
-const modules = [
+const ecosystemModules = [
+  {
+    title: "Gestão Financeira de Contratos",
+    description:
+      "Diagnóstico contratual, revisão orçamentária e provisão mensal de Resultado/EBITDA com 7.5, 9.1, 8.2.1, PEC, DFP e regras contábeis.",
+    href: "/admin/financeiro-contratos",
+    status: "Novo módulo",
+  },
+  {
+    title: "Admin Hub",
+    description:
+      "Painel central do ecossistema, com acesso aos módulos administrativos, IA, governança, usuários, auditoria e operações.",
+    href: "/admin",
+    status: "Core",
+  },
   {
     title: "Gestão de Obras",
     description:
-      "Controle físico-financeiro, etapas, documentos, medições, fotos, pendências, evolução da obra e histórico das decisões.",
+      "Controle operacional de obras com projetos, documentos, diário, checklist, pagamentos, orçamento, automações e IA.",
+    href: "/admin/obras",
+    status: "Produto",
   },
   {
-    title: "Gestão de Franquias e Sociedades",
+    title: "BID AI",
     description:
-      "Pacote para controle societário, financeiro, mobilização, ativos, garantias, ocorrências e rotinas operacionais, incluindo FACILMART como aplicação prática.",
+      "Inteligência para propostas técnicas e comerciais, premissas, riscos, composição de escopo e estratégia de contratação.",
+    href: "/admin/bid",
+    status: "IA Comercial",
   },
   {
-    title: "IA Corporativa",
+    title: "HUB IA",
     description:
-      "Agentes e recursos de inteligência artificial para documentos, decisões, diagnósticos, dados, produtividade e padronização de processos.",
+      "Laboratório corporativo de agentes, RAG, memória, playground de IA e especialistas técnicos do ecossistema.",
+    href: "/admin/agents",
+    status: "IA",
   },
   {
-    title: "Cursos EAD",
+    title: "Document AI",
     description:
-      "Trilhas, aulas, conteúdos técnicos, treinamentos corporativos e gestão de aprendizagem aplicada à rotina operacional.",
+      "Upload, OCR, análise documental, extração de texto e base para inteligência documental em todos os produtos.",
+    href: "/admin/document-ai",
+    status: "Documentos",
   },
   {
-    title: "Ferramentas de Engenharia",
+    title: "Cursos / EAD",
     description:
-      "Checklists, modelos, cálculos, planos de ação, relatórios e templates para engenharia, manutenção, obras e gestão.",
+      "Base para trilhas de capacitação, treinamentos, materiais, conteúdos técnicos e expansão educacional da EQUATEC.",
+    href: "/cursos",
+    status: "Educação",
   },
   {
-    title: "Automação via n8n",
+    title: "Automações",
     description:
-      "Fluxos automatizados para integrar sistemas, formulários, notificações, aprovações, alertas, documentos e rotinas.",
-  },
-  {
-    title: "Dashboards Executivos",
-    description:
-      "Painéis gerenciais para indicadores, obras, tarefas, financeiro, treinamentos, produtividade e visão executiva da operação.",
-  },
-  {
-    title: "HUB BONUS",
-    description:
-      "Área especial com ferramentas extras, prompts, modelos, agentes de apoio, materiais técnicos, templates e recursos digitais complementares.",
+      "Preparação para n8n, integrações, notificações, fluxos automáticos, WhatsApp, Telegram e rotinas inteligentes.",
+    href: "/automacoes",
+    status: "Integração",
   },
 ];
 
-const deliveries = [
-  "Centralização de informações",
-  "Controle de tarefas e prazos",
-  "Organização documental",
-  "Automação de processos",
-  "Apoio com IA corporativa",
-  "Dashboards executivos",
-  "Rastreabilidade e histórico",
-  "Padronização da gestão",
+const valuePillars = [
+  "Gestão integrada",
+  "IA aplicada",
+  "Engenharia",
+  "Financeiro",
+  "Obras",
+  "Documentos",
+  "Automação",
+  "Governança",
 ];
 
-const digitalSolutions = [
+const highlights = [
   {
-    title: "Sites e Plataformas Digitais",
-    description:
-      "Desenvolvimento de páginas institucionais, portais, áreas de acesso, sistemas internos e plataformas digitais sob medida.",
+    label: "Ecossistema",
+    value: "SaaS + IA",
   },
   {
-    title: "Fluxos de Trabalho com Automação e IA",
-    description:
-      "Modelagem de processos, integração com n8n, formulários inteligentes, alertas, aprovações e rotinas automatizadas.",
+    label: "Módulos estratégicos",
+    value: "7+",
   },
   {
-    title: "Chatbots e Agentes Inteligentes",
-    description:
-      "Criação de chatbots para atendimento, consulta documental, suporte técnico, treinamento, gestão e rotinas administrativas.",
+    label: "Novo produto",
+    value: "Financeiro",
   },
   {
-    title: "Treinamentos de IA Aplicada à Gestão",
-    description:
-      "Capacitações práticas para aplicar IA em manutenção, engenharia, contratos, documentos, indicadores e tomada de decisão.",
+    label: "Base técnica",
+    value: "Next.js",
   },
 ];
 
-function ContactIconLinks() {
+export default function HomePage() {
   return (
-    <div className="quick-links" aria-label="Canais rápidos de contato">
-      <Link href="https://wa.me/5522998578981" target="_blank" className="quick-link whatsapp">
-        <span className="quick-icon">☎</span>
-        <span>WhatsApp</span>
-      </Link>
-      <Link href="mailto:equatec.comserv@gmail.com" className="quick-link email">
-        <span className="quick-icon">@</span>
-        <span>E-mail</span>
-      </Link>
-      <Link href="https://www.linkedin.com/in/carlos-machado-95917433/" target="_blank" className="quick-link linkedin">
-        <span className="quick-icon">in</span>
-        <span>LinkedIn</span>
-      </Link>
-    </div>
-  );
-}
+    <main className="min-h-screen bg-slate-950 text-white">
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_32rem),radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_34rem)]" />
 
-export default function Home() {
-  return (
-    <main className="page">
-      <section className="hero">
-        <div className="container hero-grid">
-          <div>
-            <span className="badge">EQUATEC — Tecnologia, Gestão e IA aplicada</span>
-
-            <h1>
-              Ecossistema para obras, empresas, engenharia, franquias, IA e decisões executivas.
-            </h1>
-
-            <p>
-              A EQUATEC integra gestão de obras, gestão de franquias e sociedades,
-              IA corporativa, cursos EAD, ferramentas de engenharia, automações via
-              n8n, chatbots, desenvolvimento de plataformas digitais, dashboards
-              executivos e HUB BONUS em uma base modular para transformar
-              informações dispersas em controle, produtividade e tomada de decisão.
-            </p>
-
-            <div className="hero-actions">
-              <Link href="/login" className="btn btn-primary">Acessar Plataforma</Link>
-              <Link href="/cadastro" className="btn btn-outline">Solicitar Acesso</Link>
-              <Link href="/modulos" className="btn btn-outline">Conhecer Módulos</Link>
-              <Link href="https://wa.me/5522998578981" target="_blank" className="btn btn-outline">Falar no WhatsApp</Link>
-            </div>
-
-            <ContactIconLinks />
-          </div>
-
-          <aside className="profile-hero card">
-            <img src="/home/carlos-machado.jpg" alt="Carlos Machado" className="profile-photo" />
+        <div className="relative mx-auto max-w-7xl px-6 py-10">
+          <header className="mb-16 flex flex-wrap items-center justify-between gap-4">
             <div>
-              <span className="badge">Idealizador do Ecossistema</span>
-              <h2>Carlos Machado</h2>
-              <p>
-                Gestão da Manutenção Industrial • Engenharia Especializada • Soluções com Inteligência Artificial.
+              <p className="text-sm font-black uppercase tracking-[0.35em] text-cyan-300">
+                EQUATEC
+              </p>
+              <p className="mt-2 text-sm text-slate-400">
+                Tecnologia • Gestão Integrada • Engenharia • IA Aplicada
               </p>
             </div>
-          </aside>
-        </div>
-      </section>
 
-      <section id="ecossistema" className="section">
-        <div className="container">
-          <div className="section-title">
-            <h2>O que o Ecossistema EQUATEC entrega</h2>
-            <p>
-              Um ambiente digital estruturado para apoiar profissionais e empresas que
-              precisam sair da gestão fragmentada por planilhas, mensagens, arquivos
-              soltos e controles manuais.
-            </p>
-          </div>
+            <nav className="flex flex-wrap gap-3">
+              <Link
+                href="/login"
+                className="rounded-full border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
+              >
+                Login
+              </Link>
 
-          <div className="grid grid-4">
-            {deliveries.map((item) => (
-              <div key={item} className="card mini-card">
-                <h3>{item}</h3>
-                <p>Organização, rastreabilidade e padronização para melhorar a rotina operacional.</p>
+              <Link
+                href="/admin"
+                className="rounded-full bg-cyan-400 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
+              >
+                Acessar Admin Hub
+              </Link>
+            </nav>
+          </header>
+
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div>
+              <div className="mb-6 flex flex-wrap gap-2">
+                {valuePillars.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-cyan-300"
+                  >
+                    {item}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <section className="section" id="modulos">
-        <div className="container">
-          <div className="section-title">
-            <h2>Módulos do Ecossistema</h2>
-            <p>
-              Estrutura modular preparada para evoluir com segurança, sem quebrar a base funcional do sistema.
-            </p>
-          </div>
+              <h1 className="max-w-5xl text-5xl font-black tracking-tight md:text-7xl">
+                Ecossistema EQUATEC para gestão, engenharia e inteligência
+                operacional.
+              </h1>
 
-          <div className="grid grid-4">
-            {modules.map((module) => (
-              <div key={module.title} className="card module-card">
-                <h3>{module.title}</h3>
-                <p>{module.description}</p>
-                <div style={{ marginTop: 18 }}>
-                  <Link href="/cadastro" className="btn btn-outline">Solicitar acesso</Link>
+              <p className="mt-6 max-w-4xl text-lg leading-8 text-slate-300">
+                Plataforma modular para transformar planilhas, documentos,
+                rotinas operacionais, obras, contratos financeiros e decisões
+                executivas em um ambiente integrado com IA, rastreabilidade,
+                padronização e automações.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link
+                  href="/admin/financeiro-contratos"
+                  className="rounded-2xl bg-cyan-400 px-6 py-4 text-sm font-black text-slate-950 transition hover:bg-cyan-300"
+                >
+                  Abrir Gestão Financeira de Contratos
+                </Link>
+
+                <Link
+                  href="/admin/obras"
+                  className="rounded-2xl border border-slate-700 bg-slate-900 px-6 py-4 text-sm font-black text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
+                >
+                  Abrir Gestão de Obras
+                </Link>
+              </div>
+            </div>
+
+            <div className="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-6 shadow-2xl">
+              <div className="overflow-hidden rounded-[1.5rem] border border-slate-800 bg-slate-950">
+                <img
+                  src="/home/carlos-machado.jpg"
+                  alt="Carlos Machado - idealizador do Ecossistema EQUATEC"
+                  className="h-[360px] w-full object-cover object-top"
+                />
+              </div>
+
+              <div className="mt-6">
+                <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-300">
+                  Idealizador do Ecossistema
+                </p>
+
+                <h2 className="mt-3 text-3xl font-black">Carlos Machado</h2>
+
+                <p className="mt-3 text-sm leading-6 text-slate-400">
+                  Gestão da Manutenção Industrial • Engenharia Especializada •
+                  Soluções com Inteligência Artificial aplicada à gestão.
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <a
+                    href="https://wa.me/5522998578981"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-full border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300"
+                  >
+                    WhatsApp
+                  </a>
+
+                  <a
+                    href="mailto:capmneto@gmail.com"
+                    className="rounded-full border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300"
+                  >
+                    E-mail
+                  </a>
+
+                  <a
+                    href="https://www.linkedin.com/in/carlos-machado-95917433/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-full border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-cyan-400 hover:text-cyan-300"
+                  >
+                    LinkedIn
+                  </a>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section highlight-section">
-        <div className="container grid grid-2">
-          <div className="card">
-            <span className="badge">Soluções Digitais EQUATEC</span>
-            <h2 className="card-title-large">Serviços para transformar processos técnicos em plataformas digitais.</h2>
-            <p>
-              Além dos módulos internos, a EQUATEC estrutura soluções digitais para empresas,
-              profissionais técnicos, operações, franquias, sociedades e áreas de gestão que
-              precisam de automação, IA, dados e controle.
-            </p>
-          </div>
-
-          <div className="grid grid-2 compact-grid">
-            {digitalSolutions.map((solution) => (
-              <div key={solution.title} className="card service-card">
-                <h3>{solution.title}</h3>
-                <p>{solution.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container grid grid-2">
-          <div className="card">
-            <span className="badge">HUB BONUS</span>
-            <h2 className="card-title-large">Uma área especial para acelerar a gestão com recursos extras.</h2>
-            <p>
-              O HUB BONUS será a área de valor agregado do ecossistema, reunindo modelos,
-              prompts, agentes de apoio, templates, checklists, materiais técnicos,
-              ferramentas digitais e conteúdos complementares para produtividade e tomada de decisão.
-            </p>
-          </div>
-
-          <div className="card">
-            <span className="badge">IA, Automação e Decisão</span>
-            <h2 className="card-title-large">A IA como camada de apoio à rotina real.</h2>
-            <p>
-              A inteligência artificial entra como suporte para análise de documentos,
-              geração de relatórios, classificação de demandas, chatbots especializados,
-              automações, treinamentos e painéis inteligentes — sempre com governança,
-              rastreabilidade e validação humana.
-            </p>
-            <div className="hero-actions">
-              <Link href="/sobre" className="btn btn-primary">Conhecer a visão técnica</Link>
-              <Link href="/contato" className="btn btn-outline">Falar com a EQUATEC</Link>
             </div>
           </div>
+
+          <section className="mt-16 grid gap-4 md:grid-cols-4">
+            {highlights.map((item) => (
+              <div
+                key={item.label}
+                className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6"
+              >
+                <p className="text-sm text-slate-400">{item.label}</p>
+                <strong className="mt-2 block text-3xl font-black text-white">
+                  {item.value}
+                </strong>
+              </div>
+            ))}
+          </section>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-16">
+        <div className="mb-8 rounded-3xl border border-slate-800 bg-slate-900 p-8">
+          <p className="text-sm font-black uppercase tracking-[0.25em] text-cyan-300">
+            Módulos do Ecossistema
+          </p>
+
+          <h2 className="mt-4 text-4xl font-black">
+            Um hub modular para operação, gestão e tomada de decisão.
+          </h2>
+
+          <p className="mt-4 max-w-4xl text-base leading-7 text-slate-400">
+            A arquitetura permite evoluir cada produto de forma independente,
+            reaproveitando autenticação, IA, documentos inteligentes, memória,
+            RAG, auditoria, logs, uploads e automações.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {ecosystemModules.map((module) => (
+            <Link
+              key={module.title}
+              href={module.href}
+              className="group rounded-3xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-400/60 hover:bg-slate-900/80"
+            >
+              <div className="mb-5 flex items-start justify-between gap-4">
+                <h3 className="text-xl font-black">{module.title}</h3>
+
+                <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[0.65rem] font-black uppercase text-cyan-300">
+                  {module.status}
+                </span>
+              </div>
+
+              <p className="text-sm leading-6 text-slate-400">
+                {module.description}
+              </p>
+
+              <p className="mt-5 text-sm font-black text-cyan-300">
+                Acessar módulo →
+              </p>
+            </Link>
+          ))}
         </div>
       </section>
     </main>
   );
 }
+
