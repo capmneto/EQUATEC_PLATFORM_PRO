@@ -3,7 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "EQUATEC Platform Pro",
-  description: "Ecossistema EQUATEC de tecnologia, gestão integrada, IA, engenharia, obras e gestão financeira.",
+  description:
+    "Ecossistema EQUATEC de tecnologia, gestão integrada, IA, engenharia, obras, contratos financeiros e automações.",
 };
 
 export default function RootLayout({
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body className="min-h-screen bg-slate-950 text-white antialiased">
+        {children}
+      </body>
     </html>
   );
 }
