@@ -1,64 +1,45 @@
 ﻿"use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const DEV_EMAIL = "capmneto@gmail.com";
 const DEV_PASSWORD = "TrocarSenha@2026";
 
 export default function LoginPage() {
   const [email, setEmail] = useState(DEV_EMAIL);
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(true);
-  const [callbackUrl, setCallbackUrl] = useState("/admin");
+  const [password, setPassword] = useState(DEV_PASSWORD);
+  const [callbackUrl, setCallbackUrl] = useState("/admin/financeiro-contratos");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setCallbackUrl(params.get("callbackUrl") || "/admin");
+    setCallbackUrl(params.get("callbackUrl") || "/admin/financeiro-contratos");
   }, []);
 
-  async function submitLogin(loginEmail: string, loginPassword: string) {
-    setLoading(true);
-    setError("");
-
+  function createLocalSessionAndRedirect(target?: string) {
     try {
-      const response = await fetch("/api/dev-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: loginEmail,
-          password: loginPassword,
-          callbackUrl,
-        }),
-      });
+      const maxAge = 60 * 60 * 12;
 
-      const data = await response.json();
+      document.cookie = `equatec-local-dev-session=1; path=/; max-age=${maxAge}; SameSite=Lax`;
+      document.cookie = `equatec-local-dev-email=${encodeURIComponent(DEV_EMAIL)}; path=/; max-age=${maxAge}; SameSite=Lax`;
 
-      if (!response.ok || !data.success) {
-        setError(data.error || "E-mail ou senha inválidos.");
-        return;
-      }
-
-      window.location.href = data.redirectTo || callbackUrl || "/admin";
+      window.location.href = target || callbackUrl || "/admin/financeiro-contratos";
     } catch {
-      setError("Falha ao conectar com o login local.");
-    } finally {
-      setLoading(false);
+      setError("Não foi possível criar a sessão local no navegador.");
     }
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await submitLogin(email, password);
-  }
 
-  async function handleDevAccess() {
-    setEmail(DEV_EMAIL);
-    setPassword(DEV_PASSWORD);
-    await submitLogin(DEV_EMAIL, DEV_PASSWORD);
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (normalizedEmail !== DEV_EMAIL || password !== DEV_PASSWORD) {
+      setError("Use o botão de acesso local ou confira a credencial exibida abaixo.");
+      return;
+    }
+
+    createLocalSessionAndRedirect();
   }
 
   return (
@@ -89,7 +70,6 @@ export default function LoginPage() {
                 type="email"
                 placeholder="Digite seu e-mail"
                 autoComplete="off"
-                tabIndex={1}
                 className="block w-full rounded-2xl border border-cyan-400/30 bg-white px-6 py-5 text-lg text-slate-950 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/40"
               />
             </label>
@@ -99,25 +79,14 @@ export default function LoginPage() {
                 Senha
               </span>
 
-              <div className="grid gap-3 md:grid-cols-[1fr_auto]">
-                <input
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Digite sua senha"
-                  autoComplete="off"
-                  tabIndex={2}
-                  className="block w-full rounded-2xl border border-cyan-400/30 bg-white px-6 py-5 text-lg text-slate-950 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/40"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((value) => !value)}
-                  className="rounded-2xl border border-slate-700 bg-slate-900 px-5 py-4 text-sm font-black text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
-                >
-                  {showPassword ? "Ocultar" : "Mostrar"}
-                </button>
-              </div>
+              <input
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                type="text"
+                placeholder="Digite sua senha"
+                autoComplete="off"
+                className="block w-full rounded-2xl border border-cyan-400/30 bg-white px-6 py-5 text-lg text-slate-950 outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/40"
+              />
             </label>
 
             {error && (
@@ -128,19 +97,25 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full rounded-2xl bg-cyan-400 px-6 py-5 text-base font-black text-slate-950 transition hover:bg-cyan-300 disabled:opacity-60"
+              className="w-full rounded-2xl bg-cyan-400 px-6 py-5 text-base font-black text-slate-950 transition hover:bg-cyan-300"
             >
-              {loading ? "Entrando..." : "Entrar"}
+              Entrar
             </button>
 
             <button
               type="button"
-              onClick={handleDevAccess}
-              disabled={loading}
-              className="w-full rounded-2xl border border-cyan-400/40 bg-cyan-400/10 px-6 py-5 text-base font-black text-cyan-200 transition hover:bg-cyan-400/20 disabled:opacity-60"
+              onClick={() => createLocalSessionAndRedirect("/admin/financeiro-contratos")}
+              className="w-full rounded-2xl border border-cyan-400/40 bg-cyan-400/10 px-6 py-5 text-base font-black text-cyan-200 transition hover:bg-cyan-400/20"
             >
               Acessar ambiente local
+            </button>
+
+            <button
+              type="button"
+              onClick={() => createLocalSessionAndRedirect("/admin/financeiro-contratos/provisao-mensal")}
+              className="w-full rounded-2xl border border-emerald-400/40 bg-emerald-400/10 px-6 py-5 text-base font-black text-emerald-200 transition hover:bg-emerald-400/20"
+            >
+              Ir direto para Provisão Mensal
             </button>
           </form>
 
@@ -151,8 +126,7 @@ export default function LoginPage() {
             <p>E-mail: {DEV_EMAIL}</p>
             <p>Senha: {DEV_PASSWORD}</p>
             <p className="mt-2 text-cyan-200">
-              Use o botão “Acessar ambiente local” se o navegador estiver
-              travando o preenchimento manual.
+              O botão cria uma sessão local no navegador e redireciona para o módulo.
             </p>
           </div>
         </div>
