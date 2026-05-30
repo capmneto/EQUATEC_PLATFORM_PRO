@@ -240,23 +240,25 @@ export const authOptions: NextAuthOptions = {
 
 export async function auth() {
   const session = await getServerSession(authOptions);
+
   if (session?.user) return session as any;
 
-  if (
-    process.env.NODE_ENV !== "production" &&
-    process.env.LOCAL_DEV_BYPASS === "1"
-  ) {
-    return {
-      user: {
-        id: "local-dev-super-admin",
-        name: "Carlos Machado",
-        email: process.env.LOCAL_DEV_ADMIN_EMAIL || "capmneto@gmail.com",
-        role: "SUPER_ADMIN",
-        status: "APPROVED",
-      },
-    } as any;
+  if (process.env.NODE_ENV !== "production") {
+    const cookieStore = await cookies();
+    const localDevSession = cookieStore.get("equatec-local-dev-session")?.value;
+
+    if (localDevSession === "1") {
+      return {
+        user: {
+          id: "local-dev-super-admin",
+          name: "Carlos Machado",
+          email: process.env.LOCAL_DEV_ADMIN_EMAIL || "capmneto@gmail.com",
+          role: "SUPER_ADMIN",
+          status: "APPROVED",
+        },
+      } as any;
+    }
   }
 
   return null;
 }
-
