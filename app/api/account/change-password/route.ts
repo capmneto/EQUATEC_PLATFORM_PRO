@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     where: { email: session.user.email },
   });
 
-  if (!user?.password) {
+  if (!user?.passwordHash) {
     return NextResponse.json(
       { error: "Usuário não encontrado." },
       { status: 404 }
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
 
   const validPassword = await bcrypt.compare(
     currentPassword,
-    user.password
+    user.passwordHash
   );
 
   if (!validPassword) {
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
 
   await prisma.user.update({
     where: { id: user.id },
-    data: { password: hashedPassword },
+    data: { passwordHash: hashedPassword },
   });
 
   await prisma.auditLog.create({

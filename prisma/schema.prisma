@@ -1,3 +1,12 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
 model BidProject {
   id String @id @default(cuid())
 
@@ -112,4 +121,83 @@ model BidDisclaimerAcceptance {
   ipAddress String?
 
   @@index([userEmail])
+}
+
+model User {
+  auditLogs AuditLog[]
+  id           String   @id @default(cuid())
+  name         String?
+  email        String   @unique
+  passwordHash String
+  role         String   @default("USER")
+  status       String   @default("PENDING")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+
+  @@index([email])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  action     String
+  entityType String?
+  entityId   String?
+  metadata   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+  @@index([userId])
+}
+
+model VisitorSession {
+  id        String   @id @default(cuid())
+  visitorId String
+  referrer  String?
+  source    String?
+  createdAt DateTime @default(now())
+  pageViews PageView[]
+  events    TrackingEvent[]
+  @@index([visitorId])
+}
+
+model PageView {
+  id        String          @id @default(cuid())
+  sessionId String?
+  path      String
+  title     String?
+  referrer  String?
+  createdAt DateTime        @default(now())
+  session   VisitorSession? @relation(fields: [sessionId], references: [id])
+  @@index([sessionId])
+}
+
+model TrackingEvent {
+  id        String          @id @default(cuid())
+  sessionId String?
+  eventName String
+  path      String?
+  metadata  Json?
+  createdAt DateTime        @default(now())
+  session   VisitorSession? @relation(fields: [sessionId], references: [id])
+  @@index([sessionId])
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  company   String?
+  role      String?
+  interest  String?
+  message   String?
+  source    String?  @default("site")
+  status    String   @default("NOVO")
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([status])
 }

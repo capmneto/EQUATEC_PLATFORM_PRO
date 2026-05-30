@@ -1,0 +1,45 @@
+services:
+  equatec-platform-pro:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: equatec-platform-pro
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+    networks:
+      - equatec-network
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.http.routers.equatec-platform-pro.rule=Host(`novo.equatec-eng.com.br`)"
+      - "traefik.http.routers.equatec-platform-pro.entrypoints=websecure"
+      - "traefik.http.routers.equatec-platform-pro.tls=true"
+      - "traefik.http.routers.equatec-platform-pro.tls.certresolver=letsencrypt"
+      - "traefik.http.services.equatec-platform-pro.loadbalancer.server.port=3000"
+
+  mysql:
+    image: mysql:8.4
+    container_name: equatec-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_segura
+      MYSQL_DATABASE: equatec_platform
+      MYSQL_USER: equatec_user
+      MYSQL_PASSWORD: equatec_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - equatec-network
+
+volumes:
+  mysql_data:
+
+networks:
+  equatec-network:
+    driver: bridge
+  traefik_proxy:
+    external: true
