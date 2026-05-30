@@ -1,139 +1,94 @@
-"use client";
+﻿"use client";
 
-import { Suspense, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
 
-function LoginForm() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-
+export default function LoginPage() {
   const [email, setEmail] = useState("capmneto@gmail.com");
   const [password, setPassword] = useState("");
+  const [callbackUrl, setCallbackUrl] = useState("/admin");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setCallbackUrl(params.get("callbackUrl") || "/admin");
+  }, []);
 
-    setError("");
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
     setLoading(true);
+    setError("");
 
-    try {
-      const result = await signIn("credentials", {
-        email: email.trim(),
-        password,
-        redirect: false,
-        callbackUrl,
-        redirectTo: callbackUrl,
-      } as any);
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+      callbackUrl,
+    });
 
-      if ((result as any)?.error) {
-        setError("E-mail ou senha inválidos, usuário pendente de aprovação ou acesso não autorizado.");
-        setLoading(false);
-        return;
-      }
+    setLoading(false);
 
-      window.location.assign(callbackUrl);
-    } catch {
-      setError("Não foi possível realizar o login. Verifique os dados e tente novamente.");
-      setLoading(false);
+    if (result?.ok) {
+      window.location.href = result.url || callbackUrl || "/admin";
+      return;
     }
+
+    setError("E-mail ou senha inválidos, usuário pendente de aprovação ou acesso não autorizado.");
   }
 
   return (
-    <main className="simple-page">
-      <div className="container" style={{ maxWidth: 560 }}>
-        <div className="card" style={{ padding: 34 }}>
-          <span className="badge">Acesso seguro</span>
+    <main className="min-h-screen bg-slate-950 text-white">
+      <section className="mx-auto flex min-h-screen max-w-6xl items-center px-6 py-10">
+        <div className="w-full max-w-2xl">
+          <p className="mb-8 text-base font-bold text-white">Acesso seguro</p>
 
-          <h1
-            style={{
-              marginTop: 18,
-              marginBottom: 14,
-              fontSize: "clamp(40px, 5vw, 64px)",
-              lineHeight: 1,
-              letterSpacing: "-0.06em",
-            }}
-          >
+          <h1 className="text-6xl font-light tracking-tight md:text-7xl">
             Login EQUATEC
           </h1>
 
-          <p style={{ marginBottom: 28, fontSize: 18, lineHeight: 1.5 }}>
+          <p className="mt-6 max-w-2xl text-xl leading-8 text-white">
             Acesse o ecossistema de tecnologia, gestão integrada, IA e automações.
           </p>
 
-          <form onSubmit={handleSubmit} style={{ display: "grid", gap: 16 }}>
+          <form onSubmit={handleSubmit} className="mt-10 space-y-5">
             <input
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               type="email"
               placeholder="Seu e-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={{
-                width: "100%",
-                padding: "16px 18px",
-                borderRadius: 16,
-                border: "1px solid rgba(148, 163, 184, 0.35)",
-                background: "#eaf2ff",
-                color: "#020617",
-                fontSize: 16,
-              }}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-100 px-6 py-5 text-lg text-slate-950 outline-none transition focus:border-cyan-400"
             />
 
             <input
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
               type="password"
               placeholder="Sua senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={{
-                width: "100%",
-                padding: "16px 18px",
-                borderRadius: 16,
-                border: "1px solid rgba(148, 163, 184, 0.35)",
-                background: "#eaf2ff",
-                color: "#020617",
-                fontSize: 16,
-              }}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-100 px-6 py-5 text-lg text-slate-950 outline-none transition focus:border-cyan-400"
             />
 
             {error && (
-              <div style={{ color: "#fca5a5", fontSize: 14, lineHeight: 1.4 }}>
+              <p className="rounded-2xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm font-bold text-red-200">
                 {error}
-              </div>
+              </p>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary"
-              style={{
-                width: "100%",
-                justifyContent: "center",
-                minHeight: 56,
-                fontSize: 16,
-              }}
+              className="w-full rounded-2xl bg-cyan-400 px-6 py-5 text-base font-black text-slate-950 transition hover:bg-cyan-300 disabled:opacity-60"
             >
               {loading ? "Entrando..." : "Entrar"}
             </button>
           </form>
-        </div>
-      </div>
-    </main>
-  );
-}
 
-export default function LoginPage() {
-  return (
-    <Suspense
-      fallback={
-        <main className="simple-page">
-          <div className="container">Carregando login...</div>
-        </main>
-      }
-    >
-      <LoginForm />
-    </Suspense>
+          <p className="mt-8 text-sm text-slate-400">
+            Acesso local de desenvolvimento: capmneto@gmail.com / TrocarSenha@2026
+          </p>
+        </div>
+      </section>
+    </main>
   );
 }
