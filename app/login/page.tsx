@@ -1,10 +1,9 @@
 ﻿"use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("capmneto@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [callbackUrl, setCallbackUrl] = useState("/admin");
   const [error, setError] = useState("");
@@ -21,34 +20,45 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-      callbackUrl,
-    });
+    try {
+      const response = await fetch("/api/dev-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          callbackUrl,
+        }),
+      });
 
-    setLoading(false);
+      const data = await response.json();
 
-    if (result?.ok) {
-      window.location.href = result.url || callbackUrl || "/admin";
-      return;
+      if (!response.ok || !data.success) {
+        setError(data.error || "E-mail ou senha inválidos.");
+        return;
+      }
+
+      window.location.href = data.redirectTo || callbackUrl || "/admin";
+    } catch {
+      setError("Falha ao conectar com o login local.");
+    } finally {
+      setLoading(false);
     }
-
-    setError("E-mail ou senha inválidos, usuário pendente de aprovação ou acesso não autorizado.");
   }
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <section className="mx-auto flex min-h-screen max-w-6xl items-center px-6 py-10">
         <div className="w-full max-w-2xl">
-          <p className="mb-8 text-base font-bold text-white">Acesso seguro</p>
+          <p className="mb-8 text-base font-bold text-cyan-300">Acesso seguro</p>
 
           <h1 className="text-6xl font-light tracking-tight md:text-7xl">
             Login EQUATEC
           </h1>
 
-          <p className="mt-6 max-w-2xl text-xl leading-8 text-white">
+          <p className="mt-6 max-w-2xl text-xl leading-8 text-slate-200">
             Acesse o ecossistema de tecnologia, gestão integrada, IA e automações.
           </p>
 
@@ -57,7 +67,8 @@ export default function LoginPage() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               type="email"
-              placeholder="Seu e-mail"
+              placeholder="Digite seu e-mail"
+              autoComplete="username"
               className="w-full rounded-2xl border border-slate-700 bg-slate-100 px-6 py-5 text-lg text-slate-950 outline-none transition focus:border-cyan-400"
             />
 
@@ -65,7 +76,8 @@ export default function LoginPage() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               type="password"
-              placeholder="Sua senha"
+              placeholder="Digite sua senha"
+              autoComplete="current-password"
               className="w-full rounded-2xl border border-slate-700 bg-slate-100 px-6 py-5 text-lg text-slate-950 outline-none transition focus:border-cyan-400"
             />
 
@@ -84,9 +96,11 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-8 text-sm text-slate-400">
-            Acesso local de desenvolvimento: capmneto@gmail.com / TrocarSenha@2026
-          </p>
+          <div className="mt-8 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-sm leading-6 text-cyan-100">
+            <p className="font-black text-cyan-300">Acesso local de desenvolvimento</p>
+            <p>E-mail: capmneto@gmail.com</p>
+            <p>Senha: TrocarSenha@2026</p>
+          </div>
         </div>
       </section>
     </main>
