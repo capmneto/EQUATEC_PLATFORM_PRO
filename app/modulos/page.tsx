@@ -1,90 +1,110 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { modulos } from "@/lib/content/modulos";
 
-const modules = [
-  {
-    title: "Gestão de Obras",
-    description: "Controle físico-financeiro, etapas, documentos, medições, fotos, cotações, pendências e evolução da obra.",
-  },
-  {
-    title: "Gestão de Franquias e Sociedades",
-    description: "Pacote para controle de sócios, financeiro, mobilização, garantias, ativos, ocorrências, rotinas operacionais e modelos como FACILMART.",
-  },
-  {
-    title: "IA Corporativa",
-    description: "Agentes e recursos de IA para documentos, decisões, diagnósticos, análise de dados, produtividade e padronização.",
-  },
-  {
-    title: "Cursos EAD",
-    description: "Capacitação com trilhas, aulas, conteúdos técnicos, treinamentos corporativos e gestão de aprendizagem.",
-  },
-  {
-    title: "Ferramentas de Engenharia",
-    description: "Checklists, modelos, cálculos, planos de ação, relatórios, templates e ferramentas técnicas para gestão e engenharia.",
-  },
-  {
-    title: "Automação via n8n",
-    description: "Fluxos automatizados para integrar sistemas, formulários, notificações, aprovações, documentos e rotinas.",
-  },
-  {
-    title: "Dashboards Executivos",
-    description: "Painéis gerenciais para acompanhamento de indicadores, obras, tarefas, financeiro, produtividade e visão executiva.",
-  },
-  {
-    title: "HUB BONUS",
-    description: "Área especial com prompts, modelos, templates, agentes de apoio, materiais técnicos, ferramentas extras e recursos complementares.",
-  },
-];
-
-const solutions = [
-  "Desenvolvimento de Sites e Plataformas",
-  "Fluxos de Trabalho com Automação e IA",
-  "Criação de Chatbots e Agentes Inteligentes",
-  "Treinamentos e Cursos de IA Aplicada à Gestão",
-];
+export const metadata: Metadata = {
+  title: "Módulos EQUATEC | Gestão de Contratos, Obras, PMOC e Confiabilidade Humana",
+  description:
+    "Conheça os 6 módulos do ecossistema EQUATEC: Gestão de Contratos (BID AI, DRE, Orçamento), Gestão de Obras, Mercados Autônomos, PMOC AI, Confiabilidade Humana 360 e Fabricação de Estruturas.",
+};
 
 export default function ModulosPage() {
   return (
     <main className="page">
       <section className="container simple-page">
-        <span className="badge">Módulos e Soluções</span>
-        <h1>Módulos do Ecossistema EQUATEC</h1>
+        <span className="badge">Ecossistema EQUATEC</span>
+        <h1>Módulos para Gestão de Engenharia e Manutenção Industrial</h1>
         <p>
-          A plataforma foi estruturada para evoluir em módulos, mantendo rastreabilidade,
-          controle, governança técnica e abertura para soluções digitais com IA, automação,
-          chatbots, sites, plataformas e treinamentos.
+          Seis módulos integrados que cobrem todo o ciclo de gestão técnica e
+          comercial: da proposta ao contrato, da obra à operação, da
+          fabricação de estruturas à confiabilidade humana em campo.
         </p>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <div className="grid grid-4">
-            {modules.map((module) => (
-              <div key={module.title} className="card module-card">
-                <h3>{module.title}</h3>
-                <p>{module.description}</p>
-                <div style={{ marginTop: 18 }}>
-                  <Link href="/cadastro" className="btn btn-outline">Solicitar acesso</Link>
+      {modulos.map((modulo, index) => (
+        <section
+          key={modulo.slug}
+          id={modulo.slug}
+          className="section"
+          style={{
+            background: index % 2 === 1 ? "rgba(15,23,42,0.4)" : "transparent",
+          }}
+        >
+          <div className="container">
+            <div className="section-title">
+              <span className="badge">{modulo.badge}</span>
+              <h2>{modulo.titulo}</h2>
+              <p>{modulo.resumo}</p>
+            </div>
+
+            <div className="grid grid-3">
+              <div className="card">
+                <h3>Problema que resolve</h3>
+                <p>{modulo.problema}</p>
+              </div>
+              <div className="card">
+                <h3>Como funciona</h3>
+                <p>{modulo.solucao}</p>
+              </div>
+              <div className="card">
+                <h3>Resultado esperado</h3>
+                <p>{modulo.resultado}</p>
+              </div>
+            </div>
+
+            {modulo.subFuncoes && modulo.subFuncoes.length > 0 && (
+              <div style={{ marginTop: 32 }}>
+                <h3 style={{ marginBottom: 16 }}>Sub-funções do módulo</h3>
+                <div className="grid grid-2">
+                  {modulo.subFuncoes.map((sub) => (
+                    <div className="card" key={sub.nome}>
+                      <strong>{sub.nome}</strong>
+                      <p>{sub.descricao}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
+            )}
+
+            <div style={{ marginTop: 32 }}>
+              <strong>Público-alvo: </strong>
+              <span className="pill-grid">
+                {modulo.publicoAlvo.map((p) => (
+                  <span className="pill" key={p}>
+                    {p}
+                  </span>
+                ))}
+              </span>
+            </div>
+
+            <div className="hero-actions" style={{ marginTop: 32 }}>
+              <Link href="/contato" className="btn btn-primary">
+                {modulo.ctaLabel}
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ))}
 
       <section className="section">
-        <div className="container grid grid-2">
-          <div className="card">
-            <span className="badge">Soluções Digitais</span>
-            <h2 className="card-title-large">Serviços integrados ao posicionamento da EQUATEC</h2>
-            <p>
-              Além dos módulos do sistema, a EQUATEC também estrutura soluções digitais
-              para apoiar empresas, profissionais técnicos, operações, franquias e áreas de gestão.
-            </p>
-          </div>
-          <div className="grid grid-2 compact-grid">
-            {solutions.map((solution) => (
-              <div className="card mini-card" key={solution}><h3>{solution}</h3></div>
-            ))}
+        <div className="container" style={{ textAlign: "center" }}>
+          <h2>Pronto para estruturar a gestão do seu contrato ou obra?</h2>
+          <p>
+            Fale diretamente com Carlos Machado para entender qual módulo se
+            encaixa na sua operação.
+          </p>
+          <div className="hero-actions">
+            <a
+              href="https://wa.me/5522998578981"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+            >
+              Conversar no WhatsApp
+            </a>
+            <Link href="/cadastro" className="btn btn-outline">
+              Solicitar Acesso
+            </Link>
           </div>
         </div>
       </section>
