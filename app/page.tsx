@@ -1,4 +1,12 @@
-﻿const topNav = [
+﻿import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "EQUATEC | Gestão de Contratos, Obras, PMOC e Manutenção Industrial",
+  description:
+    "Ecossistema EQUATEC: plataforma para gestão de contratos de manutenção industrial, obras, PMOC, propostas técnicas (BID AI), confiabilidade humana e finanças.",
+};
+
+const topNav = [
   { label: "Início", href: "/" },
   { label: "Admin Hub", href: "/admin" },
   { label: "Financeiro Contratos", href: "/admin/financeiro-contratos" },
@@ -207,14 +215,16 @@ export default function HomePage() {
               </div>
 
               <h1 className="max-w-5xl text-5xl font-black tracking-tight md:text-7xl">
-                Gerenciamento Multidisciplinar Integrado para decisões de alto impacto.
+                Gestão de Contratos, Obras e Manutenção Industrial — Plataforma SaaS EQUATEC
               </h1>
 
               <p className="mt-6 max-w-4xl text-lg leading-8 text-slate-300">
-                O Ecossistema EQUATEC conecta engenharia, contratos, finanças,
-                obras, documentos, inteligência artificial e automações em uma
-                plataforma criada para transformar informações dispersas em
-                controle, produtividade, rastreabilidade e decisão executiva.
+                Gerenciamento multidisciplinar integrado para decisões de alto
+                impacto: o Ecossistema EQUATEC conecta engenharia, contratos,
+                finanças, obras, documentos, inteligência artificial e
+                automações em uma plataforma criada para transformar
+                informações dispersas em controle, produtividade,
+                rastreabilidade e decisão executiva.
               </p>
 
               <p className="mt-4 max-w-4xl text-base leading-7 text-slate-400">
