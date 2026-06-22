@@ -1,0 +1,910 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EQUATEC MARKET — Gôndolas para Mercados Autônomos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul-prof:#0B3C5D;
+  --azul-petroleo:#0E4D6B;
+  --ciano:#1FA8A0;
+  --ciano-claro:#2DD4BF;
+  --grafite:#16191F;
+  --grafite-2:#21262E;
+  --osb:#C4A47A;
+  --osb-claro:#D9BF98;
+  --off:#F7F9FA;
+  --cinza:#5A6470;
+  --linha:rgba(255,255,255,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--off);
+  color:var(--grafite);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{font-family:'Archivo',sans-serif;letter-spacing:-.02em;line-height:1.02}
+.narrow{font-family:'Archivo Narrow',sans-serif}
+.eyebrow{
+  font-family:'Archivo Narrow',sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.28em;
+  font-size:.72rem;
+  font-weight:700;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;
+  background:
+    radial-gradient(900px 500px at 78% 8%, rgba(45,212,191,.14), transparent 60%),
+    radial-gradient(700px 600px at 10% 90%, rgba(31,168,160,.10), transparent 55%),
+    linear-gradient(160deg,#0a2e47 0%, var(--grafite) 60%, #0d1116 100%);
+  color:#fff;
+  overflow:hidden;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+.circuit{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--linha) 1px,transparent 1px),
+    linear-gradient(90deg,var(--linha) 1px,transparent 1px);
+  background-size:54px 54px;
+  mask-image:radial-gradient(ellipse 80% 70% at 60% 30%,#000 30%,transparent 75%);
+  opacity:.5;
+}
+.topbar{
+  position:relative;z-index:3;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 0;
+}
+.topbar .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-family:'Archivo';letter-spacing:.02em;font-size:1.05rem}
+.topbar .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--ciano-claro);box-shadow:0 0 14px var(--ciano-claro)}
+.topbar .navlink{color:rgba(255,255,255,.62);text-decoration:none;font-size:.9rem;font-weight:500;margin-left:26px;transition:color .2s}
+.topbar .navlink:hover{color:#fff}
+.topbar nav{display:flex;align-items:center}
+
+.hero-inner{
+  position:relative;z-index:2;
+  flex:1;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:40px;
+  align-items:center;
+  padding:30px 0 60px;
+}
+.hero-copy .eyebrow{color:var(--ciano-claro);margin-bottom:22px}
+.hero-copy h1{
+  font-size:clamp(2.6rem,5.2vw,4.6rem);
+  font-weight:900;
+  margin-bottom:24px;
+}
+.hero-copy h1 .grad{
+  background:linear-gradient(100deg,var(--ciano-claro),var(--ciano));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-copy p.lead{
+  font-size:1.16rem;color:rgba(255,255,255,.78);max-width:540px;margin-bottom:34px;
+}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 30px;border-radius:4px;
+  font-family:'Archivo';font-weight:700;font-size:1rem;
+  text-decoration:none;cursor:pointer;border:none;transition:transform .15s, box-shadow .15s;
+}
+.btn-primary{background:linear-gradient(100deg,var(--ciano),var(--ciano-claro));color:#06231f;box-shadow:0 10px 30px rgba(31,168,160,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(31,168,160,.5)}
+.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.25)}
+.btn-ghost:hover{border-color:var(--ciano-claro);color:var(--ciano-claro)}
+
+.hero-visual{position:relative;display:flex;justify-content:center;align-items:center}
+.hero-visual .frame{
+  position:relative;
+  background:linear-gradient(150deg,rgba(255,255,255,.1),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:10px;padding:18px;
+  backdrop-filter:blur(4px);
+  box-shadow:0 30px 70px rgba(0,0,0,.4);
+}
+.hero-visual img{display:block;width:100%;max-width:360px;border-radius:6px}
+.badge-10{
+  position:absolute;right:-22px;bottom:-22px;
+  width:128px;height:128px;border-radius:50%;
+  background:linear-gradient(135deg,var(--osb),var(--osb-claro));
+  color:var(--grafite);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Archivo';text-align:center;
+  box-shadow:0 16px 40px rgba(196,164,122,.5);
+  transform:rotate(-8deg);
+}
+.badge-10 .num{font-size:2.6rem;font-weight:900;line-height:1}
+.badge-10 .lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-top:2px}
+
+/* trust strip */
+.trust{
+  position:relative;z-index:2;border-top:1px solid var(--linha);
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.trust div{padding:22px 18px;text-align:center;border-right:1px solid var(--linha)}
+.trust div:last-child{border-right:none}
+.trust .k{font-family:'Archivo';font-weight:800;font-size:1.5rem;color:var(--ciano-claro)}
+.trust .v{font-size:.8rem;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em}
+
+/* ===== SECTIONS ===== */
+section.block{padding:96px 0}
+.sec-head{margin-bottom:54px;max-width:680px}
+.sec-head .eyebrow{color:var(--ciano);margin-bottom:14px}
+.sec-head h2{font-size:clamp(2rem,3.6vw,3rem);font-weight:800;color:var(--azul-prof)}
+.sec-head p{color:var(--cinza);font-size:1.1rem;margin-top:16px}
+
+/* pilares */
+.pilares{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.pilar{
+  background:#fff;border:1px solid #e6eaee;border-radius:10px;padding:32px 26px;
+  transition:transform .2s, box-shadow .2s;position:relative;overflow:hidden;
+}
+.pilar::before{content:"";position:absolute;top:0;left:0;width:100%;height:4px;background:linear-gradient(90deg,var(--ciano),var(--ciano-claro))}
+.pilar:hover{transform:translateY(-6px);box-shadow:0 20px 44px rgba(11,60,93,.12)}
+.pilar .ic{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,var(--azul-prof),var(--azul-petroleo));display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.pilar .ic svg{width:26px;height:26px;stroke:var(--ciano-claro);fill:none;stroke-width:2}
+.pilar h3{font-size:1.22rem;color:var(--azul-prof);margin-bottom:10px;font-weight:700}
+.pilar p{font-size:.94rem;color:var(--cinza)}
+
+/* prazo destaque */
+.prazo{background:linear-gradient(160deg,var(--grafite),var(--grafite-2));color:#fff;position:relative;overflow:hidden}
+.prazo::after{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--linha) 1px,transparent 1px),linear-gradient(90deg,var(--linha) 1px,transparent 1px);background-size:54px 54px;mask-image:radial-gradient(ellipse 70% 80% at 80% 50%,#000,transparent 70%);opacity:.5}
+.prazo-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;position:relative;z-index:2}
+.prazo h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:900;margin-bottom:18px}
+.prazo h2 .big{display:block;font-size:clamp(4rem,9vw,7rem);line-height:.9;background:linear-gradient(100deg,var(--ciano-claro),var(--osb-claro));-webkit-background-clip:text;background-clip:text;color:transparent}
+.prazo p{color:rgba(255,255,255,.76);font-size:1.1rem;max-width:460px}
+.timeline{display:flex;flex-direction:column;gap:2px}
+.tl{display:flex;gap:18px;padding:18px 20px;background:rgba(255,255,255,.04);border-left:3px solid var(--ciano);align-items:center}
+.tl .d{font-family:'Archivo';font-weight:800;font-size:1.1rem;color:var(--ciano-claro);min-width:74px}
+.tl .t{font-size:.96rem;color:rgba(255,255,255,.85)}
+
+/* produtos */
+.produtos{background:#fff}
+.grid-prod{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{
+  border:1px solid #e6eaee;border-radius:12px;overflow:hidden;background:var(--off);
+  display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;
+}
+.card:hover{transform:translateY(-6px);box-shadow:0 22px 50px rgba(11,60,93,.13)}
+.card .top{background:linear-gradient(150deg,var(--azul-prof),var(--grafite));padding:26px;color:#fff;position:relative}
+.card .top.img-top{background-size:cover;background-position:center;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end}
+.card .top.img-top::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,60,93,.15) 0%,rgba(11,30,40,.88) 100%)}
+.card .top.img-top .tag,.card .top.img-top h3{position:relative;z-index:2}
+.card .top .tag{font-family:'Archivo Narrow';text-transform:uppercase;letter-spacing:.16em;font-size:.68rem;color:var(--ciano-claro);font-weight:700}
+.card .top h3{font-size:1.5rem;font-weight:800;margin-top:6px}
+.card .body{padding:24px 26px;flex:1;display:flex;flex-direction:column}
+.card ul{list-style:none;margin-bottom:20px;flex:1}
+.card li{font-size:.9rem;color:var(--cinza);padding:7px 0 7px 24px;position:relative;border-bottom:1px solid #eceff2}
+.card li::before{content:"";position:absolute;left:0;top:14px;width:12px;height:7px;border-left:2px solid var(--ciano);border-bottom:2px solid var(--ciano);transform:rotate(-45deg)}
+.card .preco{display:flex;align-items:baseline;gap:6px;margin-bottom:18px}
+.card .preco .cur{font-size:1rem;color:var(--cinza);font-weight:600}
+.card .preco .val{font-family:'Archivo';font-size:2.4rem;font-weight:900;color:var(--azul-prof)}
+.card .preco .un{font-size:.82rem;color:var(--cinza)}
+.card .mini{font-size:.74rem;color:var(--cinza);margin-bottom:16px}
+.card .btn{justify-content:center;width:100%;font-size:.94rem;padding:13px}
+
+/* especificacoes */
+.specs{background:var(--off)}
+.specs-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.spec-list{display:flex;flex-direction:column;gap:0}
+.spec-row{display:flex;justify-content:space-between;padding:18px 0;border-bottom:1px solid #dde3e8}
+.spec-row .l{font-weight:600;color:var(--azul-prof)}
+.spec-row .r{color:var(--cinza);text-align:right}
+.matbox{background:linear-gradient(150deg,var(--osb),var(--osb-claro));border-radius:14px;padding:40px;color:#3a2f1c}
+.matbox .eyebrow{color:#6b5733}
+.matbox h3{font-family:'Archivo';font-size:1.8rem;font-weight:900;margin:10px 0 16px;color:#3a2f1c}
+.matbox p{font-size:.98rem;color:#4a3d24}
+
+/* publico alvo */
+.publico{background:linear-gradient(160deg,var(--azul-prof),var(--grafite));color:#fff}
+.pub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pub{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:30px}
+.pub .ic{font-family:'Archivo';font-weight:900;font-size:1.6rem;color:var(--ciano-claro);margin-bottom:14px}
+.pub h3{font-size:1.15rem;margin-bottom:8px}
+.pub p{font-size:.9rem;color:rgba(255,255,255,.66)}
+
+/* CTA final */
+.cta-final{background:var(--off);text-align:center}
+.cta-card{background:linear-gradient(135deg,var(--ciano),var(--ciano-claro));border-radius:18px;padding:64px 40px;position:relative;overflow:hidden}
+.cta-card h2{font-size:clamp(2rem,4vw,3rem);font-weight:900;color:#06231f;margin-bottom:14px}
+.cta-card p{color:#073b35;font-size:1.15rem;margin-bottom:30px;font-weight:500}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-dark{background:var(--grafite);color:#fff}
+.btn-dark:hover{transform:translateY(-2px);background:#000}
+.btn-wa{background:#fff;color:#06231f}
+.btn-wa:hover{transform:translateY(-2px)}
+
+/* footer */
+footer{background:var(--grafite);color:rgba(255,255,255,.6);padding:48px 0 30px}
+.foot-grid{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:30px;margin-bottom:30px}
+.foot-grid .brand{font-family:'Archivo';font-weight:900;font-size:1.6rem;color:#fff;letter-spacing:.02em}
+.foot-grid .brand span{color:var(--ciano-claro)}
+.foot-contact{text-align:right;font-size:.95rem;line-height:1.9}
+.foot-contact a{color:var(--ciano-claro);text-decoration:none}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:22px;font-size:.8rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* responsivo */
+@media(max-width:920px){
+  .hero-inner{grid-template-columns:1fr;gap:50px;padding-top:10px}
+  .hero-visual{order:-1}
+  .trust{grid-template-columns:repeat(2,1fr)}
+  .trust div:nth-child(2){border-right:none}
+  .pilares{grid-template-columns:repeat(2,1fr)}
+  .prazo-grid,.specs-grid{grid-template-columns:1fr;gap:34px}
+  .grid-prod{grid-template-columns:repeat(2,1fr)}.pub-grid{grid-template-columns:1fr}
+  .topbar nav{display:none}
+}
+@media(max-width:520px){
+  .trust{grid-template-columns:1fr}
+  .trust div{border-right:none}
+  .pilares{grid-template-columns:1fr}
+  .foot-grid{flex-direction:column}
+  .foot-contact{text-align:left}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* animacao entrada */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ===== CHECKOUT MODAL ===== */
+.checkout-overlay{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(13,17,22,.72);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+  opacity:0;transition:opacity .25s;
+}
+.checkout-overlay.open{display:flex;opacity:1}
+.checkout-modal{
+  background:#fff;border-radius:14px;max-width:480px;width:100%;
+  max-height:92vh;overflow-y:auto;position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.45);
+  transform:translateY(18px);transition:transform .25s;
+}
+.checkout-overlay.open .checkout-modal{transform:translateY(0)}
+.checkout-head{
+  background:linear-gradient(150deg,var(--azul-prof),var(--grafite));
+  color:#fff;padding:22px 26px;position:relative;border-radius:14px 14px 0 0;
+}
+.checkout-head .eyebrow{color:var(--ciano-claro);margin-bottom:6px}
+.checkout-head h3{font-size:1.4rem;font-weight:800}
+.checkout-close{
+  position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.12);border:none;color:#fff;font-size:1.1rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.checkout-close:hover{background:rgba(255,255,255,.24)}
+.checkout-body{padding:26px}
+.checkout-row{margin-bottom:18px}
+.checkout-row label{
+  display:block;font-family:'Archivo Narrow',sans-serif;text-transform:uppercase;
+  letter-spacing:.1em;font-size:.74rem;font-weight:700;color:var(--cinza);margin-bottom:8px;
+}
+.checkout-select,.checkout-input{
+  width:100%;padding:13px 14px;border:1.5px solid #e0e4e8;border-radius:8px;
+  font-family:'Inter',sans-serif;font-size:.96rem;color:var(--grafite);
+  background:#fff;transition:border-color .2s;
+}
+.checkout-select:focus,.checkout-input:focus{outline:none;border-color:var(--ciano)}
+.checkout-qty{display:flex;align-items:center;gap:14px}
+.checkout-qty button{
+  width:40px;height:40px;border-radius:8px;border:1.5px solid #e0e4e8;background:#fff;
+  font-size:1.2rem;font-weight:700;color:var(--azul-prof);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:border-color .2s;
+}
+.checkout-qty button:hover{border-color:var(--ciano)}
+.checkout-qty span{font-family:'Archivo';font-size:1.3rem;font-weight:800;min-width:32px;text-align:center}
+.checkout-summary{
+  background:var(--off);border-radius:10px;padding:18px 20px;margin:20px 0;
+  border:1px solid #e6eaee;
+}
+.checkout-summary .line{display:flex;justify-content:space-between;font-size:.92rem;color:var(--cinza);padding:4px 0}
+.checkout-summary .total{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-top:10px;padding-top:10px;border-top:1px solid #dde2e6;
+}
+.checkout-summary .total .lbl{font-weight:700;color:var(--grafite)}
+.checkout-summary .total .val{font-family:'Archivo';font-size:1.7rem;font-weight:900;color:var(--azul-prof)}
+.checkout-note{font-size:.78rem;color:var(--cinza);margin-top:4px;line-height:1.5}
+.checkout-submit{
+  width:100%;justify-content:center;margin-top:8px;font-size:1rem;padding:16px;
+  background:linear-gradient(100deg,#25D366,#1FA855);color:#fff;
+  box-shadow:0 10px 30px rgba(37,211,102,.35);
+}
+.checkout-submit:hover{box-shadow:0 14px 38px rgba(37,211,102,.5)}
+.checkout-submit svg{width:20px;height:20px}
+.checkout-error{
+  display:none;background:rgba(220,53,69,.08);border:1px solid rgba(220,53,69,.3);
+  color:#b02a37;font-size:.84rem;padding:10px 14px;border-radius:8px;margin-bottom:14px;
+}
+.checkout-error.show{display:block}
+
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="circuit"></div>
+  <div class="wrap topbar">
+    <div class="brand" style="background:#fff;padding:6px 12px;border-radius:8px"><img src="assets/img_01.jpg" alt="EQUATEC MARKET" style="height:30px;width:auto;display:block"></div>
+    <nav>
+      <a class="navlink" href="#pilares">Diferenciais</a>
+      <a class="navlink" href="#prazo">Prazo</a>
+      <a class="navlink" href="#produtos">Modelos</a>
+      <a class="navlink" href="#engenharia">Engenharia</a>
+      <a class="navlink" href="#contato">Contato</a>
+    </nav>
+  </div>
+
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">Gôndolas para mercados autônomos &amp; franquias</div>
+      <h1>Estrutura que <span class="grad">sustenta</span> o seu negócio autônomo.</h1>
+      <p class="lead">Gôndolas modulares em aço e OSB, projetadas por engenharia para robustez, segurança e padronização de franquia. Prontas para uso — entregues em 10 dias úteis.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#contato">Solicitar orçamento
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#produtos">Ver modelos</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="frame">
+        <img src="assets/img_02.jpeg" alt="Gôndola EQUATEC MARKET em aço e OSB" style="display:block;width:100%;max-width:360px;border-radius:6px">
+        <div class="badge-10">
+          <span class="num">10</span>
+          <span class="lbl">dias úteis<br>para entrega</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap"><div class="trust">
+    <div><div class="k">Aço + OSB</div><div class="v">Estrutura reforçada</div></div>
+    <div><div class="k">100%</div><div class="v">Projeto de engenharia</div></div>
+    <div><div class="k">6</div><div class="v">Modelos modulares</div></div>
+    <div><div class="k">10 dias úteis</div><div class="v">Prontas para uso</div></div>
+  </div></div>
+</header>
+
+<!-- PILARES -->
+<section class="block" id="pilares">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Por que EQUATEC MARKET</div>
+      <h2>Robustez de engenharia, acabamento de varejo.</h2>
+      <p>Cada gôndola nasce de um projeto estrutural verificado — não de improviso de marcenaria. Isso significa segurança comprovada e durabilidade real no chão de loja.</p>
+    </div>
+    <div class="pilares">
+      <div class="pilar reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></div>
+        <h3>Robustez</h3>
+        <p>Esqueleto interno em metalon de aço, dimensionado para suportar a carga real de produtos sem deformar.</p>
+      </div>
+      <div class="pilar reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></div>
+        <h3>Segurança</h3>
+        <p>Estabilidade verificada por cálculo, com critérios de ancoragem documentados modelo a modelo.</p>
+      </div>
+      <div class="pilar reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <h3>Padronização</h3>
+        <p>Modelos modulares que mantêm a identidade visual igual em toda a rede de franquias.</p>
+      </div>
+      <div class="pilar reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>Entrega em 10 dias úteis</h3>
+        <p>Da confirmação do pedido à gôndola montada e pronta para abastecer, em prazo fechado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRAZO -->
+<section class="block prazo" id="prazo">
+  <div class="wrap prazo-grid">
+    <div class="reveal">
+      <div class="eyebrow" style="color:var(--ciano-claro)">Compromisso de prazo</div>
+      <h2>Pronta em<span class="big">10 dias úteis</span></h2>
+      <p>Sem espera indefinida de marcenaria. Você abre sua loja autônoma no prazo que planejou — com a gôndola entregue montada e pronta para uso.</p>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl"><span class="d">Dia 1–2</span><span class="t">Confirmação do pedido e plano de corte</span></div>
+      <div class="tl"><span class="d">Dia 3–6</span><span class="t">Fabricação da estrutura em aço</span></div>
+      <div class="tl"><span class="d">Dia 7–9</span><span class="t">Revestimento em OSB e acabamento</span></div>
+      <div class="tl"><span class="d">Dia 10</span><span class="t">Entrega montada, pronta para abastecer</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUTOS -->
+<section class="block produtos" id="produtos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Linha de modelos</div>
+      <h2>Um modelo para cada ponto da sua loja.</h2>
+      <p>Da gôndola principal ao expositor de balcão — todos no mesmo padrão construtivo e visual.</p>
+    </div>
+    <div class="grid-prod">
+      <div class="card reveal">
+        <div class="top img-top" style="background-image:url('assets/prod_gondola_a.jpg')"><div class="tag">Mais vendida</div><h3>Gôndola Reta / Inclinada</h3></div>
+        <div class="body">
+          <ul>
+            <li>1.000 × 420 × 1.805 mm</li>
+            <li>5 níveis + testeira de identificação</li>
+            <li>Modelo A: prateleiras retas</li>
+            <li>Modelo B: prateleiras inclinadas</li>
+          </ul>
+          <div class="preco"><span class="cur">R$</span><span class="val">998</span><span class="un">/un</span></div>
+          <div class="mini">Modelos A e B pelo mesmo valor — escolha no pedido.</div>
+          <a class="btn btn-primary" href="#contato">Quero esta</a>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="top img-top" style="background-image:url('assets/prod_gondola_d.jpg')"><div class="tag">Maior capacidade</div><h3>Gôndola D</h3></div>
+        <div class="body">
+          <ul>
+            <li>2.000 × 420 × 1.805 mm</li>
+            <li>Módulo duplo — 2× a área de exposição</li>
+            <li>5 níveis + testeira de identificação</li>
+            <li>Ideal para corredores centrais</li>
+          </ul>
+          <div class="preco"><span class="cur">R$</span><span class="val">1.898</span><span class="un">/un</span></div>
+          <div class="mini">Mesmo padrão construtivo e visual da linha.</div>
+          <a class="btn btn-primary" href="#contato">Quero esta</a>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="top img-top" style="background-image:url('assets/prod_totem.jpg')"><div class="tag">Destaque promocional</div><h3>Totem Expositor</h3></div>
+        <div class="body">
+          <ul>
+            <li>600 × 420 × 1.805 mm</li>
+            <li>5 níveis de exposição</li>
+            <li>Ideal para lançamentos e ofertas</li>
+            <li>Base reforçada</li>
+          </ul>
+          <div class="preco"><span class="cur">R$</span><span class="val">798</span><span class="un">/un</span></div>
+          <div class="mini">Estreito — ocupa pouco espaço de piso.</div>
+          <a class="btn btn-primary" href="#contato">Quero este</a>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="top img-top" style="background-image:url('assets/prod_nicho.jpg')"><div class="tag">Aproveite a parede</div><h3>Painel Aéreo</h3></div>
+        <div class="body">
+          <ul>
+            <li>Nicho suspenso 600 × 300 × 400 mm</li>
+            <li>Fixação na parede a 1,40 m</li>
+            <li>Libera área de piso</li>
+            <li>Estrutura em aço + OSB</li>
+          </ul>
+          <div class="preco"><span class="cur">R$</span><span class="val">798</span><span class="un">/un</span></div>
+          <div class="mini">Acabamento padronizado com toda a linha.</div>
+          <a class="btn btn-primary" href="#contato">Quero este</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESPECIFICACOES -->
+<section class="block specs">
+  <div class="wrap specs-grid">
+    <div class="reveal">
+      <div class="sec-head" style="margin-bottom:30px">
+        <div class="eyebrow">Ficha técnica</div>
+        <h2>Feita para durar.</h2>
+      </div>
+      <div class="spec-list">
+        <div class="spec-row"><span class="l">Estrutura</span><span class="r">Metalon de aço, perfil reforçado</span></div>
+        <div class="spec-row"><span class="l">Prateleiras e painéis</span><span class="r">OSB estrutural 9,5 mm</span></div>
+        <div class="spec-row"><span class="l">Acabamento</span><span class="r">Pintura anticorrosiva</span></div>
+        <div class="spec-row"><span class="l">Verificação estrutural</span><span class="r">Projeto de engenharia documentado</span></div>
+        <div class="spec-row"><span class="l">Entrega</span><span class="r">Montada, pronta para uso — 10 dias úteis</span></div>
+      </div>
+    </div>
+    <div class="matbox reveal">
+      <div class="eyebrow">Material que importa</div>
+      <h3>Aço por dentro. OSB por fora.</h3>
+      <p>O esqueleto de aço dá a robustez que o OSB sozinho não entrega — eliminando a fragilidade dos expositores 100% madeira. Por fora, o acabamento em OSB mantém a estética moderna e o custo acessível que a sua operação precisa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICO -->
+<section class="block publico">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow" style="color:var(--ciano-claro)">Feito para o seu modelo de negócio</div>
+      <h2 style="color:#fff">Pensado para o varejo autônomo.</h2>
+    </div>
+    <div class="pub-grid">
+      <div class="pub reveal"><div class="ic">01</div><h3>Mercados autônomos</h3><p>Layout que organiza o autosserviço e facilita a reposição diária.</p></div>
+      <div class="pub reveal"><div class="ic">02</div><h3>Franquias</h3><p>Padrão visual idêntico em todas as unidades — identidade de rede sem variação.</p></div>
+      <div class="pub reveal"><div class="ic">03</div><h3>Expansão rápida</h3><p>Prazo de 10 dias úteis permite abrir novas unidades sem gargalo de mobiliário.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ENGENHARIA E SEGURANCA -->
+<section class="block" id="engenharia" style="background:#fff">
+  <div class="wrap">
+    <div class="specs-grid">
+      <div class="reveal">
+        <div class="eyebrow" style="color:var(--ciano)">Projeto de engenharia, não improviso</div>
+        <h2 style="font-size:clamp(2rem,3.6vw,3rem);font-weight:800;color:var(--azul-prof);margin-bottom:18px">Cálculo estrutural real, com responsabilidade técnica.</h2>
+        <p style="color:var(--cinza);font-size:1.05rem;margin-bottom:22px">Cada modelo da linha FacilMart é verificado estruturalmente antes de ir para produção: flexão das prateleiras, compressão dos montantes e estabilidade ao tombamento são calculados e documentados — não estimados visualmente.</p>
+        <div class="spec-list">
+          <div class="spec-row"><span class="l">Memorial de cálculo</span><span class="r">Documentado por modelo</span></div>
+          <div class="spec-row"><span class="l">Responsabilidade técnica</span><span class="r">Engenheiro registrado no CREA</span></div>
+          <div class="spec-row"><span class="l">ART do projeto</span><span class="r">Emitida</span></div>
+          <div class="spec-row"><span class="l">Verificação de segurança</span><span class="r">Carga, estrutura e estabilidade</span></div>
+        </div>
+      </div>
+      <div class="reveal" style="text-align:center">
+        <img src="assets/engenharia_diagrama.jpg" alt="Diagrama real de esforços da estrutura — cortante e momento fletor" style="width:100%;max-width:420px;border-radius:10px;box-shadow:0 20px 50px rgba(11,60,93,.15);background:#fff;padding:8px">
+        <p style="font-size:.82rem;color:var(--cinza);margin-top:14px">Diagrama real de esforços (cortante e momento fletor) extraído da memória de cálculo do projeto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUSTENTABILIDADE -->
+<section class="block" style="background:linear-gradient(160deg,#1a3328,#16191F);color:#fff">
+  <div class="wrap">
+    <div class="specs-grid">
+      <div class="reveal" style="order:2">
+        <div class="eyebrow" style="color:#6ee7b7">Material que respeita o meio ambiente</div>
+        <h2 style="font-size:clamp(2rem,3.6vw,3rem);font-weight:800;color:#fff;margin-bottom:18px">Madeira que vem de onde se aproveita tudo.</h2>
+        <p style="color:rgba(255,255,255,.78);font-size:1.05rem;margin-bottom:18px">O OSB estrutural é fabricado a partir de partículas e cavacos de madeira de reflorestamento, prensados com resina — um processo que aproveita resíduos de madeira que, em chapas tradicionais, seriam descartados.</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+          <li style="display:flex;gap:10px;align-items:flex-start"><span style="color:#6ee7b7">✓</span><span style="color:rgba(255,255,255,.8);font-size:.95rem">Origem em madeira de reflorestamento, não nativa</span></li>
+          <li style="display:flex;gap:10px;align-items:flex-start"><span style="color:#6ee7b7">✓</span><span style="color:rgba(255,255,255,.8);font-size:.95rem">Aproveitamento de resíduos de madeira no processo de fabricação</span></li>
+          <li style="display:flex;gap:10px;align-items:flex-start"><span style="color:#6ee7b7">✓</span><span style="color:rgba(255,255,255,.8);font-size:.95rem">Estrutura metálica durável, reduzindo descarte por desgaste prematuro</span></li>
+          <li style="display:flex;gap:10px;align-items:flex-start"><span style="color:#6ee7b7">✓</span><span style="color:rgba(255,255,255,.8);font-size:.95rem">Plano de corte otimizado, minimizando perda de material na fabricação</span></li>
+        </ul>
+      </div>
+      <div class="reveal" style="order:1;display:flex;align-items:center;justify-content:center">
+        <div style="width:100%;max-width:320px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(110,231,183,.18),transparent 70%);display:flex;align-items:center;justify-content:center">
+          <svg width="160" height="160" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="1.4"><path d="M12 2C9 6 6 9 6 13a6 6 0 0012 0c0-4-3-7-6-11z"/><path d="M12 13v8M9 18l3-2 3 2"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="block cta-final" id="contato">
+  <div class="wrap">
+    <div class="cta-card reveal">
+      <h2>Vamos montar a sua loja?</h2>
+      <p>Solicite um orçamento e receba sua gôndola pronta em 10 dias úteis.</p>
+      <div class="cta-btns">
+        <a class="btn btn-wa" href="https://wa.me/5582982123640" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          (82) 98212-3640
+        </a>
+        <a class="btn btn-dark" href="mailto:equatec.comserv@gmail.com">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+          equatec.comserv@gmail.com
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div style="background:#fff;display:inline-block;padding:10px 16px;border-radius:8px;margin-bottom:12px">
+          <img src="assets/img_07.jpg" alt="EQUATEC MARKET" style="height:32px;width:auto;display:block">
+        </div>
+        <p style="margin-top:8px;max-width:340px;font-size:.9rem">Gôndolas modulares de engenharia para mercados autônomos e franquias.</p>
+      </div>
+      <div class="foot-contact">
+        WhatsApp: <a href="https://wa.me/5582982123640">(82) 98212-3640</a><br>
+        E-mail: <a href="mailto:equatec.comserv@gmail.com">equatec.comserv@gmail.com</a>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.1);padding:22px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="background:#fff;display:inline-block;padding:6px 12px;border-radius:6px">
+        <img src="assets/img_08.jpg" alt="EQUATEC Gestão Integrada de Obras" style="height:22px;width:auto;display:block">
+      </div>
+      <span style="font-size:.78rem;color:rgba(255,255,255,.5)">Projeto desenvolvido com responsabilidade técnica de engenharia — empresa responsável pelo cálculo estrutural e ART do projeto.</span>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 EQUATEC MARKET. Todos os direitos reservados.</span>
+      <span>Gerenciamento inteligente de franquia de mercados autônomos</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+
+<!-- ===== CHECKOUT MODAL ===== -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <div class="checkout-head">
+      <button class="checkout-close" id="checkoutClose" aria-label="Fechar">&times;</button>
+      <div class="eyebrow">Solicitar pedido</div>
+      <h3 id="checkoutTitle">Gôndola Reta</h3>
+    </div>
+    <div class="checkout-body">
+      <div class="checkout-error" id="checkoutError">Preencha seu nome e WhatsApp para continuar.</div>
+
+      <div class="checkout-row" id="checkoutVariantRow">
+        <label for="checkoutVariant">Modelo / variação</label>
+        <select class="checkout-select" id="checkoutVariant"></select>
+      </div>
+
+      <div class="checkout-row">
+        <label>Quantidade</label>
+        <div class="checkout-qty">
+          <button type="button" id="qtyMinus" aria-label="Diminuir">−</button>
+          <span id="qtyValue">1</span>
+          <button type="button" id="qtyPlus" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+
+      <div class="checkout-row">
+        <label for="checkoutNome">Seu nome</label>
+        <input class="checkout-input" id="checkoutNome" type="text" placeholder="Nome completo" autocomplete="name">
+      </div>
+
+      <div class="checkout-row">
+        <label for="checkoutTelefone">Seu WhatsApp</label>
+        <input class="checkout-input" id="checkoutTelefone" type="tel" placeholder="(00) 00000-0000" autocomplete="tel">
+      </div>
+
+      <div class="checkout-row">
+        <label for="checkoutCidade">Cidade / Loja (opcional)</label>
+        <input class="checkout-input" id="checkoutCidade" type="text" placeholder="Ex: Maceió - Unidade Centro">
+      </div>
+
+      <div class="checkout-row">
+        <label for="checkoutObs">Observações (opcional)</label>
+        <input class="checkout-input" id="checkoutObs" type="text" placeholder="Cor, prazo, dúvida...">
+      </div>
+
+      <div class="checkout-summary">
+        <div class="line"><span id="resumoProduto">Gôndola Reta</span><span id="resumoUnit">R$ 998,00</span></div>
+        <div class="line"><span id="resumoQtdLabel">Quantidade: 1</span><span></span></div>
+        <div class="total">
+          <span class="lbl">Total estimado</span>
+          <span class="val" id="resumoTotal">R$ 998,00</span>
+        </div>
+      </div>
+
+      <p class="checkout-note">
+        Ao confirmar, vamos abrir o WhatsApp com seu pedido já preenchido.
+        Pagamento (PIX ou link) e entrega são combinados diretamente por lá — prazo padrão de 10 dias úteis.
+      </p>
+
+      <a class="btn checkout-submit" id="checkoutSubmit" href="#" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        Enviar pedido pelo WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// ===== CHECKOUT — Catálogo de produtos =====
+const PRODUTOS = {
+  gondola: {
+    nome: "Gôndola Reta / Inclinada",
+    whatsappNum: "5582982123640",
+    variantes: [
+      { label: "Modelo A — Reta (1.000×420×1.805mm)", preco: 998 },
+      { label: "Modelo B — Inclinada (1.000×420×1.805mm)", preco: 998 },
+    ],
+  },
+  gondolaD: {
+    nome: "Gôndola D",
+    whatsappNum: "5582982123640",
+    variantes: [
+      { label: "Gôndola D — Módulo Duplo (2.000×420×1.805mm)", preco: 1898 },
+    ],
+  },
+  totem: {
+    nome: "Totem Expositor",
+    whatsappNum: "5582982123640",
+    variantes: [
+      { label: "Totem Expositor (600×420×1.805mm)", preco: 798 },
+    ],
+  },
+  painel: {
+    nome: "Painel Aéreo",
+    whatsappNum: "5582982123640",
+    variantes: [
+      { label: "Painel Aéreo (nicho suspenso 600×300×400mm)", preco: 798 },
+    ],
+  },
+};
+
+let checkoutAtual = { produtoKey: null, varianteIndex: 0, qtd: 1 };
+
+function formatBRL(valor) {
+  return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function abrirCheckout(produtoKey) {
+  const produto = PRODUTOS[produtoKey];
+  if (!produto) return;
+
+  checkoutAtual.produtoKey = produtoKey;
+  checkoutAtual.varianteIndex = 0;
+  checkoutAtual.qtd = 1;
+
+  document.getElementById("checkoutTitle").textContent = produto.nome;
+
+  const select = document.getElementById("checkoutVariant");
+  select.innerHTML = "";
+  produto.variantes.forEach((v, i) => {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = `${v.label} — ${formatBRL(v.preco)}`;
+    select.appendChild(opt);
+  });
+
+  // Se só há 1 variante, esconde o seletor (ex: Painel Aéreo)
+  document.getElementById("checkoutVariantRow").style.display =
+    produto.variantes.length > 1 ? "block" : "none";
+
+  document.getElementById("qtyValue").textContent = "1";
+  document.getElementById("checkoutNome").value = "";
+  document.getElementById("checkoutTelefone").value = "";
+  document.getElementById("checkoutCidade").value = "";
+  document.getElementById("checkoutObs").value = "";
+  document.getElementById("checkoutError").classList.remove("show");
+
+  atualizarResumo();
+  document.getElementById("checkoutOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function fecharCheckout() {
+  document.getElementById("checkoutOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function atualizarResumo() {
+  const produto = PRODUTOS[checkoutAtual.produtoKey];
+  if (!produto) return;
+  const variante = produto.variantes[checkoutAtual.varianteIndex];
+  const total = variante.preco * checkoutAtual.qtd;
+
+  document.getElementById("resumoProduto").textContent = variante.label;
+  document.getElementById("resumoUnit").textContent = formatBRL(variante.preco);
+  document.getElementById("resumoQtdLabel").textContent = `Quantidade: ${checkoutAtual.qtd}`;
+  document.getElementById("resumoTotal").textContent = formatBRL(total);
+
+  // Atualiza o link de envio (href) dinamicamente também ao digitar,
+  // assim funciona em qualquer navegador/dispositivo sem precisar de clique extra
+  montarLinkWhatsapp();
+}
+
+function montarLinkWhatsapp() {
+  const produto = PRODUTOS[checkoutAtual.produtoKey];
+  if (!produto) return;
+  const variante = produto.variantes[checkoutAtual.varianteIndex];
+  const total = variante.preco * checkoutAtual.qtd;
+
+  const nome = document.getElementById("checkoutNome").value.trim();
+  const telefone = document.getElementById("checkoutTelefone").value.trim();
+  const cidade = document.getElementById("checkoutCidade").value.trim();
+  const obs = document.getElementById("checkoutObs").value.trim();
+
+  let msg = `Olá! Quero fazer um pedido EQUATEC MARKET:\n\n`;
+  msg += `*Produto:* ${variante.label}\n`;
+  msg += `*Quantidade:* ${checkoutAtual.qtd}\n`;
+  msg += `*Valor unitário:* ${formatBRL(variante.preco)}\n`;
+  msg += `*Total estimado:* ${formatBRL(total)}\n\n`;
+  msg += `*Nome:* ${nome || "(não informado)"}\n`;
+  msg += `*WhatsApp:* ${telefone || "(não informado)"}\n`;
+  if (cidade) msg += `*Cidade/Loja:* ${cidade}\n`;
+  if (obs) msg += `*Observações:* ${obs}\n`;
+  msg += `\nAguardo confirmação de prazo e forma de pagamento (PIX/link).`;
+
+  const link = `https://wa.me/${produto.whatsappNum}?text=${encodeURIComponent(msg)}`;
+  document.getElementById("checkoutSubmit").setAttribute("href", link);
+}
+
+// ===== Listeners =====
+document.addEventListener("DOMContentLoaded", function () {
+  // Botões "Quero esta/este" dos 3 cards — identificados por ordem (Gôndola, Totem, Painel)
+  const botoesProduto = document.querySelectorAll('.grid-prod .card .btn-primary');
+  const chavesPorOrdem = ["gondola", "gondolaD", "totem", "painel"];
+
+  botoesProduto.forEach((btn, i) => {
+    const key = chavesPorOrdem[i];
+    if (!key) return;
+    btn.setAttribute("href", "#");
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      abrirCheckout(key);
+    });
+  });
+
+  document.getElementById("checkoutClose").addEventListener("click", fecharCheckout);
+  document.getElementById("checkoutOverlay").addEventListener("click", function (e) {
+    if (e.target === this) fecharCheckout();
+  });
+
+  document.getElementById("checkoutVariant").addEventListener("change", function (e) {
+    checkoutAtual.varianteIndex = parseInt(e.target.value, 10);
+    atualizarResumo();
+  });
+
+  document.getElementById("qtyMinus").addEventListener("click", function () {
+    if (checkoutAtual.qtd > 1) {
+      checkoutAtual.qtd -= 1;
+      document.getElementById("qtyValue").textContent = checkoutAtual.qtd;
+      atualizarResumo();
+    }
+  });
+
+  document.getElementById("qtyPlus").addEventListener("click", function () {
+    if (checkoutAtual.qtd < 50) {
+      checkoutAtual.qtd += 1;
+      document.getElementById("qtyValue").textContent = checkoutAtual.qtd;
+      atualizarResumo();
+    }
+  });
+
+  ["checkoutNome", "checkoutTelefone", "checkoutCidade", "checkoutObs"].forEach((id) => {
+    document.getElementById(id).addEventListener("input", montarLinkWhatsapp);
+  });
+
+  // Máscara simples de telefone brasileiro
+  document.getElementById("checkoutTelefone").addEventListener("input", function (e) {
+    let v = e.target.value.replace(/\D/g, "").slice(0, 11);
+    if (v.length > 6) v = v.replace(/^(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
+    else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+    e.target.value = v;
+    montarLinkWhatsapp();
+  });
+
+  document.getElementById("checkoutSubmit").addEventListener("click", function (e) {
+    const nome = document.getElementById("checkoutNome").value.trim();
+    const telefone = document.getElementById("checkoutTelefone").value.trim();
+    const errorBox = document.getElementById("checkoutError");
+
+    if (!nome || telefone.replace(/\D/g, "").length < 10) {
+      e.preventDefault();
+      errorBox.classList.add("show");
+      return;
+    }
+    errorBox.classList.remove("show");
+    // Link já está montado no href — o navegador segue normalmente (target="_blank")
+  });
+
+  // Fechar com ESC
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") fecharCheckout();
+  });
+});
+</script>
+
+</body>
+</html>
